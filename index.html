@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novovue - Streaming Premium</title>
   <style>
@@ -1371,30 +1372,24 @@
       parent.appendChild(btn);
     }
   
-    function updatePlayer() {
+    function updatePlayer(){
       const player = document.getElementById('film-player');
       player.src = '';
       player.removeAttribute('src');
 
-      setTimeout(async () => {
+      setTimeout(()=>{
         let src = '';
-
         if (currentMedia.type === 'movie') {
-          // Film
           if (currentPlayer === 'wavewatch') {
-            src = `${WAVEWATCH_FILM}${currentMedia.id}`; // TMDB ID recommandé
+            src = `${WAVEWATCH_FILM}${currentMedia.imdb_id}`;
           } else {
             src = (currentPlayer === 'frembed' ? FREMBED_FILM : VIDLINK_FILM) + currentMedia.id;
           }
-
         } else {
-          // Série / Épisode
           const s = document.getElementById('season-select').value;
           const e = document.getElementById('episode-select').value;
-
           if (currentPlayer === 'wavewatch') {
-            // On utilise la méthode recommandée avec l'ID TMDB
-            src = `${WAVEWATCH_SERIE}${currentMedia.id}/${s}/${e}`;
+            src = `https://embed.wavewatch.xyz/embed/series?tmdb=${currentMedia.id}&sea=${s}&epi=${e}`;
           } else {
             src = currentPlayer === 'frembed'
               ? `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`
@@ -1403,12 +1398,11 @@
         }
 
         player.src = src;
-        player.setAttribute('allowfullscreen', '');
-        player.setAttribute('allow', 'autoplay; fullscreen; encrypted-media');
+        player.setAttribute('allowfullscreen','');
+        player.setAttribute('allow','autoplay; fullscreen; encrypted-media');
         player.style.pointerEvents = 'auto';
       }, 100);
     }
-
 
   
     async function openOverlay(id, type) {
@@ -1507,7 +1501,6 @@
               document.getElementById('categories-title').textContent = `Films – ${genre.name}`;
               const genreUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=${genre.id}&page=1`;
               fetchAndDisplay(genreUrl,'categories-content','movie',true);
-              addSeeMoreButton('categories-content', genreUrl, 'movie', true);
               scrollToTopOfOverlay('categories-overlay');
             });
             container.appendChild(card);
