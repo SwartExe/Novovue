@@ -1,54 +1,38 @@
-// Structure du proxy Vercel
-// Tu vas pouvoir taper : https://novovue.vercel.app/https://frembed.cc/...
+// Tu vas pouvoir taper dans ton navigateur : https://novovue.vercel.app/api?url=...
+// Ce proxy ne repose que sur une fonction API, sans rewrite ni fichier statique
 
-// /api/index.js
 export default async function handler(req, res) {
-  let rawUrl = req.url.slice(5); // Supprime '/api/'
+  const { url } = req.query;
 
-  if (!rawUrl.startsWith('http')) {
-    return res.status(400).send('URL invalide');
+  if (!url || !url.startsWith('http')) {
+    return res.status(400).send('Paramètre "url" invalide');
   }
 
-  // Liste de proxys publics HTTP (attention, instabilité possible)
   const proxyList = [
     'https://thingproxy.freeboard.io/fetch/',
     'https://api.allorigins.win/raw?url=',
-    'https://api.codetabs.com/v1/proxy/?quest=' // Ne supporte pas tout
+    'https://api.codetabs.com/v1/proxy/?quest='
   ];
 
-  let success = false;
   for (const base of proxyList) {
     try {
-      const response = await fetch(base + encodeURIComponent(rawUrl), {
+      const proxied = base + encodeURIComponent(url);
+      const response = await fetch(proxied, {
         headers: {
           'User-Agent': req.headers['user-agent'] || 'Mozilla/5.0'
         }
       });
+
       const contentType = response.headers.get('content-type') || 'text/html';
-      const text = await response.text();
+      const body = await response.text();
+
       res.setHeader('Content-Type', contentType);
-      res.status(200).send(text);
-      success = true;
-      break;
+      res.status(200).send(body);
+      return;
     } catch (e) {
-      continue;
+      // Essayons le proxy suivant
     }
   }
 
-  if (!success) {
-    res.status(502).send('Impossible de charger la ressource via les proxies.');
-  }
+  res.status(502).send('Erreur : aucun proxy n’a réussi à récupérer la ressource.');
 }
-
-// Tu ajoutes un fichier vercel.json pour router tout ce qui est en / vers /api
-// vercel.json
-/*
-{
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/$1"
-    }
-  ]
-}
-*/
