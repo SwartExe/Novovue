@@ -26,8 +26,13 @@ export default async function handler(req, res) {
       const contentType = response.headers.get('content-type') || 'text/html';
       const body = await response.text();
 
+      const rewritten = body.replace(/(href|src)=["'](\/[^"']+)["']/g, (match, attr, path) => {
+        const fullUrl = new URL(path, url).toString();
+        return `${attr}="/api/index?url=${encodeURIComponent(fullUrl)}"`;
+      });
+
       res.setHeader('Content-Type', contentType);
-      res.status(200).send(body);
+      res.send(rewritten);
       return;
     } catch (e) {
       // Essayons le proxy suivant
