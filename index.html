@@ -1161,7 +1161,6 @@
       }
     }
     
-    
     @media (max-width: 576px) {
       .header-content {
       display: flex;
@@ -1312,7 +1311,6 @@
         object-fit: contain;
       }
     }
-
 
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1652,7 +1650,6 @@
       }, 100);
     }
 
-  
     async function openOverlay(id, type) {
       const res = await fetch(
         `https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}&language=fr-FR&append_to_response=external_ids`
@@ -1715,7 +1712,6 @@
       // Appelle le lecteur avec le premier épisode par défaut
       updatePlayer();
     }
-
   
     playerOptions.forEach(btn=>{
       btn.addEventListener('click',()=>{
@@ -1787,11 +1783,11 @@
     }
   
     function loadHomeContent() {
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=35&page=1`, containers.comedy,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=FR&with_genres=35&page=1`, containers.comedy,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=27&page=1`, containers.horror,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=28&page=1`, containers.action,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=18&page=1`, containers.drama,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=10749&page=1`, containers.romance,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=10749&page=1`, containers.romance,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=fr-FR&page=1`, containers.trending,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`, containers.popular,'movie');
       const today = new Date().toISOString().split('T')[0];
