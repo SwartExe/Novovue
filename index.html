@@ -1642,7 +1642,8 @@
             src = `${WAVEWATCH_FILM}${currentMedia.imdb_id}`;
 
           } else if (currentPlayer === 'wavewatchdl') {
-            src = `${WAVEWATCH_DL}${currentMedia.id}`;
+            const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
+            window.open(url, '_blank');
 
           } else {
             src = (currentPlayer === 'frembed' ? FREMBED_FILM : VIDLINK_FILM) + currentMedia.id;
@@ -1655,7 +1656,8 @@
             src = `https://embed.wavewatch.xyz/embed/series?tmdb=${currentMedia.id}&sea=${s}&epi=${e}`;
             
           } else if (currentPlayer === 'wavewatchdl') {
-            src = `${WAVEWATCH_DL}${currentMedia.id}`;
+            const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
+            window.open(url, '_blank');
 
           } else {
             src = currentPlayer === 'frembed'
