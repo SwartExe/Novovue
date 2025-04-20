@@ -922,6 +922,45 @@
       margin-top: 20px;
     }
     
+    .bottom-banner {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-size: 0.85rem;
+      padding: 10px 20px;
+      text-align: center;
+      z-index: 3000;
+      color: var(--text-secondary);
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px); /* flou si tu veux un effet verre */
+      overflow: hidden;
+    }
+
+    .bottom-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--bg-lighter);
+      opacity: 0.8; /* Réglage de l’opacité ici */
+      z-index: -1;
+    }
+
+    .bottom-banner:hover {
+      background: var(--gradient);
+      color: white;
+    }
+
+    .bottom-banner a {
+      color: var(--accent-color); /* Couleur flash pour attirer l’œil */
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .bottom-banner a:hover {
+      color: var(--primary-color); /* Teinte rose vif au survol */
+    }
+
     /* Footer */
     footer {
       text-align: center; 
@@ -1411,7 +1450,7 @@
       <div class="film-header" id="film-header"></div>
       <div class="player-options">
         <button class="player-option-btn active" data-player="wavewatch">MULTI</button>
-        <button class="player-option-btn" data-player="frembed">VF - VPN REQUIS</button>
+        <button class="player-option-btn" data-player="frembed">VF - DNS REQUIS</button>
         <button class="player-option-btn" data-player="vidlink">VO</button>
       </div>
       <div class="episode-selector" id="episode-selector" style="display:none">
@@ -1425,6 +1464,10 @@
       </div>
     </div>
   </div>
+
+  <div class="bottom-banner">
+    Nos lecteurs vidéos pourraient ne pas fonctionner avec votre configuration DNS. Cliquez <a href="https://one.one.one.one/" target="_blank">ici</a> pour utiliser un navigateur adapté.
+  </div>  
 
   <footer>
     <div class="container">
