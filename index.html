@@ -1100,14 +1100,14 @@
     }
 
     .account-wrapper {
-      position: absolute;
-      right: 0; /* À droite de la loupe */
-      top: 50%;
-      transform: translateY(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 40px; /* même taille que la loupe */
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: auto;
     }
 
     .account-btn {
@@ -1129,17 +1129,10 @@
     }
 
     .account-name {
-      position: absolute;
-      top: 42px;
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       color: var(--text-secondary);
+      margin-top: 2px;
       white-space: nowrap;
-      text-align: center;
-      width: max-content;
-      background: rgba(0,0,0,0.6);
-      padding: 2px 6px;
-      border-radius: 6px;
-      pointer-events: none;
     }
 
     .logout-btn {
@@ -1165,7 +1158,7 @@
     }
 
     /* Responsive */
-    @media (min-width: 768px) {
+    @media (min-width: 680px) {
       .header-content {
         padding: 15px 0;
       }
@@ -1234,7 +1227,7 @@
       }
     }
     
-    @media (max-width: 576px) {
+    @media (max-width: 680px) {
       .header-content {
       display: flex;
       align-items: center;
@@ -1671,13 +1664,11 @@
     onAuthStateChanged(auth, user => {
       if (user) {
         userDisplay.textContent = user.displayName || "Connecté";
-        userIcon.style.color = "#00c8ff"; // BLEU (couleur d’accent)
-        logoutBtn.style.display = "inline-block";
-        loginBtn.style.display = "none";
+        userIcon.style.color = "#00c8ff"; // logo BLEU
+        logoutBtn.style.display = "none"; // on cache le bouton déconnexion
       } else {
         userDisplay.textContent = "Non connecté";
-        userIcon.style.color = "white"; // BLANC si déconnecté
-        loginBtn.style.display = "inline-block";
+        userIcon.style.color = "white"; // logo BLANC
         logoutBtn.style.display = "none";
       }
     });
