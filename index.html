@@ -1693,22 +1693,25 @@
       signOut(auth);
     });
   
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        console.log("Utilisateur connecté :", user.email);
-        userDisplay.textContent = user.displayName || "Connecté";
-        userIcon.style.color = "#00c8ff"; // logo BLEU
-        logoutBtn.style.display = "none"; // on cache le bouton déconnexion
-        localStorage.setItem("email", user.email); 
-      } else {
-        userDisplay.textContent = "Non connecté";
-        userIcon.style.color = "white"; // logo BLANC
-        logoutBtn.style.display = "none";
-        localStorage.removeItem("email"); // <-- AJOUT ICI pour nettoyage
-      }
-      const isUserVIP = isVIP(email); // appel ici
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      const email = user.email;
+      const isUserVIP = isVIP(email); // on l'appelle ici, email est bien défini
+      console.log("Utilisateur connecté :", email);
       console.log("Est VIP ?", isUserVIP);
-    });
+  
+      userDisplay.textContent = user.displayName || "Connecté";
+      userIcon.style.color = "#00c8ff"; // logo BLEU
+      logoutBtn.style.display = "none"; // on cache le bouton déconnexion
+      localStorage.setItem("email", email); // stocke l’email pour plus tard
+    } else {
+      console.log("Aucun utilisateur connecté");
+      userDisplay.textContent = "Non connecté";
+      userIcon.style.color = "white"; // logo BLANC
+      logoutBtn.style.display = "none";
+      localStorage.removeItem("email");
+    }
+  });
   </script>
   
 
