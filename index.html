@@ -1696,14 +1696,15 @@
     onAuthStateChanged(auth, user => {
       if (user) {
         console.log("Utilisateur connecté :", user.email);
-        isVIP(user.email);
         userDisplay.textContent = user.displayName || "Connecté";
         userIcon.style.color = "#00c8ff"; // logo BLEU
         logoutBtn.style.display = "none"; // on cache le bouton déconnexion
+        localStorage.setItem("email", user.email); // <-- AJOUT ICI
       } else {
         userDisplay.textContent = "Non connecté";
         userIcon.style.color = "white"; // logo BLANC
         logoutBtn.style.display = "none";
+        localStorage.removeItem("email"); // <-- AJOUT ICI pour nettoyage
       }
     });
   </script>
