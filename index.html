@@ -562,6 +562,30 @@
       transform: translateY(-2px);
     }
 
+    #click-blocker {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 120px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 9999 !important;
+    }
+
+    #click-blocker p,
+    #click-blocker #progress-text {
+      text-align: center;
+    }
+    #click-blocker button:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+
     /* Overlay */
     .film-overlay {
       position: fixed; 
@@ -781,6 +805,7 @@
       border-radius: 8px;
       overflow: hidden; 
       position: relative; 
+      z-index: 1;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     
@@ -1794,6 +1819,130 @@
       }, 100);
     }
 
+    let unlockClicks = 0;
+    let unlockLocked = false;
+    const maxUnlock = 5;
+
+    const vipEmails = [
+      "matissehpro@gmail.com",
+      "ton.ami@protonmail.com"
+    ];
+
+    function isVIP() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      return user && vipEmails.includes(user.email);
+    }
+
+    function showProtectedPlayer(id) {
+      const overlay = document.getElementById('film-overlay');
+      const container = overlay.querySelector('.player-container');
+      const iframe = document.getElementById('film-player');
+
+      // Si c'est un VIP, pas de blocage ni pub
+      if (isVIP()) {
+        iframe.style.filter = 'none';
+        iframe.style.pointerEvents = 'auto';
+        return;
+      }
+
+      unlockClicks = 0;
+      unlockLocked = false;
+
+      // Appliquer le flou
+      iframe.style.filter = 'blur(8px)';
+      iframe.style.pointerEvents = 'none';
+
+      // Supprimer tout blocage précédent
+      document.getElementById('click-blocker')?.remove();
+
+      // Empêcher les fermetures accidentelles
+      overlay.setAttribute('data-protected', 'true');
+
+      const blocker = document.createElement('div');
+      blocker.id = 'click-blocker';
+      blocker.style.position = 'absolute';
+      blocker.style.top = '0';
+      blocker.style.left = '0';
+      blocker.style.width = '100%';
+      blocker.style.height = '100%';
+      blocker.style.display = 'flex';
+      blocker.style.flexDirection = 'column';
+      blocker.style.alignItems = 'center';
+      blocker.style.justifyContent = 'center';
+      blocker.style.zIndex = '9999';
+      blocker.style.backdropFilter = 'blur(8px)';
+      blocker.style.background = 'rgba(0,0,0,0.6)';
+
+      const label = document.createElement('p');
+      label.textContent = 'VOUS ÊTES SUR UNE ZONE PUBLICITAIRE !';
+      label.style.fontWeight = 'bold';
+      label.style.color = 'var(--primary-color)';
+      label.style.fontSize = '1.2rem';
+      label.style.marginBottom = '10px';
+
+      const desc = document.createElement('p');
+      desc.textContent = 'Regardez les publicités nécessaires afin de visionner votre film ou épisode.';
+      desc.style.color = 'var(--text-secondary)';
+      desc.style.fontSize = '0.9rem';
+      desc.style.marginBottom = '20px';
+      desc.style.textAlign = 'center';
+
+      const progress = document.createElement('div');
+      progress.id = 'progress-text';
+      progress.textContent = '0% complet';
+      progress.style.fontSize = '1.5rem';
+      progress.style.color = 'white';
+      progress.style.marginBottom = '10px';
+
+      const button = document.createElement('button');
+      button.textContent = 'Continuer';
+      button.style.padding = '12px 30px';
+      button.style.background = 'var(--primary-color)';
+      button.style.color = '#fff';
+      button.style.fontSize = '1rem';
+      button.style.border = 'none';
+      button.style.borderRadius = '30px';
+      button.style.cursor = 'pointer';
+      button.style.marginTop = '15px';
+
+      const hint = document.createElement('p');
+      hint.textContent = 'Votre compteur reste bloqué ? Rafraîchissez la page.';
+      hint.style.color = 'orange';
+      hint.style.fontSize = '0.8rem';
+      hint.style.marginTop = '15px';
+
+      blocker.addEventListener('click', e => e.stopPropagation());
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (unlockLocked) return;
+        unlockLocked = true;
+
+        window.open('https://ton-lien-affilie.com', '_blank');
+
+        unlockClicks++;
+        const percent = Math.floor((unlockClicks / maxUnlock) * 100);
+        progress.textContent = `${percent}% complet`;
+
+        if (unlockClicks >= maxUnlock) {
+          iframe.style.filter = 'none';
+          iframe.style.pointerEvents = 'auto';
+          blocker.remove();
+          overlay.removeAttribute('data-protected');
+
+          setTimeout(() => {
+            document.querySelector('.player-option-btn.active')?.click();
+          }, 50);
+        } else {
+          setTimeout(() => {
+            unlockLocked = false;
+          }, 300);
+        }
+      });
+
+      blocker.append(label, desc, progress, button, hint);
+      container.appendChild(blocker);
+    }
+
     async function openOverlay(id, type) {
       const res = await fetch(
         `https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}&language=fr-FR&append_to_response=external_ids`
@@ -1835,6 +1984,7 @@
       document.getElementById('film-overlay').classList.add('active');
       scrollToTopOfOverlay('film-overlay');
       document.body.classList.add('overlay-open');
+      showProtectedPlayer(currentMedia.imdb_id);
       updatePlayer();
     }
   
