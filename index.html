@@ -1699,7 +1699,9 @@
         userDisplay.textContent = user.displayName || "Connecté";
         userIcon.style.color = "#00c8ff"; // logo BLEU
         logoutBtn.style.display = "none"; // on cache le bouton déconnexion
-        localStorage.setItem("email", user.email); // <-- AJOUT ICI
+        localStorage.setItem("email", user.email); 
+        const isUserVIP = isVIP(email); // appel ici
+        console.log("Est VIP ?", isUserVIP);
       } else {
         userDisplay.textContent = "Non connecté";
         userIcon.style.color = "white"; // logo BLANC
