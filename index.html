@@ -5,6 +5,10 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novovue - Streaming Premium</title>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
+
   <style>
     :root {
       --primary-color: #ff2d55;
@@ -151,7 +155,7 @@
 
     .search-toggle {
       position: absolute;
-      right: 0;
+      right: 30px;
       background: none;
       border: none;
       color: var(--text-color);
@@ -165,7 +169,6 @@
       border-radius: 50%;
       cursor: pointer;
     }
-
     
     .search-toggle:hover { 
       background: rgba(255,255,255,0.1); 
@@ -175,7 +178,7 @@
     .search-bar {
       position: absolute; 
       top: 50%; 
-      right: 60px; 
+      right: 80px; 
       transform: translateY(-50%);
       width: 200px; 
       display: none; 
@@ -1086,6 +1089,70 @@
       pointer-events: auto;
     }
 
+    .account-container {
+      position: absolute;
+      right: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .account-wrapper {
+      position: absolute;
+      right: 0; /* À droite de la loupe */
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 40px; /* même taille que la loupe */
+    }
+
+    .account-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      width: 100%;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #user-icon {
+      font-size: 1.2rem;
+      color: white;
+      transition: color 0.3s ease;
+    }
+
+    .account-name {
+      position: absolute;
+      top: 42px;
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      text-align: center;
+      width: max-content;
+      background: rgba(0,0,0,0.6);
+      padding: 2px 6px;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    .logout-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin-top: 3px;
+    }
+
+
     /* Animations */
     @keyframes fadeIn { 
       from { opacity: 0; } 
@@ -1350,6 +1417,13 @@
           <input type="text" id="search-input" placeholder="Rechercher un film ou série...">
           <button id="search-btn"><i class="fas fa-search"></i></button>
         </div>
+        <div class="account-wrapper">
+          <button id="login-btn" class="account-btn">
+            <i id="user-icon" class="fas fa-user-circle"></i>
+          </button>
+          <span id="user-display" class="account-name">Non connecté</span>
+          <button id="logout-btn" class="logout-btn">Déconnexion</button>
+        </div>                
       </div>
     </div>
   </header>
@@ -1559,6 +1633,56 @@
       <p>© 2025 Novovue. Tous droits réservés.</p>
     </div>
   </footer>
+  
+  <script type="module">
+    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyBCJ1FyO85ioH7Tojk1i4gHtGyCEhj1i9M",
+      authDomain: "novovue-ac9a9.firebaseapp.com",
+      projectId: "novovue-ac9a9",
+      storageBucket: "novovue-ac9a9.firebasestorage.app",
+      messagingSenderId: "347769678734",
+      appId: "1:347769678734:web:0c1bb017cc76dbdc2992df"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const userIcon = document.getElementById("user-icon");
+  
+    const userDisplay = document.getElementById("user-display");
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+  
+    loginBtn.addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error("Erreur login :", error.message);
+      }
+    });
+  
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth);
+    });
+  
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        userDisplay.textContent = user.displayName || "Connecté";
+        userIcon.style.color = "#00c8ff"; // BLEU (couleur d’accent)
+        logoutBtn.style.display = "inline-block";
+        loginBtn.style.display = "none";
+      } else {
+        userDisplay.textContent = "Non connecté";
+        userIcon.style.color = "white"; // BLANC si déconnecté
+        loginBtn.style.display = "inline-block";
+        logoutBtn.style.display = "none";
+      }
+    });
+  </script>
+  
 
   <script>
     const API_KEY = '7e14b834557481d48b67aebd4f0680b2';
@@ -1805,7 +1929,7 @@
     }
   
     function loadHomeContent() {
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=FR&with_genres=35&page=1`, containers.comedy,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=35&page=1`, containers.comedy,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=27&page=1`, containers.horror,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=28&page=1`, containers.action,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=18&page=1`, containers.drama,'movie');
