@@ -1823,27 +1823,20 @@
     let unlockLocked = false;
     const maxUnlock = 5;
 
-    const vipEmails = [
-      "matissehpro@gmail.com",
-      "ton.ami@protonmail.com"
-    ];
-
-    function isVIP() {
-      const user = JSON.parse(localStorage.getItem('user'));
-      return user && vipEmails.includes(user.email);
+    function isVIP(email) {
+      const vipEmails = [
+        "matisse@example.com",
+        "ton.ami@protonmail.com",
+        "contact@famille.fr"
+      ];
+      return vipEmails.includes(email);
     }
+
 
     function showProtectedPlayer(id) {
       const overlay = document.getElementById('film-overlay');
       const container = overlay.querySelector('.player-container');
       const iframe = document.getElementById('film-player');
-
-      // Si c'est un VIP, pas de blocage ni pub
-      if (isVIP()) {
-        iframe.style.filter = 'none';
-        iframe.style.pointerEvents = 'auto';
-        return;
-      }
 
       unlockClicks = 0;
       unlockLocked = false;
@@ -1984,7 +1977,10 @@
       document.getElementById('film-overlay').classList.add('active');
       scrollToTopOfOverlay('film-overlay');
       document.body.classList.add('overlay-open');
-      showProtectedPlayer(currentMedia.imdb_id);
+      const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
+      if (!isVIP(email)) {
+        showProtectedPlayer(currentMedia.imdb_id);
+      }
       updatePlayer();
     }
   
