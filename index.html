@@ -1830,7 +1830,8 @@
         "ton.ami@protonmail.com",
         "contact@famille.fr"
       ];
-      return vipEmails.includes(email);
+      return vipEmails.includes(email)
+      console.log(vipEmails.includes(email));
     }
 
 
@@ -1978,6 +1979,7 @@
       document.getElementById('film-overlay').classList.add('active');
       scrollToTopOfOverlay('film-overlay');
       document.body.classList.add('overlay-open');
+
       const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
       if (!isVIP(email)) {
         showProtectedPlayer(currentMedia.imdb_id);
