@@ -5,6 +5,10 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novovue - Streaming Premium</title>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
+
   <style>
     :root {
       --primary-color: #ff2d55;
@@ -1350,6 +1354,11 @@
           <input type="text" id="search-input" placeholder="Rechercher un film ou série...">
           <button id="search-btn"><i class="fas fa-search"></i></button>
         </div>
+        <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end;">
+          <span id="user-display" style="font-size: 0.85rem;"></span>
+          <button id="login-btn">Se connecter</button>
+          <button id="logout-btn" style="display: none;">Se déconnecter</button>
+        </div>        
       </div>
     </div>
   </header>
@@ -1559,6 +1568,53 @@
       <p>© 2025 Novovue. Tous droits réservés.</p>
     </div>
   </footer>
+  
+  <script type="module">
+    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyBCJ1FyO85ioH7Tojk1i4gHtGyCEhj1i9M",
+      authDomain: "novovue-ac9a9.firebaseapp.com",
+      projectId: "novovue-ac9a9",
+      storageBucket: "novovue-ac9a9.firebasestorage.app",
+      messagingSenderId: "347769678734",
+      appId: "1:347769678734:web:0c1bb017cc76dbdc2992df"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+  
+    const userDisplay = document.getElementById("user-display");
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+  
+    loginBtn.addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error("Erreur login :", error.message);
+      }
+    });
+  
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth);
+    });
+  
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        userDisplay.textContent = `Connecté : ${user.displayName || user.email}`;
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+      } else {
+        userDisplay.textContent = "Non connecté";
+        loginBtn.style.display = "inline-block";
+        logoutBtn.style.display = "none";
+      }
+    });
+  </script>
+  
 
   <script>
     const API_KEY = '7e14b834557481d48b67aebd4f0680b2';
@@ -1805,7 +1861,7 @@
     }
   
     function loadHomeContent() {
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=FR&with_genres=35&page=1`, containers.comedy,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=35&page=1`, containers.comedy,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=27&page=1`, containers.horror,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=28&page=1`, containers.action,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=18&page=1`, containers.drama,'movie');
