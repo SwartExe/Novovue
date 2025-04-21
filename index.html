@@ -1700,14 +1700,14 @@
         userIcon.style.color = "#00c8ff"; // logo BLEU
         logoutBtn.style.display = "none"; // on cache le bouton déconnexion
         localStorage.setItem("email", user.email); 
-        const isUserVIP = isVIP(email); // appel ici
-        console.log("Est VIP ?", isUserVIP);
       } else {
         userDisplay.textContent = "Non connecté";
         userIcon.style.color = "white"; // logo BLANC
         logoutBtn.style.display = "none";
         localStorage.removeItem("email"); // <-- AJOUT ICI pour nettoyage
       }
+      const isUserVIP = isVIP(email); // appel ici
+      console.log("Est VIP ?", isUserVIP);
     });
   </script>
   
