@@ -394,6 +394,12 @@
       display: none; 
     }
 
+    .vip-glow {
+      color: #e0da2d;
+      text-shadow: 0 0 4px #e0da2d, 0 0 8px #e0da2d77;
+      transition: text-shadow 0.3s ease;
+    }
+
     #vip-section {
       margin: 60px 0;
       position: relative;
@@ -1863,9 +1869,10 @@
   
       userDisplay.textContent = user.displayName || "Connecté";
       if (isVIP(email)) {
-        userIcon.style.color = "#e0da2d"; // logo OR
+        userIcon.classList.add("vip-glow");
       } else {
-        userIcon.style.color = "#00c8ff"; // logo BLEU
+        userIcon.classList.remove("vip-glow");
+        userIcon.style.color = "#00c8ff";
       }
       logoutBtn.style.display = "none"; // on cache le bouton déconnexion
       localStorage.setItem("email", email); // stocke l’email pour plus tard
