@@ -6,16 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Novovue - Streaming Premium</title>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZWC51QSQ7"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-  
-    gtag('config', 'G-6ZWC51QSQ7');
-  </script>
-
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
 
@@ -424,11 +414,14 @@
       color: #0f0f13;
       border-radius: 20px;
       padding: 40px 20px;
-      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3), 
+                  0 0 50px rgba(255, 215, 0, 0.15) inset;
       position: relative;
       overflow: hidden;
+      z-index: 0;
     }
 
+    /* Effet de lumière principale */
     .vip-banner::before {
       content: '';
       position: absolute;
@@ -436,21 +429,109 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-      animation: sparkle 6s linear infinite;
+      background: 
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25) 0%, transparent 25%),
+        radial-gradient(circle at 70% 70%, rgba(255, 255, 210, 0.3) 0%, transparent 30%),
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+      animation: 
+        sparkle 8s ease-in-out infinite alternate,
+        moveBackground 25s linear infinite;
       pointer-events: none;
       z-index: 1;
+      mix-blend-mode: overlay;
     }
 
+    /* Effet de brillance traversante */
     .vip-banner::after {
       content: '';
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
-      transform: translateX(-100%);
-      animation: shine 3s ease-in-out infinite;
+      top: 0; 
+      left: 0;
+      width: 150%; 
+      height: 150%;
+      background: linear-gradient(
+        120deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.1) 20%,
+        rgba(255, 255, 255, 0.3) 40%,
+        rgba(255, 215, 0, 0.2) 50%,
+        rgba(255, 255, 255, 0.3) 60%,
+        rgba(255, 255, 255, 0.1) 80%,
+        transparent 100%
+      );
+      transform: translateX(-100%) rotate(15deg);
+      animation: shine 4s ease-in-out infinite;
       z-index: 2;
+    }
+
+    /* Effet de particules avec box-shadow */
+    .vip-banner .particle-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .vip-banner .particle-effect::before {
+      content: '';
+      position: absolute;
+      width: 300%;
+      height: 300%;
+      top: -100%;
+      left: -100%;
+      background: transparent;
+      box-shadow: 
+        /* Particules dorées */
+        15% 10% 0 1px rgba(255, 215, 0, 0.4),
+        25% 65% 0 2px rgba(255, 215, 0, 0.3),
+        45% 30% 0 1px rgba(255, 255, 255, 0.5),
+        60% 80% 0 1px rgba(255, 215, 0, 0.4),
+        75% 25% 0 2px rgba(255, 255, 255, 0.4),
+        85% 60% 0 1px rgba(255, 215, 0, 0.3),
+        10% 45% 0 1px rgba(255, 255, 255, 0.5),
+        35% 75% 0 1px rgba(255, 215, 0, 0.4),
+        50% 15% 0 2px rgba(255, 255, 255, 0.3),
+        70% 50% 0 1px rgba(255, 215, 0, 0.5);
+      animation: floatParticles 20s linear infinite;
+    }
+
+    /* Animations */
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.6; transform: scale(0.95); }
+      50% { opacity: 0.9; transform: scale(1.05); }
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) rotate(15deg); }
+      100% { transform: translateX(100%) rotate(15deg); }
+    }
+
+    @keyframes moveBackground {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-3%, -2%); }
+      50% { transform: translate(-5%, 0); }
+      75% { transform: translate(-3%, 2%); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes floatParticles {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(5%, 5%); }
     }
 
     .vip-content {
@@ -1301,17 +1382,6 @@
       to { opacity: 1; transform: translateY(0); } 
     }
 
-    @keyframes shine {
-      0% { transform: translateX(-100%); }
-      50% { transform: translateX(100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    @keyframes sparkle {
-      0% { background-position: 0 0; }
-      100% { background-position: 100% 100%; }
-    }
-
     /* Responsive */
     @media (min-width: 680px) {
       .header-content {
@@ -1661,14 +1731,15 @@
     <section id="vip-section">
       <h2>Exclusivité VIP</h2>
       <div class="vip-banner">
-        <div class="vip-content">
-          <h3>Rejoins le club VIP</h3>
-          <p>Accès sans pub, fonctionnlités communautaires, et chaînes privées en illimité.</p>
-          <div class="vip-btn-wrapper">
-            <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn">Devenir VIP</a>
-          </div>          
+        <div class="particle-effect"></div>
+          <div class="vip-content">
+            <h3>Rejoins le club VIP</h3>
+            <p>Accès sans pub, fonctionnlités communautaires, et chaînes privées en illimité. A partir de 1,99€ seulement.</p>
+            <div class="vip-btn-wrapper">
+              <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn">Devenir VIP</a>
+            </div>  
+          </div>        
         </div>
-      </div>
     </section>      
     <section>
       <h2>Sorties récentes</h2>
@@ -1818,6 +1889,38 @@
       </div>      
     </div>
   </div>
+
+  <div id="vip-overlay" class="film-overlay">
+    <div class="film-container" style="max-width: 600px;">
+      <button class="close-btn" onclick="closeOverlay('vip-overlay')"><i class="fas fa-times"></i></button>
+      <h2 style="text-align: center; margin-bottom: 30px; font-size: 2rem;">⭐ Deviens VIP ⭐</h2>
+  
+      <div style="display: flex; flex-direction: column; gap: 25px;">
+  
+        <!-- PASS 24H -->
+        <div style="background: linear-gradient(145deg, #fff4b8, #ffd700); box-shadow: 0 0 12px #ffd70099; border-radius: 16px; padding: 24px; animation: fadeInUp 0.4s;">
+          <h3 style="color: #8a6d00; font-size: 1.4rem;">💫 Pass 24h – 1,99€</h3>
+          <p style="margin: 10px 0;">Lecture sans pub, accès aux commentaires, tout débloqué pendant 24h.</p>
+          <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #8a6d00;">Choisir</a>
+        </div>
+  
+        <!-- MENSUEL -->
+        <div style="background: linear-gradient(145deg, #c9f4ff, #00c8ff); box-shadow: 0 0 12px #00c8ff99; border-radius: 16px; padding: 24px; animation: fadeInUp 0.6s;">
+          <h3 style="color: #006e99; font-size: 1.4rem;">📅 Abonnement mensuel – 4,99€</h3>
+          <p style="margin: 10px 0;">Streaming illimité sans pub, favoris, TV premium, interface dorée, nouveautés en avance.</p>
+          <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #006e99;">Choisir</a>
+        </div>
+  
+        <!-- À VIE -->
+        <div style="background: linear-gradient(145deg, #ffd5dd, #ff2d55); box-shadow: 0 0 12px #ff2d55aa; border-radius: 16px; padding: 24px; animation: fadeInUp 0.8s;">
+          <h3 style="color: #730022; font-size: 1.4rem;">👑 VIP à vie – 14,99€</h3>
+          <p style="margin: 10px 0;">Un seul paiement pour débloquer tous les avantages à vie. Zéro pub. Zéro limite. Badge doré éternel.</p>
+          <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #730022;">Choisir</a>
+        </div>
+  
+      </div>
+    </div>
+  </div>  
 
   <div class="bottom-banner">
     Nos lecteurs vidéos pourraient ne pas fonctionner avec votre configuration DNS. Cliquez <a href="https://one.one.one.one/" target="_blank">ici</a> pour utiliser un navigateur adapté.
@@ -1981,6 +2084,12 @@
       const overlay = document.getElementById(overlayId);
       if (overlay) overlay.scrollTo({ top: 0, behavior: 'auto' });
     }
+
+    document.querySelector('.vip-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('vip-overlay').classList.add('active');
+      document.body.classList.add('overlay-open');
+    });
   
     function closeOverlay(overlayId) {
       const overlay = document.getElementById(overlayId);
@@ -1998,6 +2107,8 @@
       }
       document.getElementById('home-page').style.display = 'block';
     }
+    window.closeOverlay = closeOverlay;
+
   
     function addSeeMoreButton(containerId, baseUrl, type, isGrid = false) {
       const container = document.getElementById(containerId);
