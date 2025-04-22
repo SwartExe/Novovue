@@ -1880,7 +1880,7 @@
     await addDoc(collection(db, "commentaires"), {
       filmId: currentMedia.imdb_id,
       user: user.email,
-      pseudo: user.displayName || "VIP",
+      pseudo: (user.displayName?.split(" ")[0]) || "VIP",
       commentaire,
       date: new Date().toISOString()
     });
