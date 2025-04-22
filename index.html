@@ -1862,7 +1862,11 @@
       console.log("Est VIP ?", isUserVIP);
   
       userDisplay.textContent = user.displayName || "Connecté";
-      userIcon.style.color = "#00c8ff"; // logo BLEU
+      if (isVIP(email)) {
+        userIcon.style.color = "#FFD700."; // logo OR
+      } else {
+        userIcon.style.color = "#00c8ff"; // logo BLEU
+      }
       logoutBtn.style.display = "none"; // on cache le bouton déconnexion
       localStorage.setItem("email", email); // stocke l’email pour plus tard
     } else {
