@@ -394,6 +394,99 @@
       display: none; 
     }
 
+    #vip-section {
+      margin: 60px 0;
+      position: relative;
+      text-align: left;
+    }
+
+    .vip-banner {
+      background: linear-gradient(145deg, #FFD700, #FFC300, #FFB000);
+      color: #0f0f13;
+      border-radius: 20px;
+      padding: 40px 20px;
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vip-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      animation: sparkle 6s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .vip-banner::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: translateX(-100%);
+      animation: shine 3s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    .vip-content {
+      position: relative;
+      z-index: 3;
+    }
+
+    .vip-content h3 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .vip-content p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: #222;
+      text-align: center;
+    }
+
+    .vip-content {
+      position: relative;
+      z-index: 3;
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .vip-btn {
+      background: #0f0f13;
+      color: gold;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: transform 0.3s ease, background 0.3s ease;
+      text-shadow: 0 1px 2px black;
+      margin-top: 20px;
+
+      display: inline-block;       /* bouton garde sa taille */
+      text-align: center;          /* texte centré dans le bouton */
+    }
+
+    .vip-content .vip-btn-wrapper {
+      text-align: center;          /* on centre le bouton dans ce bloc */
+      margin-top: 20px;
+    }
+
+
+    .vip-btn:hover {
+      transform: scale(1.05);
+      background: #1e1e28;
+    }
+
     /* Fixed navigation arrows */
     .section-nav-arrow {
       position: absolute; 
@@ -1189,6 +1282,17 @@
       to { opacity: 1; transform: translateY(0); } 
     }
 
+    @keyframes shine {
+      0% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes sparkle {
+      0% { background-position: 0 0; }
+      100% { background-position: 100% 100%; }
+    }
+
     /* Responsive */
     @media (min-width: 680px) {
       .header-content {
@@ -1514,6 +1618,18 @@
         <button class="section-nav-arrow right" data-target="popular-content"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
+    <section id="vip-section">
+      <h2>Exclusivité VIP</h2>
+      <div class="vip-banner">
+        <div class="vip-content">
+          <h3>Rejoins le club VIP</h3>
+          <p>Accès sans pub, qualité HD+, et chaînes privées en illimité.</p>
+          <div class="vip-btn-wrapper">
+            <a href="#" class="vip-btn">Devenir VIP</a>
+          </div>          
+        </div>
+      </div>
+    </section>      
     <section>
       <h2>Sorties récentes</h2>
       <div class="movies-grid-container">
@@ -1636,6 +1752,18 @@
       <div class="player-container">
         <iframe id="film-player" frameborder="0" allow="autoplay; fullscreen; encrypted-media"></iframe>
       </div>
+      <div id="comments-section" style="margin-top: 40px;">
+        <h3 style="font-size: 1.3rem; margin-bottom: 10px;">Commentaires</h3>
+      
+        <div id="comments-list" style="margin-bottom: 20px;"></div>
+      
+        <div id="comment-form" style="display: none;">
+          <textarea id="comment-input" placeholder="Écris ton avis..." rows="3" style="width:100%; padding:10px; border-radius:8px; resize:none;"></textarea>
+          <button id="submit-comment" style="margin-top:10px; background: var(--primary-color); color:white; border:none; border-radius:20px; padding:10px 20px; cursor:pointer;">Envoyer</button>
+        </div>
+      
+        <p id="comment-warning" style="color:orange; display:none;">Fonction réservée aux membres VIP.</p>
+      </div>      
     </div>
   </div>
 
@@ -1712,10 +1840,54 @@
       localStorage.removeItem("email");
     }
   });
-  </script>
-  
 
-  <script>
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  const db = getFirestore(app);
+
+  const commentSection = document.getElementById("comments-section");
+  const commentList = document.getElementById("comments-list");
+  const commentForm = document.getElementById("comment-form");
+  const commentInput = document.getElementById("comment-input");
+  const commentBtn = document.getElementById("submit-comment");
+  const commentWarning = document.getElementById("comment-warning");
+
+  async function loadComments(filmId) {
+    commentList.innerHTML = "";
+    const q = query(collection(db, "commentaires"), orderBy("date", "desc"));
+    onSnapshot(q, (snapshot) => {
+      commentList.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.filmId === filmId) {
+          const div = document.createElement("div");
+          div.innerHTML = `
+            <strong style="color:gold">${data.pseudo}</strong> <span style="font-size:0.8rem; color:gray;">(${new Date(data.date).toLocaleString()})</span><br>
+            <p style="margin:5px 0 15px;">${data.commentaire}</p>
+          `;
+          commentList.appendChild(div);
+        }
+      });
+    });
+  }
+
+  commentBtn.addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user || !isVIP(user.email)) return;
+
+    const commentaire = commentInput.value.trim();
+    if (!commentaire) return;
+
+    await addDoc(collection(db, "commentaires"), {
+      filmId: currentMedia.imdb_id,
+      user: user.email,
+      pseudo: user.displayName || "VIP",
+      commentaire,
+      date: new Date().toISOString()
+    });
+
+    commentInput.value = "";
+  });
+
     const API_KEY = '7e14b834557481d48b67aebd4f0680b2';
     const FREMBED_FILM = 'https://play.frembed.cc/api/film.php?id=';
     const FREMBED_SERIE = 'https://play.frembed.cc/api/serie.php?id=';
@@ -1991,6 +2163,16 @@
       if (!isVIP(email)) {
         showProtectedPlayer(currentMedia.imdb_id);
       }
+
+      loadComments(currentMedia.imdb_id);
+      if (isVIP(email)) {
+        commentForm.style.display = "block";
+        commentWarning.style.display = "none";
+      } else {
+        commentForm.style.display = "none";
+        commentWarning.style.display = "block";
+      }
+
       updatePlayer();
     }
   
