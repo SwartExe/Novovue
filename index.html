@@ -933,19 +933,18 @@
 
     /* TV Channels specific styles */
     .tv-channel-card {
-      flex: 0 0 auto;
-      width: 200px;
-      background: var(--bg-light);
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 10px;
       border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-      box-shadow: var(--card-shadow);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 15px;
+    }
+
+    #tv-channels {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+      justify-content: center;
     }
 
     .tv-channel-card:hover {
@@ -997,13 +996,6 @@
     .tv-channel-play-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(255,45,85,0.3);
-    }
-
-    #tv-channels {
-      display: grid !important;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      padding: 20px 0;
     }
 
     #tv-player {
