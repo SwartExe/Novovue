@@ -1684,7 +1684,7 @@
     <div class="hero-content">
       <h1>L'expérience ultime de streaming</h1>
       <p>Des milliers de films et séries en qualité HD, disponibles partout</p>
-      <a href="#" class="hero-btn">Regarder maintenant</a>
+      <a id="scroll-to-featured" href="#" class="hero-btn">Regarder maintenant</a>
     </div>
   </div>
 
@@ -1712,7 +1712,7 @@
       </div>
     </section>
 
-    <section>
+    <section id="featured">
       <h2>À l'affiche</h2>
       <div class="movies-grid-container">
         <button class="section-nav-arrow left" data-target="trending-content"><i class="fas fa-chevron-left"></i></button>
@@ -2079,6 +2079,14 @@
     };
   
     const playerOptions = document.querySelectorAll('.player-option-btn');
+
+    document.getElementById("scroll-to-featured").addEventListener("click", () => {
+      const section = document.getElementById("featured");
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+
   
     function scrollToTopOfOverlay(overlayId) {
       const overlay = document.getElementById(overlayId);
