@@ -1362,7 +1362,21 @@
         width: 220px;
       }
     }
-    
+
+    iframe::after,
+    iframe::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    iframe {
+      pointer-events: auto !important;
+    }
+
+    body * {
+      user-select: auto !important;
+    }
+
     @media (max-width: 680px) {
       .header-content {
       display: flex;
@@ -1869,6 +1883,9 @@
       });
     });
   }
+
+  // Sauvegarde de l’original
+  window.__originalOpen = window.open.bind(window);
 
   commentBtn.addEventListener("click", async () => {
     const user = auth.currentUser;
