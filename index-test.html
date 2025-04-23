@@ -510,6 +510,17 @@
 
     /* Animations */
 
+    #online-users-grid {
+      transition: opacity 0.3s ease;
+    }
+    #online-users-grid.fade-out {
+      opacity: 0;
+    }
+    #online-users-grid.fade-in {
+      opacity: 1;
+    }
+
+
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -1370,17 +1381,6 @@
       pointer-events: none;
     }
 
-    .logout-btn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 0.65rem;
-      color: var(--text-secondary);
-      cursor: pointer;
-      margin-top: 3px;
-    }
-
-
     /* Animations */
     @keyframes fadeIn { 
       from { opacity: 0; } 
@@ -1671,7 +1671,6 @@
             <i id="user-icon" class="fas fa-user-circle"></i>
           </button>
           <span id="user-display" class="account-name">Non connecté</span>
-          <button id="logout-btn" class="logout-btn">Déconnexion</button>
         </div>                
       </div>
     </div>
@@ -1981,7 +1980,6 @@
   
     const userDisplay = document.getElementById("user-display");
     const loginBtn = document.getElementById("login-btn");
-    const logoutBtn = document.getElementById("logout-btn");
   
     loginBtn.addEventListener("click", async () => {
       try {
@@ -1989,10 +1987,6 @@
       } catch (error) {
         console.error("Erreur login :", error.message);
       }
-    });
-  
-    logoutBtn.addEventListener("click", () => {
-      signOut(auth);
     });
   
   onAuthStateChanged(auth, user => {
@@ -2011,13 +2005,11 @@
         userIcon.classList.remove("vip-glow");
         userIcon.style.color = "#00c8ff";
       }
-      logoutBtn.style.display = "none"; // on cache le bouton déconnexion
       localStorage.setItem("email", email); // stocke l’email pour plus tard
     } else {
       console.log("Aucun utilisateur connecté");
       userDisplay.textContent = "Non connecté";
       userIcon.style.color = "white"; // logo BLANC
-      logoutBtn.style.display = "none";
       localStorage.removeItem("email");
     }
   });
@@ -2059,18 +2051,34 @@
 
   function listenToUsersOnline() {
     const usersRef = collection(db, "usersOnline");
+
     onSnapshot(usersRef, (snapshot) => {
-      usersGrid.innerHTML = "";
       const now = new Date();
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const lastSeen = new Date(data.timestamp?.seconds * 1000 || 0);
-        if ((now - lastSeen) / 1000 < 40) {
-          usersGrid.appendChild(createUserCard(data));
-        }
-      });
+      
+      // FADE OUT
+      usersGrid.classList.add("fade-out");
+
+      setTimeout(() => {
+        usersGrid.innerHTML = "";
+
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const lastSeen = new Date(data.timestamp?.seconds * 1000 || 0);
+          if ((now - lastSeen) / 1000 < 40) {
+            usersGrid.appendChild(createUserCard(data));
+          }
+        });
+
+        // FADE IN
+        usersGrid.classList.remove("fade-out");
+        usersGrid.classList.add("fade-in");
+
+        // Nettoie après animation
+        setTimeout(() => usersGrid.classList.remove("fade-in"), 300);
+      }, 200);
     });
   }
+
 
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
   const db = getFirestore(app);
