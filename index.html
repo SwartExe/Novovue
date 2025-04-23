@@ -1800,14 +1800,6 @@
         <button class="section-nav-arrow right" data-target="romance-content"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
-    <section>
-      <h2>Nos utilisateurs</h2>
-      <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="online-users-grid"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="online-users-grid"></div>
-        <button class="section-nav-arrow right" data-target="online-users-grid"><i class="fas fa-chevron-right"></i></button>
-      </div>
-    </section>
   </div>
 
   <!-- Overlays -->
@@ -1961,7 +1953,6 @@
   </footer>
   
   <script type="module">
-    import { doc, setDoc, deleteDoc, updateDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
   
@@ -2001,8 +1992,6 @@
       const isUserVIP = isVIP(email); // on l'appelle ici, email est bien défini
       console.log("Utilisateur connecté :", email);
       console.log("Est VIP ?", isUserVIP);
-      updateUserPresence(user.uid, user.displayName || "Anonyme");
-      listenToUsersOnline();
   
       userDisplay.textContent = user.displayName || "Connecté";
       if (isVIP(email)) {
@@ -2021,56 +2010,6 @@
       localStorage.removeItem("email");
     }
   });
-
-  const usersGrid = document.getElementById("online-users-grid");
-
-  function createUserCard(user) {
-    const card = document.createElement("div");
-    card.className = "movie-card";
-    card.innerHTML = `
-      <img class="movie-poster" src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0D8ABC&color=fff&size=256" alt="${user.name}" />
-      <div class="movie-info">
-        <h3>${user.name}</h3>
-        <p>En ligne</p>
-      </div>
-    `;
-    return card;
-  }
-
-  function updateUserPresence(uid, name) {
-    const userRef = doc(db, "usersOnline", uid);
-    setDoc(userRef, {
-      name,
-      timestamp: serverTimestamp()
-    });
-
-    // Mise à jour régulière
-    setInterval(() => {
-      updateDoc(userRef, {
-        timestamp: serverTimestamp()
-      });
-    }, 20000);
-
-    // Suppression à la fermeture
-    window.addEventListener("beforeunload", () => {
-      deleteDoc(userRef);
-    });
-  }
-
-  function listenToUsersOnline() {
-    const usersRef = collection(db, "usersOnline");
-    onSnapshot(usersRef, (snapshot) => {
-      usersGrid.innerHTML = "";
-      const now = new Date();
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const lastSeen = new Date(data.timestamp?.seconds * 1000 || 0);
-        if ((now - lastSeen) / 1000 < 40) {
-          usersGrid.appendChild(createUserCard(data));
-        }
-      });
-    });
-  }
 
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
   const db = getFirestore(app);
