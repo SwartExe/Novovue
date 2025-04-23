@@ -1,0 +1,2804 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Novovue - Streaming Premium</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZWC51QSQ7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-6ZWC51QSQ7');
+  </script>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #ff2d55;
+      --primary-dark: #d12245;
+      --secondary-color: #0f0f13;
+      --accent-color: #00c8ff;
+      --bg-light: #1a1a24;
+      --bg-lighter: #252535;
+      --text-color: #ffffff;
+      --text-secondary: #bbbbbb;
+      --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+      --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; 
+    }
+    
+    body {
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body.overlay-open { 
+      overflow: hidden; 
+      width: 100%;
+    }
+    
+    a { 
+      color: inherit; 
+      text-decoration: none; 
+    }
+    
+    .container { 
+      width: 95%; 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      padding: 20px 0; 
+    }
+
+    /* Header */
+    header {
+      position: sticky; 
+      top: 0; 
+      z-index: 1000;
+      background: rgba(15,15,19,0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    header.scrolled { 
+      padding: 5px 0; 
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3); 
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Centrage horizontal du nav */
+      padding: 12px 0;
+      position: relative; /* Nécessaire pour placer logo et recherche */
+    }
+    
+    .logo {
+      position: absolute;
+      left: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: var(--transition);
+    }
+    
+    .logo:hover { 
+      transform: scale(1.03); 
+    }
+    
+    .logo-icon { 
+      font-size: 1.8rem; 
+      color: var(--primary-color); 
+    }
+    
+    nav {
+      display: none;
+    }
+    
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    
+    .nav-menu {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+    
+    .nav-menu li a {
+      font-weight: 500; 
+      position: relative; 
+      padding: 5px 0; 
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+    
+    .nav-menu li a::after {
+      content: ''; 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 0; 
+      height: 2px;
+      background: var(--gradient); 
+      transition: width 0.3s ease;
+    }
+    
+    .nav-menu li a:hover, 
+    .nav-menu li a.active { 
+      color: var(--primary-color); 
+    }
+    
+    .nav-menu li a:hover::after, 
+    .nav-menu li a.active::after { 
+      width: 100%; 
+    }
+
+    .search-toggle {
+      position: absolute;
+      right: 35px;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    .search-toggle:hover { 
+      background: rgba(255,255,255,0.1); 
+      color: var(--primary-color); 
+    }
+
+    .search-bar {
+      position: absolute; 
+      top: 50%; 
+      right: 80px; 
+      transform: translateY(-50%);
+      width: 200px; 
+      display: none; 
+      z-index: 1001;
+    }
+    
+    .search-bar.active { 
+      display: block; 
+      animation: fadeIn 0.3s ease; 
+    }
+    
+    .search-bar input {
+      width: 100%; 
+      padding: 10px 16px 10px 16px; 
+      padding-right: 40px;
+      border: none; 
+      border-radius: 30px; 
+      background: rgba(255,255,255,0.1);
+      color: var(--text-color); 
+      font-size: 0.9rem; 
+      outline: none;
+      backdrop-filter: blur(5px); 
+      transition: var(--transition);
+    }
+    
+    .search-bar button {
+      position: absolute; 
+      right: 5px; 
+      top: 50%; 
+      transform: translateY(-50%);
+      width: 30px; 
+      height: 30px; 
+      background: var(--gradient); 
+      border: none;
+      border-radius: 50%; 
+      color: white; 
+      display: flex; 
+      align-items: center;
+      justify-content: center; 
+      cursor: pointer; 
+      transition: var(--transition);
+    }
+    
+    .search-bar button:hover { 
+      transform: translateY(-50%) scale(1.1); 
+    }
+
+    /* Hero */
+    .hero {
+      height: 70vh; 
+      min-height: 500px;
+      max-height: 800px;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+                  url('https://image.tmdb.org/t/p/original/rLb2cwF3Pazuxaj0sRXQ037tGI1.jpg') no-repeat center/cover;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      text-align: center;
+      padding: 0 20px; 
+      position: relative; 
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: ''; 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 150px;
+      background: linear-gradient(transparent, var(--secondary-color)); 
+      z-index: 1;
+    }
+    
+    .hero-content {
+      max-width: 800px; 
+      position: relative; 
+      z-index: 2; 
+      opacity: 0;
+      transform: translateY(20px); 
+      animation: fadeInUp 0.8s 0.3s forwards;
+      padding: 0 20px;
+    }
+    
+    .hero h1 {
+      font-size: 3rem; 
+      margin-bottom: 15px;
+      background: linear-gradient(to right, #fff 20%, var(--accent-color) 100%);
+      -webkit-background-clip: text; 
+      background-clip: text;
+      -webkit-text-fill-color: transparent; 
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    
+    .hero p { 
+      font-size: 1.2rem; 
+      color: var(--text-secondary); 
+      margin-bottom: 30px; 
+    }
+    
+    .hero-btn {
+      display: inline-block; 
+      padding: 12px 30px; 
+      background: var(--gradient);
+      border-radius: 30px; 
+      font-weight: 600; 
+      color: white; 
+      transition: var(--transition);
+      box-shadow: 0 5px 15px rgba(255,45,85,0.3);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    .hero-btn:hover { 
+      transform: translateY(-3px); 
+      box-shadow: 0 8px 20px rgba(255,45,85,0.4); 
+    }
+
+    /* Streaming categories */
+    .streaming-categories {
+      display: flex; 
+      overflow-x: auto; 
+      gap: 12px; 
+      padding: 15px 5px; 
+      margin: 25px 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    
+    .streaming-categories::-webkit-scrollbar { 
+      display: none; 
+    }
+    
+    .stream-btn {
+      flex: 0 0 auto; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px;
+      background: var(--bg-light); 
+      border: none; 
+      border-radius: 8px; 
+      padding: 10px 18px;
+      cursor: pointer; 
+      transition: var(--transition); 
+      color: var(--text-color); 
+      font-weight: 500;
+      box-shadow: var(--card-shadow);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    
+    .stream-btn img { 
+      height: 20px; 
+      transition: transform 0.3s ease; 
+    }
+    
+    .stream-btn:hover { 
+      background: var(--primary-color); 
+      color: white; 
+      transform: translateY(-3px); 
+    }
+    
+    .stream-btn.active { 
+      background: var(--gradient); 
+      color: white; 
+    }
+
+    /* Section titles */
+    section { 
+      margin-bottom: 40px; 
+      position: relative; 
+    }
+    
+    section h2 {
+      font-size: 1.5rem; 
+      margin-bottom: 20px; 
+      position: relative;
+      padding-left: 12px; 
+      display: inline-block;
+      font-weight: 600;
+    }
+    
+    section h2::before {
+      content: ''; 
+      position: absolute; 
+      left: 0; 
+      top: 0; 
+      height: 100%;
+      width: 4px; 
+      background: var(--gradient); 
+      border-radius: 5px;
+    }
+
+    /* Movie grids */
+    .movies-grid-container {
+      position: relative;
+    }
+    
+    .movies-grid {
+      display: flex; 
+      overflow-x: auto; 
+      gap: 15px; 
+      padding: 15px 5px; 
+      margin-bottom: 10px;
+      scroll-behavior: smooth; 
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    
+    .movies-grid::-webkit-scrollbar { 
+      display: none; 
+    }
+
+    .vip-glow {
+      color: #ffd700;
+      text-shadow:
+        0 0 3px #ffd700,
+        0 0 6px #ffd700aa,
+        0 0 12px #ffea00aa;
+      transition: text-shadow 0.3s ease, color 0.3s ease;
+    }
+
+    #vip-section {
+      margin: 60px 0;
+      position: relative;
+      text-align: left;
+    }
+
+    .vip-banner {
+      background: linear-gradient(145deg, #FFD700, #FFC300, #FFB000);
+      color: #0f0f13;
+      border-radius: 20px;
+      padding: 40px 20px;
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3), 
+                  0 0 50px rgba(255, 215, 0, 0.15) inset;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    /* Effet de lumière principale */
+    .vip-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25) 0%, transparent 25%),
+        radial-gradient(circle at 70% 70%, rgba(255, 255, 210, 0.3) 0%, transparent 30%),
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+      animation: 
+        sparkle 8s ease-in-out infinite alternate,
+        moveBackground 25s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+      mix-blend-mode: overlay;
+    }
+
+    /* Effet de brillance traversante */
+    .vip-banner::after {
+      content: '';
+      position: absolute;
+      top: 0; 
+      left: 0;
+      width: 150%; 
+      height: 150%;
+      background: linear-gradient(
+        120deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.1) 20%,
+        rgba(255, 255, 255, 0.3) 40%,
+        rgba(255, 215, 0, 0.2) 50%,
+        rgba(255, 255, 255, 0.3) 60%,
+        rgba(255, 255, 255, 0.1) 80%,
+        transparent 100%
+      );
+      transform: translateX(-100%) rotate(15deg);
+      animation: shine 4s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    /* Effet de particules avec box-shadow */
+    .vip-banner .particle-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .vip-banner .particle-effect::before {
+      content: '';
+      position: absolute;
+      width: 300%;
+      height: 300%;
+      top: -100%;
+      left: -100%;
+      background: transparent;
+      box-shadow: 
+        /* Particules dorées */
+        15% 10% 0 1px rgba(255, 215, 0, 0.4),
+        25% 65% 0 2px rgba(255, 215, 0, 0.3),
+        45% 30% 0 1px rgba(255, 255, 255, 0.5),
+        60% 80% 0 1px rgba(255, 215, 0, 0.4),
+        75% 25% 0 2px rgba(255, 255, 255, 0.4),
+        85% 60% 0 1px rgba(255, 215, 0, 0.3),
+        10% 45% 0 1px rgba(255, 255, 255, 0.5),
+        35% 75% 0 1px rgba(255, 215, 0, 0.4),
+        50% 15% 0 2px rgba(255, 255, 255, 0.3),
+        70% 50% 0 1px rgba(255, 215, 0, 0.5);
+      animation: floatParticles 20s linear infinite;
+    }
+
+    /* Animations */
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.6; transform: scale(0.95); }
+      50% { opacity: 0.9; transform: scale(1.05); }
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) rotate(15deg); }
+      100% { transform: translateX(100%) rotate(15deg); }
+    }
+
+    @keyframes moveBackground {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-3%, -2%); }
+      50% { transform: translate(-5%, 0); }
+      75% { transform: translate(-3%, 2%); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes floatParticles {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(5%, 5%); }
+    }
+
+    .vip-content {
+      position: relative;
+      z-index: 3;
+    }
+
+    .vip-content h3 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .vip-content p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: #222;
+      text-align: center;
+    }
+
+    .vip-content {
+      position: relative;
+      z-index: 3;
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .vip-btn {
+      background: #0f0f13;
+      color: gold;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: transform 0.3s ease, background 0.3s ease;
+      text-shadow: 0 1px 2px black;
+      margin-top: 20px;
+
+      display: inline-block;       /* bouton garde sa taille */
+      text-align: center;          /* texte centré dans le bouton */
+    }
+
+    .vip-content .vip-btn-wrapper {
+      text-align: center;          /* on centre le bouton dans ce bloc */
+      margin-top: 20px;
+    }
+
+
+    .vip-btn:hover {
+      transform: scale(1.05);
+      background: #1e1e28;
+    }
+
+    /* Fixed navigation arrows */
+    .section-nav-arrow {
+      position: absolute; 
+      top: 50%; 
+      transform: translateY(-50%);
+      width: 36px; 
+      height: 36px; 
+      background: rgba(255,255,255,0.2);
+      border: none; 
+      border-radius: 50%; 
+      color: white; 
+      font-size: 1rem;
+      cursor: pointer; 
+      z-index: 10; 
+      display: flex; 
+      align-items: center;
+      justify-content: center; 
+      transition: var(--transition);
+      opacity: 0.8;
+    }
+    
+    .section-nav-arrow:hover { 
+      background: rgba(255,255,255,0.4); 
+      opacity: 1;
+    }
+    
+    .section-nav-arrow.left { 
+      left: -10px; 
+    }
+    
+    .section-nav-arrow.right { 
+      right: -10px; 
+    }
+
+    /* Override grid for overlays */
+    #platform-results, #search-results, #films-content, #series-content, #categories-content {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px; 
+      overflow: visible !important;
+      padding: 10px 0;
+    }
+
+    /* Movie card */
+    .movie-card {
+      flex: 0 0 auto; 
+      width: 150px; 
+      background: var(--bg-light);
+      border-radius: 10px; 
+      overflow: hidden; 
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative; 
+      box-shadow: var(--card-shadow);
+    }
+    
+    .movie-card:hover { 
+      transform: translateY(-8px) scale(1.03); 
+      box-shadow: 0 12px 24px rgba(0,0,0,0.4); 
+    }
+    
+    .movie-card::before {
+      content: ''; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+      opacity: 0; 
+      transition: opacity 0.3s ease; 
+      z-index: 1;
+    }
+    
+    .movie-card:hover::before { 
+      opacity: 1; 
+    }
+
+    .movie-poster { 
+      width: 100%; 
+      height: 225px; 
+      object-fit: cover; 
+      transition: transform 0.5s ease; 
+    }
+    
+    .movie-card:hover .movie-poster { 
+      transform: scale(1.05); 
+    }
+
+    .movie-info { 
+      padding: 12px; 
+      position: relative; 
+      z-index: 2; 
+    }
+    
+    .movie-info h3 {
+      font-size: 0.95rem; 
+      margin-bottom: 5px; 
+      white-space: nowrap;
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .movie-card:hover .movie-info h3 { 
+      color: var(--primary-color); 
+    }
+    
+    .movie-info p {
+      font-size: 0.8rem; 
+      color: var(--text-secondary); 
+      display: flex;
+      align-items: center; 
+      gap: 5px;
+    }
+    
+    .movie-rating { 
+      color: gold; 
+      font-weight: 600; 
+    }
+
+    .play-icon {
+      position: absolute; 
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%) scale(0.8);
+      width: 45px; 
+      height: 45px; 
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      color: var(--primary-color); 
+      font-size: 1.3rem; 
+      opacity: 0; 
+      transition: var(--transition);
+      z-index: 2; 
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    .movie-card:hover .play-icon { 
+      opacity: 1; 
+      transform: translate(-50%, -50%) scale(1); 
+    }
+
+    /* See more button */
+    .see-more-btn {
+      display: block; 
+      margin: 20px auto 0; 
+      padding: 10px 25px;
+      background: var(--gradient); 
+      color: #fff; 
+      border: none;
+      border-radius: 30px; 
+      cursor: pointer; 
+      font-weight: 500;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(255,45,85,0.3);
+    }
+    
+    .see-more-btn:hover { 
+      background: var(--primary-dark); 
+      transform: translateY(-2px);
+    }
+
+    #click-blocker {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 120px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 9999 !important;
+    }
+
+    #click-blocker p,
+    #click-blocker #progress-text {
+      text-align: center;
+    }
+    #click-blocker button:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+
+    /* Overlay */
+    .film-overlay {
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background: rgba(0,0,0,0.97); 
+      display: none; 
+      z-index: 2000;
+      overflow-y: auto; 
+      opacity: 0; 
+      transition: opacity 0.3s ease;
+      padding: 20px;
+    }
+    
+    .film-overlay.active { 
+      display: block; 
+      animation: fadeIn 0.3s forwards; 
+    }
+    
+    .film-container {
+      background: var(--secondary-color); 
+      border-radius: 10px;
+      max-width: 1100px; 
+      margin: 40px auto; 
+      padding: 25px;
+      position: relative; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transform: translateY(20px); 
+      transition: transform 0.3s ease;
+    }
+    
+    .film-overlay.active .film-container { 
+      transform: translateY(0); 
+    }
+
+    .close-btn {
+      position: absolute; 
+      top: 15px; 
+      right: 15px; 
+      width: 36px; 
+      height: 36px;
+      background: rgba(255,255,255,0.1); 
+      border: none; 
+      border-radius: 50%;
+      color: var(--text-secondary); 
+      font-size: 1.1rem; 
+      cursor: pointer;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      transition: var(--transition);
+      z-index: 10;
+    }
+    
+    .close-btn:hover { 
+      background: var(--primary-color); 
+      color: white; 
+      transform: rotate(90deg); 
+    }
+
+    .film-header { 
+      display: flex; 
+      gap: 25px; 
+      margin-bottom: 20px; 
+      flex-direction: column;
+    }
+    
+    .film-poster {
+      width: 100%; 
+      max-width: 300px; 
+      border-radius: 10px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease;
+      align-self: center;
+    }
+    
+    .film-poster:hover { 
+      transform: scale(1.02); 
+    }
+
+    .film-details { 
+      flex: 1; 
+    }
+    
+    .film-details h1 {
+      font-size: 1.8rem; 
+      margin-bottom: 10px;
+      background: linear-gradient(to right, #fff 20%, var(--accent-color) 100%);
+      -webkit-background-clip: text; 
+      background-clip: text; 
+      -webkit-text-fill-color: transparent;
+      line-height: 1.3;
+    }
+    
+    .film-meta {
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 12px; 
+      margin-bottom: 15px;
+      color: var(--text-secondary); 
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    
+    .film-rating {
+      color: gold; 
+      font-weight: bold; 
+      display: flex; 
+      align-items: center; 
+      gap: 5px;
+    }
+    
+    .film-genres {
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 8px; 
+      margin-bottom: 15px;
+    }
+    
+    .genre-tag {
+      background: var(--bg-lighter); 
+      padding: 5px 12px; 
+      border-radius: 20px;
+      font-size: 0.75rem; 
+      transition: var(--transition);
+    }
+    
+    .genre-tag:hover { 
+      background: var(--gradient); 
+      color: white; 
+      transform: translateY(-2px); 
+    }
+    
+    .film-overview { 
+      margin-bottom: 20px; 
+      line-height: 1.7; 
+      color: var(--text-secondary); 
+      font-size: 0.95rem;
+    }
+
+    .player-options {
+      display: flex; 
+      gap: 8px; 
+      margin-bottom: 15px; 
+      flex-wrap: wrap;
+    }
+    
+    .player-option-btn {
+      padding: 8px 16px; 
+      background: var(--bg-lighter); 
+      border: none;
+      border-radius: 30px; 
+      cursor: pointer; 
+      transition: var(--transition);
+      color: var(--text-color); 
+      font-weight: 500; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      font-size: 0.85rem;
+    }
+    
+    .player-option-btn:hover { 
+      background: rgba(255,255,255,0.2); 
+    }
+    
+    .player-option-btn.active {
+      background: var(--gradient); 
+      color: white; 
+      box-shadow: 0 5px 15px rgba(255,45,85,0.3);
+    }
+
+    .episode-selector {
+      margin-bottom: 15px; 
+      background: var(--bg-lighter); 
+      padding: 12px; 
+      border-radius: 8px; 
+      display: none;
+    }
+    
+    .episode-selector label {
+      display: block; 
+      margin-bottom: 6px; 
+      font-weight: 500; 
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    
+    .episode-selector select {
+      width: 100%; 
+      padding: 8px 12px; 
+      background: var(--bg-light);
+      border: 1px solid rgba(255,255,255,0.1); 
+      border-radius: 5px; 
+      color: var(--text-color);
+      margin-bottom: 10px; 
+      cursor: pointer; 
+      transition: var(--transition);
+      font-size: 0.85rem;
+    }
+    
+    .episode-selector select:hover { 
+      border-color: var(--primary-color); 
+    }
+    
+    .episode-selector select:focus {
+      outline: none; 
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(0,200,255,0.2);
+    }
+
+    .player-container {
+      width: 100%; 
+      height: 0;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000; 
+      border-radius: 8px;
+      overflow: hidden; 
+      position: relative; 
+      z-index: 1;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .player-container::before {
+      content: ''; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255,45,85,0.1), rgba(0,200,255,0.1));
+      z-index: 1; 
+      opacity: 0; 
+      transition: opacity 0.3s ease; 
+      pointer-events: none;
+    }
+    
+    .player-container:hover::before { 
+      opacity: 1; 
+    }
+
+    #film-player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%; 
+      height: 100%; 
+      border: none; 
+      z-index: 2; 
+      pointer-events: auto;
+    }
+
+    /* TV Channels specific styles */
+    .tv-channel-card {
+      flex: 0 0 auto;
+      width: 200px;
+      background: var(--bg-light);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+    }
+
+    .tv-channel-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+    }
+
+    .tv-channel-logo {
+      width: 100%;
+      height: 100px;
+      object-fit: contain;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .tv-channel-info {
+      text-align: center;
+      width: 100%;
+    }
+
+    .tv-channel-info h3 {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tv-channel-info p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .tv-channel-play-btn {
+      margin-top: 10px;
+      padding: 8px 20px;
+      background: var(--gradient);
+      border-radius: 30px;
+      font-weight: 500;
+      color: white;
+      transition: var(--transition);
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .tv-channel-play-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255,45,85,0.3);
+    }
+
+    #tv-channels {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    #tv-player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: 2;
+      pointer-events: auto;
+    }
+
+    /* TV Player Overlay */
+    #tv-player-overlay .film-container {
+      max-width: 900px;
+    }
+
+    #tv-player-overlay h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #tv-player-overlay h2 i {
+      color: var(--primary-color);
+    }
+
+    #tv-player-overlay .player-container {
+      position: relative;
+      width: 100%;
+      height: 75vh; /* ou 90vh si tu veux plus grand */
+      padding-bottom: 0 !important;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    
+    .bottom-banner {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-size: 12px;
+      padding: 10px 20px;
+      text-align: center;
+      z-index: 3000;
+      color: var(--text-secondary);
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px); /* flou si tu veux un effet verre */
+      overflow: hidden;
+      color: rgb(255, 255, 255);
+    }
+
+    .bottom-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--bg-lighter);
+      opacity: 0.8; /* Réglage de l’opacité ici */
+      z-index: -1;
+    }
+
+    .bottom-banner:hover {
+      background: var(--gradient);
+      color: white;
+    }
+
+    .bottom-banner a {
+      color: var(--accent-color); /* Couleur flash pour attirer l’œil */
+      text-decoration: underline;
+      font-size: 12px;
+      transition: color 0.3s ease;
+      color: rgb(255, 67, 101);
+    }
+
+    .bottom-banner a:hover {
+      color: var(--primary-color); /* Teinte rose vif au survol */
+    }
+
+    /* Footer */
+    footer {
+      text-align: center; 
+      padding: 40px 0; 
+      font-size: 12px;
+      color: var(--text-secondary); 
+      background: var(--bg-light); 
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 50px;
+    }
+    
+    .footer-logo {
+      font-size: 1.4rem; 
+      font-weight: 700; 
+      background: var(--gradient);
+      -webkit-background-clip: text; 
+      background-clip: text; 
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px; 
+      display: inline-block;
+    }
+    
+    .footer-links {
+      display: flex; 
+      justify-content: center; 
+      gap: 15px; 
+      flex-wrap: wrap; 
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+    }
+    
+    .footer-links a:hover { 
+      color: var(--primary-color); 
+    }
+    
+    .social-links {
+      display: flex; 
+      justify-content: center; 
+      gap: 12px; 
+      margin-bottom: 20px;
+    }
+    
+    .social-links a {
+      width: 36px; 
+      height: 36px; 
+      border-radius: 50%; 
+      background: var(--bg-lighter);
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+    
+    .social-links a:hover { 
+      background: var(--gradient); 
+      transform: translateY(-3px); 
+      color: white; 
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100%;
+      background: var(--bg-light);
+      z-index: 1000;
+      transition: all 0.4s ease;
+      padding: 80px 20px 20px;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+      overflow-y: auto;
+    }
+    
+    .mobile-menu.active {
+      right: 0;
+    }
+    
+    .mobile-menu ul {
+      list-style: none;
+    }
+    
+    .mobile-menu li {
+      margin-bottom: 15px;
+    }
+    
+    .mobile-menu a {
+      display: block;
+      padding: 10px 15px;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+    
+    .mobile-menu a:hover,
+    .mobile-menu a.active {
+      background: rgba(255,255,255,0.1);
+      color: var(--primary-color);
+    }
+    
+    .mobile-menu-toggle {
+      display: block;
+    }
+    
+    .mobile-menu-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .mobile-menu-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .account-container {
+      position: absolute;
+      right: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .account-wrapper {
+      position: absolute;
+      right: 0; /* À droite de la loupe */
+      top: 48%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 40px; /* même taille que la loupe */
+    }
+
+    .account-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      width: 100%;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #user-icon {
+      font-size: 1.2rem;
+      color: white;
+      transition: color 0.3s ease;
+    }
+
+    .account-name {
+      position: absolute;
+      top: 35px;
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      text-align: center;
+      width: max-content;
+      background: rgba(0,0,0,0.6);
+      padding: 2px 6px;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    .logout-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin-top: 3px;
+    }
+
+
+    /* Animations */
+    @keyframes fadeIn { 
+      from { opacity: 0; } 
+      to { opacity: 1; } 
+    }
+    
+    @keyframes fadeInUp { 
+      from { opacity: 0; transform: translateY(20px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+
+    /* Responsive */
+    @media (min-width: 680px) {
+      .header-content {
+        padding: 15px 0;
+      }
+
+      .film-overlay {
+        padding-bottom: 7rem; /* pour laisser la place au footer */
+      }
+      
+      .logo {
+        font-size: 1.8rem;
+        gap: 10px;
+      }
+      
+      .logo-icon {
+        font-size: 2rem;
+      }
+      
+      nav {
+        display: block;
+        position: static;
+        transform: none;
+      }
+      
+      .mobile-menu-toggle {
+        display: none;
+      }
+      
+      .mobile-menu {
+        display: none;
+      }
+      
+      .film-header {
+        flex-direction: row;
+      }
+      
+      .film-poster {
+        align-self: flex-start;
+      }
+      
+      .film-details h1 {
+        font-size: 2.2rem;
+      }
+      
+      section h2 {
+        font-size: 1.8rem;
+      }
+      
+      .movie-card {
+        width: 180px;
+      }
+      
+      .movie-poster {
+        height: 270px;
+      }
+      
+      .movies-grid {
+        gap: 20px;
+      }
+      
+      #platform-results, #search-results, #films-content, #series-content, #categories-content {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+
+      .tv-channel-card {
+        width: 220px;
+      }
+    }
+
+    iframe::after,
+    iframe::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    iframe {
+      pointer-events: auto !important;
+    }
+
+    body * {
+      user-select: auto !important;
+    }
+
+    @media (max-width: 680px) {
+      .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      width: 100%;
+      height: 2rem;
+    }
+
+    .film-overlay{
+      padding-bottom: 7rem; /* pour laisser la place au footer */
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 10px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+      /* Logo centré */
+      .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 40px;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+      }
+
+      /* Barre de recherche */
+      .search-bar {
+        position: absolute;
+        top: 50%;
+        right: 75px;
+        width: 60%; /* ajuste la largeur comme tu veux */
+        transform: translateY(-50%);
+        padding: 8px 12px;
+        font-size: 1rem;
+        border-radius: 8px;
+        display: none;
+        z-index: 3;
+      }
+
+    .search-bar.active {
+      display: block;
+    }
+
+    /* Masque le logo quand la recherche est active */
+    .search-bar.active ~ .logo {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+      /* Hero & films */
+      .hero {
+        height: 65vh;
+        min-height: 380px;
+        padding: 20px 15px;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .hero p {
+        font-size: 1.05rem;
+        text-align: center;
+      }
+
+      .movie-card {
+        width: 100%;
+        max-width: 140px;
+        margin: 0 auto;
+      }
+
+      .movie-poster {
+        height: 200px;
+        border-radius: 8px;
+      }
+
+      .stream-btn {
+        padding: 10px 18px;
+        font-size: 1rem;
+        border-radius: 6px;
+      }
+
+      .stream-btn img {
+        height: 20px;
+        margin-right: 6px;
+      }
+
+      .film-container {
+        padding: 20px 15px;
+        margin: 15px auto;
+      }
+
+      .film-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .film-poster {
+        width: 100%;
+        max-width: 240px;
+      }
+
+      .film-details {
+        text-align: center;
+      }
+
+      .film-details h1 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+      }
+
+      .section-nav-arrow {
+        display: none;
+      }
+
+      #platform-results,
+      #search-results,
+      #films-content,
+      #series-content,
+      #categories-content {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 16px;
+      }
+
+      .tv-channel-card {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 10px;
+        border-radius: 10px;
+      }
+
+      #tv-channels {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 16px;
+        justify-content: center;
+      }
+
+      .tv-channel-logo {
+        height: 80px;
+        object-fit: contain;
+      }
+    }
+
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header id="main-header">
+    <div class="container">
+      <div class="header-content">
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a href="#" class="logo">
+          <i class="fas fa-play-circle logo-icon"></i>
+          <span>Novovue</span>
+        </a>
+        <nav>
+          <ul class="nav-menu">
+            <li><a href="#" class="active" id="home-link">Accueil</a></li>
+            <li><a href="#" id="films-link">Films</a></li>
+            <li><a href="#" id="series-link">Séries</a></li>
+            <li><a href="#" id="tv-link">TV</a></li>
+            <li><a href="#" id="categories-link">Catégories</a></li>
+          </ul>
+        </nav>
+        <button class="search-toggle" id="search-toggle"><i class="fas fa-search"></i></button>
+        <div class="search-bar" id="search-bar">
+          <input type="text" id="search-input" placeholder="Rechercher un film ou série...">
+          <button id="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="account-wrapper">
+          <button id="login-btn" class="account-btn">
+            <i id="user-icon" class="fas fa-user-circle"></i>
+          </button>
+          <span id="user-display" class="account-name">Non connecté</span>
+          <button id="logout-btn" class="logout-btn">Déconnexion</button>
+        </div>                
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <ul>
+      <li><a href="#" class="active" id="mobile-home-link">Accueil</a></li>
+      <li><a href="#" id="mobile-films-link">Films</a></li>
+      <li><a href="#" id="mobile-series-link">Séries</a></li>
+      <li><a href="#" id="mobile-tv-link">TV</a></li>
+      <li><a href="#" id="mobile-categories-link">Catégories</a></li>
+    </ul>
+  </div>
+  <div class="mobile-menu-backdrop" id="mobile-menu-backdrop"></div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>L'expérience ultime de streaming</h1>
+      <p>Des milliers de films et séries en qualité HD, disponibles partout</p>
+      <a id="scroll-to-featured" class="hero-btn">Regarder maintenant</a>
+    </div>
+  </div>
+
+  <!-- Home page sections -->
+  <div class="container" id="home-page">
+    <section>
+      <h2>Plateformes disponibles</h2>
+      <div class="streaming-categories">
+        <button class="stream-btn" data-provider="8" data-name="Netflix">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix">
+          Netflix
+        </button>
+        <button class="stream-btn" data-provider="119" data-name="Amazon Prime">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png" alt="Prime">
+          Prime
+        </button>
+        <button class="stream-btn" data-provider="337" data-name="Disney+">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg" alt="Disney+">
+          Disney+
+        </button>
+        <button class="stream-btn" data-provider="531" data-name="Paramount+">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Paramount_Plus.svg" alt="Paramount+">
+          Paramount+
+        </button>
+      </div>
+    </section>
+
+    <section id="featured">
+      <h2>À l'affiche</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="trending-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="trending-content"></div>
+        <button class="section-nav-arrow right" data-target="trending-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+    <section>
+      <h2>Films populaires</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="popular-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="popular-content"></div>
+        <button class="section-nav-arrow right" data-target="popular-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+    <section id="vip-section">
+      <h2>Exclusivité VIP</h2>
+      <div class="vip-banner">
+        <div class="particle-effect"></div>
+          <div class="vip-content">
+            <h3>Rejoins le club VIP</h3>
+            <p>Accès sans pub, fonctionnlités communautaires, et chaînes privées en illimité. A partir de 1,99€ seulement.</p>
+            <div class="vip-btn-wrapper">
+              <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn">Devenir VIP</a>
+            </div>  
+          </div>        
+        </div>
+    </section>      
+    <section>
+      <h2>Sorties récentes</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="recent-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="recent-content"></div>
+        <button class="section-nav-arrow right" data-target="recent-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Comédie</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="comedy-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="comedy-content"></div>
+        <button class="section-nav-arrow right" data-target="comedy-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+    <section>
+      <h2>Horreur</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="horror-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="horror-content"></div>
+        <button class="section-nav-arrow right" data-target="horror-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+    <section>
+      <h2>Action</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="action-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="action-content"></div>
+        <button class="section-nav-arrow right" data-target="action-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+    <section>
+      <h2>Drame</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="drama-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="drama-content"></div>
+        <button class="section-nav-arrow right" data-target="drama-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+    <section>
+      <h2>Romance</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="romance-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="romance-content"></div>
+        <button class="section-nav-arrow right" data-target="romance-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+    <section>
+      <h2>Nos utilisateurs</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="online-users-grid"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="online-users-grid"></div>
+        <button class="section-nav-arrow right" data-target="online-users-grid"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Overlays -->
+  <div id="films-overlay" class="film-overlay">
+    <div class="film-container">
+      <button class="close-btn" id="close-films"><i class="fas fa-times"></i></button>
+      <h2>Tous les films</h2>
+      <div class="movies-grid" id="films-content"></div>
+    </div>
+  </div>
+  <div id="series-overlay" class="film-overlay">
+    <div class="film-container">
+      <button class="close-btn" id="close-series"><i class="fas fa-times"></i></button>
+      <h2>Toutes les séries</h2>
+      <div class="movies-grid" id="series-content"></div>
+    </div>
+  </div>
+  <div id="tv-overlay" class="film-overlay">
+    <div class="film-container">
+      <button class="close-btn" id="close-tv"><i class="fas fa-times"></i></button>
+      <h2><i class="fas fa-tv"></i> Chaînes TV</h2>
+      <div id="tv-channels" class="movies-grid"></div>
+    </div>
+  </div>  
+  <div id="categories-overlay" class="film-overlay">
+    <div class="film-container">
+      <button class="close-btn" id="close-categories"><i class="fas fa-times"></i></button>
+      <h2 id="categories-title">Toutes les catégories</h2>
+      <div id="categories-content"></div>
+    </div>
+  </div>
+  <div id="platform-overlay" class="film-overlay">
+    <div class="film-container">
+      <button class="close-btn" id="close-platform"><i class="fas fa-times"></i></button>
+      <h2 id="platform-title"></h2>
+      <div class="movies-grid" id="platform-results"></div>
+    </div>
+  </div>
+  <div id="search-overlay" class="film-overlay">
+    <div class="film-container">
+      <button class="close-btn" id="close-search"><i class="fas fa-times"></i></button>
+      <h2>Résultats de recherche</h2>
+      <div class="movies-grid" id="search-results"></div>
+    </div>
+  </div>
+  <div id="tv-player-overlay" class="film-overlay">
+    <div class="film-container">
+      <button class="close-btn" id="close-tv-player"><i class="fas fa-times"></i></button>
+      <h2 id="tv-player-title"><i class="fas fa-tv"></i> <span id="tv-channel-name"></span></h2>
+      <div class="player-container" style="margin-top:20px;">
+        <iframe
+          id="tv-player"
+          src=""
+          frameborder="0"
+          allowfullscreen
+          allow="autoplay; fullscreen; encrypted-media"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>
+      </div>
+    </div>
+  </div>  
+  <div id="film-overlay" class="film-overlay">
+    <div class="film-container">
+      <button class="close-btn" id="close-film"><i class="fas fa-times"></i></button>
+      <div class="film-header" id="film-header"></div>
+      <div class="player-options">
+        <button class="player-option-btn active" data-player="wavewatch">VM AUDIO</button>
+        <button class="player-option-btn" data-player="frembed">VF AUDIO</button>
+        <button class="player-option-btn" data-player="vidlink">VO AUDIO</button>
+        <button class="player-option-btn" data-player="wavewatchdl">DOWNLOAD</button>
+      </div>
+      <div class="episode-selector" id="episode-selector" style="display:none">
+        <label for="season-select">Saison :</label>
+        <select id="season-select"></select>
+        <label for="episode-select">Épisode :</label>
+        <select id="episode-select"></select>
+      </div>
+      <div class="player-container">
+        <iframe
+          id="film-player"
+          frameborder="0"
+          allow="autoplay; fullscreen; encrypted-media"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>
+      </div>      
+      <div id="comments-section" style="margin-top: 40px;">
+        <h3 style="font-size: 1.3rem; margin-bottom: 10px;">Commentaires</h3>
+      
+        <div id="comments-list" style="margin-bottom: 20px;"></div>
+      
+        <div id="comment-form" style="display: none;">
+          <textarea id="comment-input" placeholder="Écris ton avis... | ⚠️ Tout spoil, insulte ou abus sera sévèrement sanctionné." rows="3" style="width:100%; padding:10px; border-radius:8px; resize:none;"></textarea>
+          <button id="submit-comment" style="margin-top:10px; background: var(--primary-color); color:white; border:none; border-radius:20px; padding:10px 20px; cursor:pointer;">Envoyer</button>
+        </div>
+      
+        <p id="comment-warning" style="color:orange; display:none;">Fonction réservée aux membres VIP.</p>
+      </div>      
+    </div>
+  </div>
+
+  <div id="vip-overlay" class="film-overlay">
+    <div class="film-container" style="max-width: 600px;">
+      <button class="close-btn" onclick="closeOverlay('vip-overlay')"><i class="fas fa-times"></i></button>
+      <h2 style="text-align: center; margin-bottom: 30px; font-size: 2rem;">⭐ Deviens VIP ⭐</h2>
+  
+      <div style="display: flex; flex-direction: column; gap: 25px;">
+  
+        <!-- PASS 24H -->
+        <div style="background: linear-gradient(145deg, #fff4b8, #ffd700); box-shadow: 0 0 12px #ffd70099; border-radius: 16px; padding: 24px; animation: fadeInUp 0.4s;">
+          <h3 style="color: #8a6d00; font-size: 1.4rem;">💫 Pass 24h – 1,99€</h3>
+          <p style="margin: 10px 0;">Lecture sans pub, accès aux commentaires, tout débloqué pendant 24h.</p>
+          <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #8a6d00;">Choisir</a>
+        </div>
+  
+        <!-- MENSUEL -->
+        <div style="background: linear-gradient(145deg, #c9f4ff, #00c8ff); box-shadow: 0 0 12px #00c8ff99; border-radius: 16px; padding: 24px; animation: fadeInUp 0.6s;">
+          <h3 style="color: #006e99; font-size: 1.4rem;">📅 Abonnement mensuel – 4,99€</h3>
+          <p style="margin: 10px 0;">Streaming illimité sans pub, favoris, TV premium, interface dorée, nouveautés en avance.</p>
+          <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #006e99;">Choisir</a>
+        </div>
+  
+        <!-- À VIE -->
+        <div style="background: linear-gradient(145deg, #ffd5dd, #ff2d55); box-shadow: 0 0 12px #ff2d55aa; border-radius: 16px; padding: 24px; animation: fadeInUp 0.8s;">
+          <h3 style="color: #730022; font-size: 1.4rem;">👑 VIP à vie – 14,99€</h3>
+          <p style="margin: 10px 0;">Un seul paiement pour débloquer tous les avantages à vie. Zéro pub. Zéro limite. Badge doré éternel.</p>
+          <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #730022;">Choisir</a>
+        </div>
+  
+      </div>
+    </div>
+  </div>  
+
+  <div class="bottom-banner">
+    🔔 Votre configuration DNS bloque certains lecteurs. Utilisez ce <a href="https://one.one.one.one/" target="_blank">navigateur</a> pour profter pleinement de notre site.
+  </div>  
+
+  <footer>
+    <div class="container">
+      <div class="footer-logo">Novovue</div>
+      <div class="footer-links">
+        <a href="#">Un site pour les gouverner tous. Un site pour les trouver. Un site pour les amener tous et dans les ténèbres les lier.</a>
+      </div>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+      <p>© 2025 Novovue. Tous droits réservés.</p>
+    </div>
+  </footer>
+  
+  <script type="module">
+    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyBCJ1FyO85ioH7Tojk1i4gHtGyCEhj1i9M",
+      authDomain: "novovue-ac9a9.firebaseapp.com",
+      projectId: "novovue-ac9a9",
+      storageBucket: "novovue-ac9a9.firebasestorage.app",
+      messagingSenderId: "347769678734",
+      appId: "1:347769678734:web:0c1bb017cc76dbdc2992df"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const userIcon = document.getElementById("user-icon");
+  
+    const userDisplay = document.getElementById("user-display");
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+  
+    loginBtn.addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error("Erreur login :", error.message);
+      }
+    });
+  
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth);
+    });
+  
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      const email = user.email;
+      const isUserVIP = isVIP(email); // on l'appelle ici, email est bien défini
+      console.log("Utilisateur connecté :", email);
+      console.log("Est VIP ?", isUserVIP);
+      updateUserPresence(user.uid, user.displayName || "Anonyme");
+      listenToUsersOnline();
+  
+      userDisplay.textContent = user.displayName || "Connecté";
+      if (isVIP(email)) {
+        userIcon.classList.add("vip-glow");
+      } else {
+        userIcon.classList.remove("vip-glow");
+        userIcon.style.color = "#00c8ff";
+      }
+      logoutBtn.style.display = "none"; // on cache le bouton déconnexion
+      localStorage.setItem("email", email); // stocke l’email pour plus tard
+    } else {
+      console.log("Aucun utilisateur connecté");
+      userDisplay.textContent = "Non connecté";
+      userIcon.style.color = "white"; // logo BLANC
+      logoutBtn.style.display = "none";
+      localStorage.removeItem("email");
+    }
+  });
+
+  const usersGrid = document.getElementById("online-users-grid");
+
+  function createUserCard(user) {
+    const card = document.createElement("div");
+    card.className = "movie-card";
+    card.innerHTML = `
+      <img class="movie-poster" src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0D8ABC&color=fff&size=256" alt="${user.name}" />
+      <div class="movie-info">
+        <h3>${user.name}</h3>
+        <p>En ligne</p>
+      </div>
+    `;
+    return card;
+  }
+
+  function updateUserPresence(uid, name) {
+    const userRef = doc(db, "usersOnline", uid);
+    setDoc(userRef, {
+      name,
+      timestamp: serverTimestamp()
+    });
+
+    // Mise à jour régulière
+    setInterval(() => {
+      updateDoc(userRef, {
+        timestamp: serverTimestamp()
+      });
+    }, 20000);
+
+    // Suppression à la fermeture
+    window.addEventListener("beforeunload", () => {
+      deleteDoc(userRef);
+    });
+  }
+
+  function listenToUsersOnline() {
+    const usersRef = collection(db, "usersOnline");
+    onSnapshot(usersRef, (snapshot) => {
+      usersGrid.innerHTML = "";
+      const now = new Date();
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const lastSeen = new Date(data.timestamp?.seconds * 1000 || 0);
+        if ((now - lastSeen) / 1000 < 40) {
+          usersGrid.appendChild(createUserCard(data));
+        }
+      });
+    });
+  }
+
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  const db = getFirestore(app);
+
+  const commentSection = document.getElementById("comments-section");
+  const commentList = document.getElementById("comments-list");
+  const commentForm = document.getElementById("comment-form");
+  const commentInput = document.getElementById("comment-input");
+  const commentBtn = document.getElementById("submit-comment");
+  const commentWarning = document.getElementById("comment-warning");
+
+  async function loadComments(filmId) {
+    commentList.innerHTML = "";
+    const q = query(collection(db, "commentaires"), orderBy("date", "desc"));
+    onSnapshot(q, (snapshot) => {
+      commentList.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.filmId === filmId) {
+          const div = document.createElement("div");
+          div.innerHTML = `
+            <strong style="color:gold">${data.pseudo}</strong> <span style="font-size:0.8rem; color:gray;">(${new Date(data.date).toLocaleString()})</span><br>
+            <p style="margin:5px 0 15px;">${data.commentaire}</p>
+          `;
+          commentList.appendChild(div);
+        }
+      });
+    });
+  }
+
+  // Sauvegarde de l’original
+  window.__originalOpen = window.open.bind(window);
+
+  commentBtn.addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user || !isVIP(user.email)) return;
+
+    const commentaire = commentInput.value.trim();
+    if (!commentaire) return;
+
+    await addDoc(collection(db, "commentaires"), {
+      filmId: currentMedia.imdb_id,
+      user: user.email,
+      pseudo: (user.displayName?.split(" ")[0]) || "VIP",
+      commentaire,
+      date: new Date().toISOString()
+    });
+
+    commentInput.value = "";
+  });
+
+    const API_KEY = '7e14b834557481d48b67aebd4f0680b2';
+    const FREMBED_FILM = 'https://frembed.art/api/film.php?id=';
+    const FREMBED_SERIE = 'https://frembed.art/api/serie.php?id=';
+    const VIDLINK_FILM = 'https://vidlink.pro/movie/';
+    const VIDLINK_SERIE = 'https://vidlink.pro/tv/';
+    const WAVEWATCH_FILM = 'https://embed.wavewatch.xyz/embed/';
+    const WAVEWATCH_SERIE = 'https://embed.wavewatch.xyz/embed/';
+    const WAVEWATCH_DL = 'https://embed.wavewatch.xyz/download/'
+  
+    let currentPage = 1,
+        currentCategory = '',
+        currentProvider = '';
+  
+    let currentMedia = {},
+        currentPlayer = 'wavewatch';
+  
+    const containers = {
+      comedy: 'comedy-content',
+      horror: 'horror-content',
+      action: 'action-content',
+      drama: 'drama-content',
+      romance: 'romance-content',
+      recent: 'recent-content',
+      popular: 'popular-content',
+      trending: 'trending-content'
+    };
+  
+    const playerOptions = document.querySelectorAll('.player-option-btn');
+
+    document.getElementById("scroll-to-featured").addEventListener("click", () => {
+      const section = document.getElementById("featured");
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+
+  
+    function scrollToTopOfOverlay(overlayId) {
+      const overlay = document.getElementById(overlayId);
+      if (overlay) overlay.scrollTo({ top: 0, behavior: 'auto' });
+    }
+
+    document.querySelector('.vip-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('vip-overlay').classList.add('active');
+      document.body.classList.add('overlay-open');
+    });
+  
+    function closeOverlay(overlayId) {
+      const overlay = document.getElementById(overlayId);
+      overlay.classList.remove('active');
+      document.body.classList.remove('overlay-open');
+      if (overlayId === 'film-overlay') {
+        const player = document.getElementById('film-player');
+        player.src = '';
+        player.removeAttribute('src');
+      }
+      if (overlayId === 'tv-player-overlay') {
+        const player = document.getElementById('tv-player');
+        player.src = '';
+        player.removeAttribute('src');
+      }
+      document.getElementById('home-page').style.display = 'block';
+    }
+    window.closeOverlay = closeOverlay;
+
+  
+    function addSeeMoreButton(containerId, baseUrl, type, isGrid = false) {
+      const container = document.getElementById(containerId);
+      const parent = container.parentElement;
+      const oldBtn = parent.querySelector('.see-more-btn');
+      if (oldBtn) oldBtn.remove();
+      const btn = document.createElement('button');
+      btn.className = 'see-more-btn';
+      btn.textContent = 'Voir plus';
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        btn.textContent = 'Chargement...';
+        await fetchAndDisplay(`${baseUrl}&page=${currentPage + 1}`, containerId, type, isGrid, true);
+        btn.disabled = false;
+        btn.textContent = 'Voir plus';
+      });
+      parent.appendChild(btn);
+    }
+  
+    function updatePlayer(){
+      const player = document.getElementById('film-player');
+      player.src = '';
+      player.removeAttribute('src');
+
+      setTimeout(()=>{
+        let src = '';
+        if (currentMedia.type === 'movie') {
+          if (currentPlayer === 'wavewatch') {
+            src = `${WAVEWATCH_FILM}${currentMedia.imdb_id}`;
+
+          } else if (currentPlayer === 'wavewatchdl') {
+            const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
+            window.open(url, '_blank');
+
+          } else {
+            src = (currentPlayer === 'frembed' ? FREMBED_FILM : VIDLINK_FILM) + currentMedia.id;
+          }
+        } else {
+          const s = document.getElementById('season-select').value;
+          const e = document.getElementById('episode-select').value;
+
+          if (currentPlayer === 'wavewatch') {
+            src = `https://embed.wavewatch.xyz/embed/series?tmdb=${currentMedia.id}&sea=${s}&epi=${e}`;
+            
+          } else if (currentPlayer === 'wavewatchdl') {
+            const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
+            window.open(url, '_blank');
+
+          } else {
+            src = currentPlayer === 'frembed'
+              ? `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`
+              : `${VIDLINK_SERIE}${currentMedia.id}/${s}/${e}`;
+          }
+        }
+        player.src = src;
+        player.setAttribute('allowfullscreen','');
+        player.setAttribute('allow','autoplay; fullscreen; encrypted-media');
+        player.style.pointerEvents = 'auto';
+      }, 100);
+    }
+
+    let unlockClicks = 0;
+    let unlockLocked = false;
+    const maxUnlock = 5;
+
+    function isVIP(email) {
+      const vipEmails = [
+        "matissehpro@gmail.com"
+      ];
+      return vipEmails.includes(email)
+      console.log(vipEmails.includes(email));
+    }
+
+
+    function showProtectedPlayer(id) {
+      const overlay = document.getElementById('film-overlay');
+      const container = overlay.querySelector('.player-container');
+      const iframe = document.getElementById('film-player');
+
+      unlockClicks = 0;
+      unlockLocked = false;
+
+      // Appliquer le flou
+      iframe.style.filter = 'blur(8px)';
+      iframe.style.pointerEvents = 'none';
+
+      // Supprimer tout blocage précédent
+      document.getElementById('click-blocker')?.remove();
+
+      // Empêcher les fermetures accidentelles
+      overlay.setAttribute('data-protected', 'true');
+
+      const blocker = document.createElement('div');
+      blocker.id = 'click-blocker';
+      blocker.style.position = 'absolute';
+      blocker.style.top = '0';
+      blocker.style.left = '0';
+      blocker.style.width = '100%';
+      blocker.style.height = '100%';
+      blocker.style.display = 'flex';
+      blocker.style.flexDirection = 'column';
+      blocker.style.alignItems = 'center';
+      blocker.style.justifyContent = 'center';
+      blocker.style.zIndex = '9999';
+      blocker.style.backdropFilter = 'blur(8px)';
+      blocker.style.background = 'rgba(0,0,0,0.6)';
+
+      const label = document.createElement('p');
+      label.textContent = 'VOUS ÊTES SUR UNE ZONE PUBLICITAIRE !';
+      label.style.fontWeight = 'bold';
+      label.style.color = 'var(--primary-color)';
+      label.style.fontSize = '1.2rem';
+      label.style.marginBottom = '10px';
+
+      const desc = document.createElement('p');
+      desc.textContent = 'Regardez les publicités nécessaires afin de visionner votre film ou épisode.';
+      desc.style.color = 'var(--text-secondary)';
+      desc.style.fontSize = '0.9rem';
+      desc.style.marginBottom = '20px';
+      desc.style.textAlign = 'center';
+
+      const progress = document.createElement('div');
+      progress.id = 'progress-text';
+      progress.textContent = '0% complet';
+      progress.style.fontSize = '1.5rem';
+      progress.style.color = 'white';
+      progress.style.marginBottom = '10px';
+
+      const button = document.createElement('button');
+      button.textContent = 'Continuer';
+      button.style.padding = '12px 30px';
+      button.style.background = 'var(--primary-color)';
+      button.style.color = '#fff';
+      button.style.fontSize = '1rem';
+      button.style.border = 'none';
+      button.style.borderRadius = '30px';
+      button.style.cursor = 'pointer';
+      button.style.marginTop = '15px';
+
+      const hint = document.createElement('p');
+      hint.textContent = 'Votre compteur reste bloqué ? Rafraîchissez la page.';
+      hint.style.color = 'orange';
+      hint.style.fontSize = '0.8rem';
+      hint.style.marginTop = '15px';
+
+      blocker.addEventListener('click', e => e.stopPropagation());
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (unlockLocked) return;
+        unlockLocked = true;
+
+        window.open('https://uvoonaix.top/4/9242923', '_blank');
+
+        unlockClicks++;
+        const percent = Math.floor((unlockClicks / maxUnlock) * 100);
+        progress.textContent = `${percent}% complet`;
+
+        if (unlockClicks >= maxUnlock) {
+          iframe.style.filter = 'none';
+          iframe.style.pointerEvents = 'auto';
+          blocker.remove();
+          overlay.removeAttribute('data-protected');
+
+          setTimeout(() => {
+            document.querySelector('.player-option-btn.active')?.click();
+          }, 50);
+        } else {
+          setTimeout(() => {
+            unlockLocked = false;
+          }, 300);
+        }
+      });
+
+      blocker.append(label, desc, progress, button, hint);
+      container.appendChild(blocker);
+    }
+
+    async function openOverlay(id, type) {
+      const res = await fetch(
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}&language=fr-FR&append_to_response=external_ids`
+      );
+      const data = await res.json();
+      const hdr = document.getElementById('film-header');
+      hdr.innerHTML = `
+        <img src="https://image.tmdb.org/t/p/w500${data.poster_path}" class="film-poster" alt="${data.title||data.name}" onerror="this.src='https://placehold.co/500x750?text=Image+manquante&font=roboto'">
+        <div class="film-details">
+          <h1>${data.title||data.name}</h1>
+          <div class="film-meta">
+            <span>${(data.release_date||data.first_air_date||'').slice(0,4)}</span>
+            <span class="film-rating"><i class="fas fa-star"></i> ${data.vote_average?.toFixed(1)||'N/A'}</span>
+            <span>${type==='movie'? (data.runtime?data.runtime+' min':'Durée inconnue') : data.number_of_seasons+' saisons'}</span>
+          </div>
+          <div class="film-genres">${(data.genres||[]).map(g=>`<span class="genre-tag">${g.name}</span>`).join('')}</div>
+          <p class="film-overview">${data.overview||'Aucun synopsis disponible.'}</p>
+        </div>`;
+      currentMedia = { id, type, imdb_id: data.external_ids?.imdb_id };
+      if (type === 'tv') {
+        document.getElementById('episode-selector').style.display='block';
+        const ss = document.getElementById('season-select');
+        ss.innerHTML = '';
+        (data.seasons||[])
+          .filter(s=>s.season_number>0)
+          .forEach(s=>{
+            const o = document.createElement('option');
+            o.value = s.season_number;
+            o.textContent = `Saison ${s.season_number}`;
+            ss.appendChild(o);
+          });
+        await loadEpisodes(id);
+      } else {
+        document.getElementById('episode-selector').style.display='none';
+      }
+      playerOptions.forEach(b=>b.classList.remove('active'));
+      document.querySelector('.player-option-btn[data-player="wavewatch"]').classList.add('active');
+      currentPlayer = 'wavewatch';
+      document.getElementById('film-overlay').classList.add('active');
+      scrollToTopOfOverlay('film-overlay');
+      document.body.classList.add('overlay-open');
+
+      const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
+      if (!isVIP(email)) {
+        showProtectedPlayer(currentMedia.imdb_id);
+      }
+
+      loadComments(currentMedia.imdb_id);
+      if (isVIP(email)) {
+        commentForm.style.display = "block";
+        commentWarning.style.display = "none";
+      } else {
+        commentForm.style.display = "none";
+        commentWarning.style.display = "block";
+      }
+
+      updatePlayer();
+    }
+  
+    async function loadEpisodes(id) {
+      const season = document.getElementById('season-select').value;
+      const res = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}/season/${season}?api_key=${API_KEY}&language=fr-FR`
+      );
+      const data = await res.json();
+      const epSel = document.getElementById('episode-select');
+      epSel.innerHTML = '';
+      (data.episodes || []).forEach(ep => {
+        const o = document.createElement('option');
+        o.value = ep.episode_number;
+        o.textContent = `Épisode ${ep.episode_number} : ${ep.name}`;
+        epSel.appendChild(o);
+      });
+
+      // Appelle le lecteur avec le premier épisode par défaut
+      updatePlayer();
+    }
+  
+    playerOptions.forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        playerOptions.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        currentPlayer = btn.dataset.player;
+        updatePlayer();
+      });
+    });
+  
+    async function fetchAndDisplay(url, containerId, forceType=null, isGrid=false, loadMore=false) {
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        const list = json.results || json.genres || [];
+        const container = document.getElementById(containerId);
+        if (!loadMore) { container.innerHTML = ''; currentPage = 1; }
+        else { currentPage++; }
+        container.style.display = isGrid ? 'grid' : 'flex';
+        if (containerId==='categories-content' && !forceType && url.includes('/genre/movie/list')) {
+          list.forEach(genre=>{
+            const card = document.createElement('div');
+            card.className = 'movie-card';
+            card.innerHTML = `
+              <div style="background:var(--gradient);height:270px;display:flex;align-items:center;justify-content:center;">
+                <h3 style="color:white;padding:20px;text-align:center;">${genre.name}</h3>
+              </div>
+              <div class="movie-info"><h3>${genre.name}</h3></div>`;
+            card.addEventListener('click', ()=>{
+              currentCategory = genre.id;
+              document.getElementById('categories-title').textContent = `Films – ${genre.name}`;
+              const genreUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=${genre.id}&page=1`;
+              fetchAndDisplay(genreUrl,'categories-content','movie',true);
+              scrollToTopOfOverlay('categories-overlay');
+            });
+            container.appendChild(card);
+          });
+          return;
+        }
+        for (const item of list) {
+          const type = forceType || item.media_type || 'movie';
+          let poster = item.poster_path || item.backdrop_path;
+          if (!poster) {
+            const r = await fetch(`https://api.themoviedb.org/3/${type}/${item.id}?api_key=${API_KEY}&language=fr-FR`);
+            const full = await r.json();
+            poster = full.poster_path||full.backdrop_path;
+            if (!poster) continue;
+          }
+          const title = type==='tv' ? item.name : item.title||item.name;
+          const date = type==='tv' ? item.first_air_date : item.release_date;
+          const year = date? date.split('-')[0] : '';
+          const card = document.createElement('div');
+          card.className = 'movie-card';
+          card.innerHTML = `
+            <img src="https://image.tmdb.org/t/p/w500${poster}" class="movie-poster" alt="${title}" onerror="this.src='https://placehold.co/500x750?text=Image+manquante&font=roboto'">
+            <div class="movie-info">
+              <h3>${title}</h3>
+              <p><i class="fas fa-star movie-rating"></i> ${item.vote_average?.toFixed(1)||'N/A'} • ${year}</p>
+            </div>
+            <div class="play-icon"><i class="fas fa-play"></i></div>`;
+          card.addEventListener('click', () => openOverlay(item.id, type));
+          container.appendChild(card);
+        }
+        if (isGrid && list.length>0 && ['films-content','series-content','categories-content','platform-results'].includes(containerId)) {
+          const baseUrl = url.split('&page=')[0];
+          addSeeMoreButton(containerId, baseUrl, forceType, isGrid);
+        }
+      } catch(e) { console.error(e); }
+    }
+  
+    function loadHomeContent() {
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=35&page=1`, containers.comedy,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=27&page=1`, containers.horror,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=28&page=1`, containers.action,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=18&page=1`, containers.drama,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=10749&page=1`, containers.romance,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=fr-FR&page=1`, containers.trending,'movie');
+      fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`, containers.popular,'movie');
+      const today = new Date().toISOString().split('T')[0];
+      const monthAgo = new Date(Date.now()-30*24*60*60*1000).toISOString().split('T')[0];
+      fetchAndDisplay(
+        `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&primary_release_date.gte=${monthAgo}&primary_release_date.lte=${today}&page=1`,
+        containers.recent,'movie'
+      );
+    }
+  
+    function openTVPlayer(name, src) {
+      const overlay = document.getElementById('tv-player-overlay');
+      document.getElementById('tv-channel-name').textContent = name;
+      const iframe = document.getElementById('tv-player');
+      iframe.src = src;
+      overlay.classList.add('active');
+      document.body.classList.add('overlay-open');
+      document.getElementById('home-page').style.display = 'none';
+    }
+
+    function loadTVChannels() {
+      const channels = [
+      {
+          name: 'C8',
+          logo: 'data:image/png;base64,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',
+          src: 'https://embed.wavewatch.xyz/embed/Nx69L?ref=SwartExe',
+          description: 'Lecteur C8'
+        },
+
+        {
+          name: 'MGG FAST',
+          logo: 'https://upload.wikimedia.org/wikipedia/fr/thumb/4/4e/Mgg_tv.png/250px-Mgg_tv.png',
+          src: 'https://embed.wavewatch.xyz/embed/vgpgV?ref=SwartExe',
+          description: 'Lecteur MGG FAST'
+        },
+
+        {
+          name: 'BeIN Sport 1',
+          logo: 'data:image/jpeg;base64,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',
+          src: 'https://embed.wavewatch.xyz/embed/oYk7K?ref=SwartExe',
+          description: 'Lecteur Bein Sport chaine 1'
+        },
+        {
+          name: 'BeIN Sport 2',
+          logo: 'data:image/jpeg;base64,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',
+          src: 'https://embed.wavewatch.xyz/embed/y8v8V?ref=SwartExe',
+          description: 'Lecteur Bein Sport chaine 2'
+        },
+        {
+          name: 'BeIN Sport 3',
+          logo: 'data:image/jpeg;base64,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',
+          src: 'https://embed.wavewatch.xyz/embed/zmwmr?ref=SwartExe',
+          description: 'Lecteur Bein Sport chaine 3'
+        },
+
+        {
+          name: 'DAZN 1',
+          logo: 'data:image/png;base64,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',
+          src: 'https://embed.wavewatch.xyz/embed/0gPZL?ref=SwartExe',
+          description: 'Lecteur DAZN chaine 1'
+        },
+        {
+          name: 'DAZN 2',
+          logo: 'data:image/png;base64,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',
+          src: 'https://embed.wavewatch.xyz/embed/wjqjJ?ref=SwartExe',
+          description: 'Lecteur DAZN chaine 2'
+        },
+        {
+          name: 'DAZN 3',
+          logo: 'data:image/png;base64,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',
+          src: 'https://embed.wavewatch.xyz/embed/xGrGJ?ref=SwartExe',
+          description: 'Lecteur DAZN chaine 3'
+        },  
+
+        {
+          name: 'RMC SPORT 1',
+          logo: 'https://upload.wikimedia.org/wikipedia/commons/b/bf/Logo_RMC_Sport_2018.svg',
+          src: 'https://embed.wavewatch.xyz/embed/DRVRB?ref=SwartExe',
+          description: 'Lecteur RMC SPORT chaine 1'
+        },
+        {
+          name: 'RMC SPORT 2',
+          logo: 'https://upload.wikimedia.org/wikipedia/commons/b/bf/Logo_RMC_Sport_2018.svg',
+          src: 'https://embed.wavewatch.xyz/embed/ElVlN?ref=SwartExe',
+          description: 'Lecteur RMC SPORT chaine 2'
+        },
+        {
+          name: 'RMC SPORT 3',
+          logo: 'https://upload.wikimedia.org/wikipedia/commons/b/bf/Logo_RMC_Sport_2018.svg',
+          src: 'https://embed.wavewatch.xyz/embed/GZVZy?ref=SwartExe',
+          description: 'Lecteur RMC SPORT chaine 3'
+        },  
+
+        {
+          name: 'CANAL+',
+          logo: 'data:image/png;base64,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',
+          src: 'https://embed.wavewatch.xyz/embed/Y6mnp?ref=SwartExe',
+          description: 'Lecteur Canal+'
+        },
+        {
+          name: 'CANAL+ FOOT',
+          logo: 'data:image/png;base64,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',
+          src: 'https://embed.wavewatch.xyz/embed/GZrEy?ref=SwartExe',
+          description: 'Lecteur Canal+ Foot'
+        },
+        {
+          name: 'CANAL+ 360',
+          logo: 'https://upload.wikimedia.org/wikipedia/fr/1/11/C%2B_Sport_360.png',
+          src: 'https://embed.wavewatch.xyz/embed/AnYnB?ref=SwartExe',
+          description: 'Lecteur Canal+ 360'
+        }
+      ];
+
+      const container = document.getElementById('tv-channels');
+      container.innerHTML = '';
+      channels.forEach(channel => {
+        const card = document.createElement('div');
+        card.className = 'tv-channel-card';
+        card.innerHTML = `
+          <img src="${channel.logo}" class="tv-channel-logo" alt="${channel.name}">
+          <div class="tv-channel-info">
+            <h3>${channel.name}</h3>
+            <p>${channel.description}</p>
+            <button class="tv-channel-play-btn">
+              <i class="fas fa-play"></i> Regarder
+            </button>
+          </div>
+        `;
+        card.addEventListener('click', () => {
+          openTVPlayer(channel.name, channel.src);
+        });
+        container.appendChild(card);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadHomeContent();
+
+      document.getElementById('season-select').addEventListener('change', async () => {
+        await loadEpisodes(currentMedia.id);
+        updatePlayer();
+      });
+
+      document.getElementById('episode-select').addEventListener('change', () => {
+        updatePlayer();
+      });
+
+      window.addEventListener('scroll', () => {
+        document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50);
+      });
+      document.getElementById('search-toggle').addEventListener('click', () => {
+        const sb = document.getElementById('search-bar');
+        sb.classList.toggle('active');
+        if (sb.classList.contains('active')) document.getElementById('search-input').focus();
+      });
+      document.querySelectorAll('.section-nav-arrow').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const grid = document.getElementById(btn.dataset.target);
+          grid.scrollBy({ left: btn.classList.contains('left') ? -300 : 300, behavior: 'smooth' });
+        });
+      });
+      document.getElementById('home-link').addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById('home-page').style.display = 'block';
+        document.querySelectorAll('.film-overlay').forEach(o => o.classList.remove('active'));
+        document.body.classList.remove('overlay-open');
+      });
+      document.getElementById('tv-link').addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('tv-overlay').classList.add('active');
+        scrollToTopOfOverlay('tv-overlay');
+        document.body.classList.add('overlay-open');
+        loadTVChannels();
+      });
+
+      document.getElementById('films-link').addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('films-overlay').classList.add('active');
+        document.body.classList.add('overlay-open');
+        const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&with_origin_country=US&page=1`;
+        fetchAndDisplay(url, 'films-content','movie',true);
+        addSeeMoreButton('films-content', url, 'movie', true);
+      });
+      document.getElementById('series-link').addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('series-overlay').classList.add('active');
+        scrollToTopOfOverlay('series-overlay');
+        document.body.classList.add('overlay-open');
+        const url = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&with_origin_country=US&with_type=2&page=1`;
+        fetchAndDisplay(url, 'series-content','tv',true);
+        addSeeMoreButton('series-content', url, 'tv', true);
+      });
+      document.getElementById('categories-link').addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('categories-overlay').classList.add('active');
+        scrollToTopOfOverlay('categories-overlay');
+        document.body.classList.add('overlay-open');
+        currentCategory = '';
+        document.getElementById('categories-title').textContent = `Toutes les catégories`;
+        fetchAndDisplay(
+          `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=fr-FR`,
+          'categories-content', null, true
+        );
+      });
+      document.querySelectorAll('.film-overlay').forEach(overlay => {
+        overlay.addEventListener('click', e => {
+          const container = overlay.querySelector('.film-container');
+          if (!container.contains(e.target)) {
+            overlay.classList.remove('active');
+            document.body.classList.remove('overlay-open');
+            document.getElementById('home-page').style.display = 'block';
+            if (overlay.id === 'film-overlay') {
+              const player = document.getElementById('film-player');
+              player.src = '';
+              player.removeAttribute('src');
+            }
+            if (overlay.id === 'tv-player-overlay') {
+              const player = document.getElementById('tv-player');
+              player.src = '';
+              player.removeAttribute('src');
+            }
+          }
+        });
+      });
+      document.querySelectorAll('.stream-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pid = btn.dataset.provider, name = btn.dataset.name;
+          document.getElementById('platform-title').textContent = `${name} – Disponibles`;
+          document.getElementById('home-page').style.display = 'none';
+          document.getElementById('platform-overlay').classList.add('active');
+          scrollToTopOfOverlay('platform-overlay');
+          document.body.classList.add('overlay-open');
+          const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_watch_providers=${pid}&watch_region=FR&page=1`;
+          fetchAndDisplay(url, 'platform-results','movie',true);
+          addSeeMoreButton('platform-results', url, 'movie', true);
+        });
+      });
+      document.getElementById('search-btn').addEventListener('click', () => {
+        const q = document.getElementById('search-input').value.trim();
+        if (!q) return;
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('search-overlay').classList.add('active');
+        scrollToTopOfOverlay('search-overlay');
+        document.body.classList.add('overlay-open');
+        fetchAndDisplay(
+          `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=fr-FR&query=${encodeURIComponent(q)}&page=1`,
+          'search-results', null, true
+        );
+      });
+      document.getElementById('search-input').addEventListener('keypress', e => {
+        if (e.key === 'Enter') document.getElementById('search-btn').click();
+      });
+      ['close-films','close-series','close-categories','close-platform','close-search','close-film','close-tv','close-tv-player']
+        .forEach(id => document.getElementById(id).addEventListener('click', () => closeOverlay(id.replace('close-','') + '-overlay')));
+      const mobileMenuToggle = document.getElementById('mobile-menu-toggle'),
+            mobileMenu = document.getElementById('mobile-menu'),
+            mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+      mobileMenuToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        mobileMenuBackdrop.classList.toggle('active');
+        document.body.classList.toggle('overlay-open');
+      });
+      mobileMenuBackdrop.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        mobileMenuBackdrop.classList.remove('active');
+        document.body.classList.remove('overlay-open');
+      });
+      ['home','films','series','tv','categories'].forEach(section => {
+        document.getElementById(`mobile-${section}-link`).addEventListener('click', e => {
+          e.preventDefault();
+          document.getElementById(`${section}-link`).click();
+          mobileMenu.classList.remove('active');
+          mobileMenuBackdrop.classList.remove('active');
+          document.body.classList.remove('overlay-open');
+        });
+      });
+    });
+    
+  </script>
+</body>
+</html>
