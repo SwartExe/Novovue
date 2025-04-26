@@ -1851,6 +1851,14 @@
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Disney_Plus_logo.svg/1200px-Disney_Plus_logo.svg.png" alt="Disney+">
           Disney Plus
         </button>
+        <button class="stream-btn" data-provider="420" data-name="Marvel Studio">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/1200px-Marvel_Logo.svg.png" alt="Marvel Studio">
+          Marvel Inc.
+        </button>
+        <button class="stream-btn" data-provider="9993" data-name="DC Entertainment">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/DC_Comics_logo.png" alt="DC Entertainment">
+          DC Entertainment
+        </button>
         <button class="stream-btn" data-provider="531" data-name="Paramount+">
           <img src="https://logodownload.org/wp-content/uploads/2021/03/paramount-plus-logo-1.png" alt="Paramount+">
           Paramount+
@@ -2865,19 +2873,36 @@
           }
         });
       });
+
       document.querySelectorAll('.stream-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const pid = btn.dataset.provider, name = btn.dataset.name;
-          document.getElementById('platform-title').textContent = `${name} – Disponibles`;
-          document.getElementById('home-page').style.display = 'none';
-          document.getElementById('platform-overlay').classList.add('active');
-          scrollToTopOfOverlay('platform-overlay');
-          document.body.classList.add('overlay-open');
-          const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_watch_providers=${pid}&watch_region=FR&page=1`;
-          fetchAndDisplay(url, 'platform-results','movie',true);
-          addSeeMoreButton('platform-results', url, 'movie', true);
-        });
+      btn.addEventListener('click', function(e) {
+        e.preventDefault(); // 🔥 Bloque le clic du lien
+        
+        const pid = this.dataset.provider;
+        const name = this.dataset.name;
+
+        document.getElementById('platform-title').textContent = `${name} – Disponibles`;
+
+        // ➔ Remplacer display none par ajout d'une classe qui masque en douceur
+        document.getElementById('home-page').classList.add('hidden'); 
+        document.getElementById('platform-overlay').classList.add('active');
+
+        document.body.classList.add('overlay-open');
+
+        let url;
+        if (name === 'Marvel Studio') {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_companies=420&page=1`;
+        } else if (name === 'DC Entertainment') {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_companies=9993&page=1`;
+        } else {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_watch_providers=${pid}&watch_region=FR&page=1`;
+        }
+
+        fetchAndDisplay(url, 'platform-results', 'movie', true);
+        addSeeMoreButton('platform-results', url, 'movie', true);
       });
+    });
+
       document.getElementById('search-btn').addEventListener('click', () => {
         const q = document.getElementById('search-input').value.trim();
         if (!q) return;
@@ -2918,7 +2943,6 @@
         });
       });
     });
-    
   </script>
 </body>
 </html>
