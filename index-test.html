@@ -309,6 +309,25 @@
       box-shadow: 0 8px 20px rgba(255,45,85,0.4); 
     }
 
+    /* Scrollbar très clean et discrète */
+    ::-webkit-scrollbar {
+      width: 6px; /* fine */
+      height: 6px; /* fine pour scroll horizontal aussi */
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent; /* aucune couleur de fond */
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2); /* petit blanc semi-transparent */
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.4); /* un peu plus visible au survol */
+    }
+
     /* Streaming categories */
     .streaming-categories {
       display: flex; 
@@ -509,17 +528,6 @@
     }
 
     /* Animations */
-
-    #online-users-grid {
-      transition: opacity 0.3s ease;
-    }
-    #online-users-grid.fade-out {
-      opacity: 0;
-    }
-    #online-users-grid.fade-in {
-      opacity: 1;
-    }
-
 
     @keyframes fadeInUp {
       from {
@@ -1381,6 +1389,17 @@
       pointer-events: none;
     }
 
+    .logout-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin-top: 3px;
+    }
+
+
     /* Animations */
     @keyframes fadeIn { 
       from { opacity: 0; } 
@@ -1671,6 +1690,7 @@
             <i id="user-icon" class="fas fa-user-circle"></i>
           </button>
           <span id="user-display" class="account-name">Non connecté</span>
+          <button id="logout-btn" class="logout-btn">Déconnexion</button>
         </div>                
       </div>
     </div>
@@ -1707,15 +1727,15 @@
           Netflix
         </button>
         <button class="stream-btn" data-provider="119" data-name="Amazon Prime">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png" alt="Prime">
-          Prime
+          <img src="https://logos-marques.com/wp-content/uploads/2023/01/Amazon-Prime-Video-Logo-2022.png" alt="Prime">
+          Prime Vidéo
         </button>
         <button class="stream-btn" data-provider="337" data-name="Disney+">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg" alt="Disney+">
-          Disney+
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Disney_Plus_logo.svg/1200px-Disney_Plus_logo.svg.png" alt="Disney+">
+          Disney Plus
         </button>
         <button class="stream-btn" data-provider="531" data-name="Paramount+">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Paramount_Plus.svg" alt="Paramount+">
+          <img src="https://logodownload.org/wp-content/uploads/2021/03/paramount-plus-logo-1.png" alt="Paramount+">
           Paramount+
         </button>
       </div>
@@ -1751,11 +1771,11 @@
         </div>
     </section>      
     <section>
-      <h2>Sorties récentes</h2>
+      <h2>Séries emblématiques</h2>
       <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="recent-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="recent-content"></div>
-        <button class="section-nav-arrow right" data-target="recent-content"><i class="fas fa-chevron-right"></i></button>
+        <button class="section-nav-arrow left" data-target="serie-popular"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="serie-popular"></div>
+        <button class="section-nav-arrow right" data-target="serie-popular"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
 
@@ -1797,14 +1817,6 @@
         <button class="section-nav-arrow left" data-target="romance-content"><i class="fas fa-chevron-left"></i></button>
         <div class="movies-grid" id="romance-content"></div>
         <button class="section-nav-arrow right" data-target="romance-content"><i class="fas fa-chevron-right"></i></button>
-      </div>
-    </section>
-    <section>
-      <h2>Nos utilisateurs</h2>
-      <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="online-users-grid"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="online-users-grid"></div>
-        <button class="section-nav-arrow right" data-target="online-users-grid"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
   </div>
@@ -1960,7 +1972,6 @@
   </footer>
   
   <script type="module">
-    import { doc, setDoc, deleteDoc, updateDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
   
@@ -1980,6 +1991,7 @@
   
     const userDisplay = document.getElementById("user-display");
     const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
   
     loginBtn.addEventListener("click", async () => {
       try {
@@ -1989,14 +2001,16 @@
       }
     });
   
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth);
+    });
+  
   onAuthStateChanged(auth, user => {
     if (user) {
       const email = user.email;
       const isUserVIP = isVIP(email); // on l'appelle ici, email est bien défini
       console.log("Utilisateur connecté :", email);
       console.log("Est VIP ?", isUserVIP);
-      updateUserPresence(user.uid, user.displayName || "Anonyme");
-      listenToUsersOnline();
   
       userDisplay.textContent = user.displayName || "Connecté";
       if (isVIP(email)) {
@@ -2005,80 +2019,16 @@
         userIcon.classList.remove("vip-glow");
         userIcon.style.color = "#00c8ff";
       }
+      logoutBtn.style.display = "none"; // on cache le bouton déconnexion
       localStorage.setItem("email", email); // stocke l’email pour plus tard
     } else {
       console.log("Aucun utilisateur connecté");
       userDisplay.textContent = "Non connecté";
       userIcon.style.color = "white"; // logo BLANC
+      logoutBtn.style.display = "none";
       localStorage.removeItem("email");
     }
   });
-
-  const usersGrid = document.getElementById("online-users-grid");
-
-  function createUserCard(user) {
-    const card = document.createElement("div");
-    card.className = "movie-card";
-    card.innerHTML = `
-      <img class="movie-poster" src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0D8ABC&color=fff&size=256" alt="${user.name}" />
-      <div class="movie-info">
-        <h3>${user.name}</h3>
-        <p>En ligne</p>
-      </div>
-    `;
-    return card;
-  }
-
-  function updateUserPresence(uid, name) {
-    const userRef = doc(db, "usersOnline", uid);
-    setDoc(userRef, {
-      name,
-      timestamp: serverTimestamp()
-    });
-
-    // Mise à jour régulière
-    setInterval(() => {
-      updateDoc(userRef, {
-        timestamp: serverTimestamp()
-      });
-    }, 20000);
-
-    // Suppression à la fermeture
-    window.addEventListener("beforeunload", () => {
-      deleteDoc(userRef);
-    });
-  }
-
-  function listenToUsersOnline() {
-    const usersRef = collection(db, "usersOnline");
-
-    onSnapshot(usersRef, (snapshot) => {
-      const now = new Date();
-      
-      // FADE OUT
-      usersGrid.classList.add("fade-out");
-
-      setTimeout(() => {
-        usersGrid.innerHTML = "";
-
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const lastSeen = new Date(data.timestamp?.seconds * 1000 || 0);
-          if ((now - lastSeen) / 1000 < 40) {
-            usersGrid.appendChild(createUserCard(data));
-          }
-        });
-
-        // FADE IN
-        usersGrid.classList.remove("fade-out");
-        usersGrid.classList.add("fade-in");
-
-        // Nettoie après animation
-        setTimeout(() => usersGrid.classList.remove("fade-in"), 300);
-      }, 200);
-    });
-  }
-
 
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
   const db = getFirestore(app);
@@ -2131,8 +2081,8 @@
   });
 
     const API_KEY = '7e14b834557481d48b67aebd4f0680b2';
-    const FREMBED_FILM = 'https://frembed.art/api/film.php?id=';
-    const FREMBED_SERIE = 'https://frembed.art/api/serie.php?id=';
+    const FREMBED_FILM = 'https://frembed.ink/api/film.php?id=';
+    const FREMBED_SERIE = 'https://frembed.ink/api/serie.php?id=';
     const VIDLINK_FILM = 'https://vidlink.pro/movie/';
     const VIDLINK_SERIE = 'https://vidlink.pro/tv/';
     const WAVEWATCH_FILM = 'https://embed.wavewatch.xyz/embed/';
@@ -2152,7 +2102,7 @@
       action: 'action-content',
       drama: 'drama-content',
       romance: 'romance-content',
-      recent: 'recent-content',
+      serie: 'serie-popular',
       popular: 'popular-content',
       trending: 'trending-content'
     };
@@ -2527,13 +2477,9 @@
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=18&page=1`, containers.drama,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=10749&page=1`, containers.romance,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=fr-FR&page=1`, containers.trending,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`, containers.popular,'movie');
-      const today = new Date().toISOString().split('T')[0];
-      const monthAgo = new Date(Date.now()-30*24*60*60*1000).toISOString().split('T')[0];
-      fetchAndDisplay(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&primary_release_date.gte=${monthAgo}&primary_release_date.lte=${today}&page=1`,
-        containers.recent,'movie'
-      );
+      fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`, containers.popular, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&vote_count.gte=1000&page=1`, containers.serie,'movie');
+
     }
   
     function openTVPlayer(name, src) {
