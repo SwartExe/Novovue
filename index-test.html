@@ -1448,17 +1448,6 @@
       pointer-events: none;
     }
 
-    .logout-btn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 0.65rem;
-      color: var(--text-secondary);
-      cursor: pointer;
-      margin-top: 3px;
-    }
-
-
     /* Animations */
     @keyframes fadeIn { 
       from { opacity: 0; } 
@@ -1575,7 +1564,7 @@
       }
 
       .hero-slide {
-        background-size: 250% auto; /* ➔ Zoom plus fort pour remplir tout sans bandes noires */
+        background-size: 350% auto; /* ➔ Zoom plus fort pour remplir tout sans bandes noires */
         background-position: center center;
       }
 
@@ -1822,7 +1811,6 @@
             <i id="user-icon" class="fas fa-user-circle"></i>
           </button>
           <span id="user-display" class="account-name">Non connecté</span>
-          <button id="logout-btn" class="logout-btn">Déconnexion</button>
         </div>                
       </div>
     </div>
@@ -2117,7 +2105,6 @@
   
     const userDisplay = document.getElementById("user-display");
     const loginBtn = document.getElementById("login-btn");
-    const logoutBtn = document.getElementById("logout-btn");
   
     loginBtn.addEventListener("click", async () => {
       try {
@@ -2125,10 +2112,6 @@
       } catch (error) {
         console.error("Erreur login :", error.message);
       }
-    });
-  
-    logoutBtn.addEventListener("click", () => {
-      signOut(auth);
     });
   
   onAuthStateChanged(auth, user => {
@@ -2145,13 +2128,10 @@
         userIcon.classList.remove("vip-glow");
         userIcon.style.color = "#00c8ff";
       }
-      logoutBtn.style.display = "none"; // on cache le bouton déconnexion
-      localStorage.setItem("email", email); // stocke l’email pour plus tard
     } else {
       console.log("Aucun utilisateur connecté");
       userDisplay.textContent = "Non connecté";
       userIcon.style.color = "white"; // logo BLANC
-      logoutBtn.style.display = "none";
       localStorage.removeItem("email");
     }
   });
