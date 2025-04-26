@@ -92,26 +92,36 @@
     
     .logo {
       position: absolute;
-      left: 0;
+      left: 12px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: var(--gradient);
+      gap: 10px;
+      font-size: 2rem;
+      font-weight: bold;
+      background: var(--gradient); /* Ton beau dégradé rose/bleu */
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      transition: var(--transition);
+      transition: transform 0.3s ease;
+      letter-spacing: 1px;
     }
-    
-    .logo:hover { 
-      transform: scale(1.03); 
+
+    .logo:hover {
+      transform: scale(1.05);
     }
-    
-    .logo-icon { 
-      font-size: 1.8rem; 
-      color: var(--primary-color); 
+
+    .logo-icon {
+      width: 26px;
+      height: 26px;
+      background: var(--gradient);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      box-shadow: 0 0 8px rgba(255, 45, 85, 0.5);
     }
     
     nav {
@@ -1792,9 +1802,9 @@
           <i class="fas fa-bars"></i>
         </button>
         <a href="#" class="logo">
-          <i class="fas fa-play-circle logo-icon"></i>
-          <span>Novovue</span>
-        </a>
+          <div class="logo-icon"></div>
+          Novovue
+        </a>        
         <nav>
           <ul class="nav-menu">
             <li><a href="#" class="active" id="home-link">Accueil</a></li>
