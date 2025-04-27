@@ -16,7 +16,6 @@
     gtag('config', 'G-6ZWC51QSQ7');
   </script>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
 
   <style>
@@ -71,7 +70,7 @@
       position: sticky; 
       top: 0; 
       z-index: 1000;
-      background: rgba(15,15,19,0.98);
+      background: rgba(15,15,19,0.8);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255,255,255,0.1);
       transition: all 0.3s ease;
@@ -92,26 +91,36 @@
     
     .logo {
       position: absolute;
-      left: 0;
+      left: 12px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: var(--gradient);
+      gap: 10px;
+      font-size: 2rem;
+      font-weight: bold;
+      background: var(--gradient); /* Ton beau dégradé rose/bleu */
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      transition: var(--transition);
+      transition: transform 0.3s ease;
+      letter-spacing: 1px;
     }
-    
-    .logo:hover { 
-      transform: scale(1.03); 
+
+    .logo:hover {
+      transform: scale(1.05);
     }
-    
-    .logo-icon { 
-      font-size: 1.8rem; 
-      color: var(--primary-color); 
+
+    .logo-icon {
+      width: 26px;
+      height: 26px;
+      background: var(--gradient);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      box-shadow: 0 0 8px rgba(255, 45, 85, 0.5);
     }
     
     nav {
@@ -283,7 +292,7 @@
       justify-content: space-between;
       width: 100%;
       height: 400px;
-      background: linear-gradient(to right, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0) 70%);
+      background: linear-gradient(to right top, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0) 60%);
       padding: 40px;
       border-radius: 10px;
       overflow: hidden;
@@ -351,6 +360,7 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       border: none;
+      z-index: 9999;
     }
 
     .play-btn {
@@ -483,6 +493,39 @@
     
     .movies-grid::-webkit-scrollbar { 
       display: none; 
+    }
+
+    #vip-overlay {
+      /* Fond noir semi-transparent */
+      background-color: rgba(0, 0, 0, 0.98);
+      
+      /* Animation de particules dorées */
+      background-image: 
+        radial-gradient(circle, rgba(255,215,0,0.8) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,215,0,0.5) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,215,0,0.3) 1px, transparent 1px);
+
+      background-attachment: fixed;
+      background-size: contain;
+      background-position: center;
+    }
+
+    /* Option : Ajoutez ceci si vous voulez des particules interactives */
+    #vip-overlay::before {
+      content: "";
+      position: fixed; /* ➔ FIXÉ à l'écran */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      
+      background: url('https://assets.codepen.io/13471/sparkles.gif') repeat;
+      background-size: contain;
+      
+      mix-blend-mode: screen;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .vip-glow {
@@ -1242,7 +1285,6 @@
       padding: 10px 20px;
       text-align: center;
       z-index: 3000;
-      color: var(--text-secondary);
       box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
       backdrop-filter: blur(8px); /* flou si tu veux un effet verre */
       overflow: hidden;
@@ -1253,8 +1295,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: var(--bg-lighter);
-      opacity: 0.8; /* Réglage de l’opacité ici */
+      background: rgba(15,15,19,0.9);
       z-index: -1;
     }
 
@@ -1557,8 +1598,7 @@
         gap: 10px;
         border-radius: 0;
         background: 
-          linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 70%), 
-          linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 30%);
+          linear-gradient(to right top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 70%), 
       }
       
       .hero-slider::after {
@@ -1792,9 +1832,9 @@
           <i class="fas fa-bars"></i>
         </button>
         <a href="#" class="logo">
-          <i class="fas fa-play-circle logo-icon"></i>
-          <span>Novovue</span>
-        </a>
+          <div class="logo-icon"></div>
+          Novovue
+        </a>        
         <nav>
           <ul class="nav-menu">
             <li><a href="#" class="active" id="home-link">Accueil</a></li>
@@ -1851,6 +1891,22 @@
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Disney_Plus_logo.svg/1200px-Disney_Plus_logo.svg.png" alt="Disney+">
           Disney Plus
         </button>
+        <button class="stream-btn" data-provider="420" data-name="Marvel Studio">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/1200px-Marvel_Logo.svg.png" alt="Marvel Studio">
+          Marvel Inc.
+        </button>
+        <button class="stream-btn" data-provider="9993" data-name="DC Comics">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/DC_Comics_logo.png" alt="DC Comics">
+          DC Comics
+        </button>
+        <button class="stream-btn" data-provider="2" data-name="Disney">
+          <img src="https://img.icons8.com/fluent/600/disney-1.png" alt="Disney">
+          Walt Disney
+        </button>
+        <button class="stream-btn" data-provider="3" data-name="Pixar">
+          <img src="https://img.icons8.com/?size=512&id=20555&format=png" alt="Pixar">
+          Pixar Studio
+        </button>
         <button class="stream-btn" data-provider="531" data-name="Paramount+">
           <img src="https://logodownload.org/wp-content/uploads/2021/03/paramount-plus-logo-1.png" alt="Paramount+">
           Paramount+
@@ -1882,7 +1938,7 @@
             <h3>Rejoins le club VIP</h3>
             <p>Accès sans pub, fonctionnlités communautaires, et chaînes privées en illimité. A partir de 1,99€ seulement.</p>
             <div class="vip-btn-wrapper">
-              <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn">Devenir VIP</a>
+              <a href=# target="_blank" class="vip-btn">Devenir VIP</a>
             </div>  
           </div>        
         </div>
@@ -1990,7 +2046,6 @@
           id="tv-player"
           src=""
           frameborder="0"
-          allowfullscreen
           allow="autoplay; fullscreen; encrypted-media"
           sandbox="allow-scripts allow-same-origin"
         ></iframe>
@@ -2044,7 +2099,7 @@
       <div style="display: flex; flex-direction: column; gap: 25px;">
   
         <!-- PASS 24H -->
-        <div style="background: linear-gradient(145deg, #fff4b8, #ffd700); box-shadow: 0 0 12px #ffd70099; border-radius: 16px; padding: 24px; animation: fadeInUp 0.4s;">
+        <div style= "background: linear-gradient(145deg, #fff4b8, #ffd700); box-shadow: 0 0 12px #ffd70099; border-radius: 16px; padding: 24px; animation: fadeInUp 0.4s;">
           <h3 style="color: #8a6d00; font-size: 1.4rem;">💫 Pass 24h – 1,99€</h3>
           <p style="margin: 10px 0;">Lecture sans pub, accès aux commentaires, tout débloqué pendant 24h.</p>
           <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #8a6d00;">Choisir</a>
@@ -2139,6 +2194,31 @@
     }
   });
 
+  function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function isAvailableOnFrembed(tmdbId) {
+    return new Promise((resolve) => {
+      const testIframe = document.createElement('iframe');
+      testIframe.style.display = 'none';
+      testIframe.src = `https://frembed.ink/embed/${tmdbId}`;
+      document.body.appendChild(testIframe);
+
+      testIframe.onload = () => {
+        setTimeout(() => {
+          resolve(true); // Charge OK = dispo
+          testIframe.remove();
+        }, 800); // attendre 0.8s avant de valider
+      };
+
+      testIframe.onerror = () => {
+        resolve(false); // Charge KO = non dispo
+        testIframe.remove();
+      };
+    });
+  }
+
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
   const db = getFirestore(app);
 
@@ -2209,7 +2289,6 @@
         openOverlay(id, 'movie');
       }
     });
-
   }
 
   document.addEventListener('DOMContentLoaded', loadHeroSlides);
@@ -2605,7 +2684,11 @@
           });
           return;
         }
-        for (const item of list) {
+        for (const item of list.slice(0, 20)) { // Limiter à 20 films par section
+          await wait(200); // Pause de 200ms pour éviter de spammer
+          const isAvailable = await isAvailableOnFrembed(item.id);
+          if (!isAvailable) continue;
+          
           const type = forceType || item.media_type || 'movie';
           let poster = item.poster_path || item.backdrop_path;
           if (!poster) {
@@ -2865,19 +2948,35 @@
           }
         });
       });
+
       document.querySelectorAll('.stream-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const pid = btn.dataset.provider, name = btn.dataset.name;
-          document.getElementById('platform-title').textContent = `${name} – Disponibles`;
-          document.getElementById('home-page').style.display = 'none';
-          document.getElementById('platform-overlay').classList.add('active');
-          scrollToTopOfOverlay('platform-overlay');
-          document.body.classList.add('overlay-open');
-          const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_watch_providers=${pid}&watch_region=FR&page=1`;
-          fetchAndDisplay(url, 'platform-results','movie',true);
-          addSeeMoreButton('platform-results', url, 'movie', true);
-        });
+      btn.addEventListener('click', function(e) {
+        e.preventDefault(); // 🔥 Bloque le clic du lien
+        
+        const pid = this.dataset.provider;
+        const name = this.dataset.name;
+
+        document.getElementById('platform-title').textContent = `${name} – Disponibles`;
+
+        // ➔ Remplacer display none par ajout d'une classe qui masque en douceur
+        document.getElementById('home-page').classList.add('hidden'); 
+        document.getElementById('platform-overlay').classList.add('active');
+
+        document.body.classList.add('overlay-open');
+
+        let url;
+        if (name === 'Marvel Studio' || name === 'DC Comics' || name === 'Disney' || name === 'Pixar') {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_companies=${pid}&page=1`;
+        } else {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_watch_providers=${pid}&watch_region=FR&page=1`;
+        }
+
+        fetchAndDisplay(url, 'platform-results', 'movie', true);
+        addSeeMoreButton('platform-results', url, 'movie', true);
+        scrollToTopOfOverlay('platform-overlay')
       });
+    });
+
       document.getElementById('search-btn').addEventListener('click', () => {
         const q = document.getElementById('search-input').value.trim();
         if (!q) return;
@@ -2918,7 +3017,6 @@
         });
       });
     });
-    
   </script>
 </body>
 </html>
