@@ -2074,6 +2074,7 @@
           frameborder="0"
           allow="autoplay; fullscreen; encrypted-media"
           sandbox="allow-scripts allow-same-origin"
+          scrolling="no"
         ></iframe>
       </div>      
       <div id="comments-section" style="margin-top: 40px;">
@@ -2193,31 +2194,6 @@
       localStorage.removeItem("email");
     }
   });
-
-  function wait(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async function isAvailableOnFrembed(tmdbId) {
-    return new Promise((resolve) => {
-      const testIframe = document.createElement('iframe');
-      testIframe.style.display = 'none';
-      testIframe.src = `https://frembed.ink/embed/${tmdbId}`;
-      document.body.appendChild(testIframe);
-
-      testIframe.onload = () => {
-        setTimeout(() => {
-          resolve(true); // Charge OK = dispo
-          testIframe.remove();
-        }, 800); // attendre 0.8s avant de valider
-      };
-
-      testIframe.onerror = () => {
-        resolve(false); // Charge KO = non dispo
-        testIframe.remove();
-      };
-    });
-  }
 
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
   const db = getFirestore(app);
@@ -2684,11 +2660,7 @@
           });
           return;
         }
-        for (const item of list.slice(0, 20)) { // Limiter à 20 films par section
-          await wait(200); // Pause de 200ms pour éviter de spammer
-          const isAvailable = await isAvailableOnFrembed(item.id);
-          if (!isAvailable) continue;
-          
+        for (const item of list) {
           const type = forceType || item.media_type || 'movie';
           let poster = item.poster_path || item.backdrop_path;
           if (!poster) {
