@@ -16,7 +16,6 @@
     gtag('config', 'G-6ZWC51QSQ7');
   </script>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
 
   <style>
@@ -293,7 +292,7 @@
       justify-content: space-between;
       width: 100%;
       height: 400px;
-      background: linear-gradient(to right, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0) 70%);
+      background: linear-gradient(to right top, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0) 60%);
       padding: 40px;
       border-radius: 10px;
       overflow: hidden;
@@ -361,6 +360,7 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       border: none;
+      z-index: 9999;
     }
 
     .play-btn {
@@ -493,6 +493,39 @@
     
     .movies-grid::-webkit-scrollbar { 
       display: none; 
+    }
+
+    #vip-overlay {
+      /* Fond noir semi-transparent */
+      background-color: rgba(0, 0, 0, 0.85);
+      
+      /* Animation de particules dorées */
+      background-image: 
+        radial-gradient(circle, rgba(255,215,0,0.8) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,215,0,0.5) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,215,0,0.3) 1px, transparent 1px);
+
+      background-attachment: fixed;
+      background-size: contain;
+      background-position: center;
+    }
+
+    /* Option : Ajoutez ceci si vous voulez des particules interactives */
+    #vip-overlay::before {
+      content: "";
+      position: fixed; /* ➔ FIXÉ à l'écran */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      
+      background: url('https://assets.codepen.io/13471/sparkles.gif') repeat;
+      background-size: contain;
+      
+      mix-blend-mode: screen;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .vip-glow {
@@ -1252,7 +1285,6 @@
       padding: 10px 20px;
       text-align: center;
       z-index: 3000;
-      color: var(--text-secondary);
       box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
       backdrop-filter: blur(8px); /* flou si tu veux un effet verre */
       overflow: hidden;
@@ -1263,8 +1295,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: var(--bg-lighter);
-      opacity: 0.8; /* Réglage de l’opacité ici */
+      background: rgba(15,15,19,0.9);
       z-index: -1;
     }
 
@@ -1567,8 +1598,7 @@
         gap: 10px;
         border-radius: 0;
         background: 
-          linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 70%), 
-          linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 30%);
+          linear-gradient(to right top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 70%), 
       }
       
       .hero-slider::after {
@@ -1865,9 +1895,17 @@
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/1200px-Marvel_Logo.svg.png" alt="Marvel Studio">
           Marvel Inc.
         </button>
-        <button class="stream-btn" data-provider="9993" data-name="DC Entertainment">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/DC_Comics_logo.png" alt="DC Entertainment">
-          DC Entertainment
+        <button class="stream-btn" data-provider="9993" data-name="DC Comics">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/DC_Comics_logo.png" alt="DC Comics">
+          DC Comics
+        </button>
+        <button class="stream-btn" data-provider="2" data-name="Disney">
+          <img src="https://img.icons8.com/fluent/600/disney-1.png" alt="Disney">
+          Walt Disney
+        </button>
+        <button class="stream-btn" data-provider="3" data-name="Pixar">
+          <img src="https://img.icons8.com/?size=512&id=20555&format=png" alt="Pixar">
+          Pixar Studio
         </button>
         <button class="stream-btn" data-provider="531" data-name="Paramount+">
           <img src="https://logodownload.org/wp-content/uploads/2021/03/paramount-plus-logo-1.png" alt="Paramount+">
@@ -1900,7 +1938,7 @@
             <h3>Rejoins le club VIP</h3>
             <p>Accès sans pub, fonctionnlités communautaires, et chaînes privées en illimité. A partir de 1,99€ seulement.</p>
             <div class="vip-btn-wrapper">
-              <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn">Devenir VIP</a>
+              <a href=# target="_blank" class="vip-btn">Devenir VIP</a>
             </div>  
           </div>        
         </div>
@@ -2008,7 +2046,6 @@
           id="tv-player"
           src=""
           frameborder="0"
-          allowfullscreen
           allow="autoplay; fullscreen; encrypted-media"
           sandbox="allow-scripts allow-same-origin"
         ></iframe>
@@ -2062,7 +2099,7 @@
       <div style="display: flex; flex-direction: column; gap: 25px;">
   
         <!-- PASS 24H -->
-        <div style="background: linear-gradient(145deg, #fff4b8, #ffd700); box-shadow: 0 0 12px #ffd70099; border-radius: 16px; padding: 24px; animation: fadeInUp 0.4s;">
+        <div style= "background: linear-gradient(145deg, #fff4b8, #ffd700); box-shadow: 0 0 12px #ffd70099; border-radius: 16px; padding: 24px; animation: fadeInUp 0.4s;">
           <h3 style="color: #8a6d00; font-size: 1.4rem;">💫 Pass 24h – 1,99€</h3>
           <p style="margin: 10px 0;">Lecture sans pub, accès aux commentaires, tout débloqué pendant 24h.</p>
           <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #8a6d00;">Choisir</a>
@@ -2227,7 +2264,6 @@
         openOverlay(id, 'movie');
       }
     });
-
   }
 
   document.addEventListener('DOMContentLoaded', loadHeroSlides);
@@ -2900,16 +2936,15 @@
         document.body.classList.add('overlay-open');
 
         let url;
-        if (name === 'Marvel Studio') {
-          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_companies=420&page=1`;
-        } else if (name === 'DC Entertainment') {
-          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_companies=9993&page=1`;
+        if (name === 'Marvel Studio' || name === 'DC Comics' || name === 'Disney' || name === 'Pixar') {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_companies=${pid}&page=1`;
         } else {
           url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_watch_providers=${pid}&watch_region=FR&page=1`;
         }
 
         fetchAndDisplay(url, 'platform-results', 'movie', true);
         addSeeMoreButton('platform-results', url, 'movie', true);
+        scrollToTopOfOverlay('platform-overlay')
       });
     });
 
