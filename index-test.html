@@ -2045,9 +2045,13 @@
         <iframe
           id="tv-player"
           src=""
-          frameborder="0"
-          allow="autoplay; fullscreen; encrypted-media"
-          sandbox="allow-scripts allow-same-origin"
+          width="100%" 
+          height="500px" 
+          frameborder="0" 
+          allowfullscreen="yes" 
+          scrolling="no" 
+          style="overflow:hidden"
+          sandbox= "allow-scripts allow-same-origin"
         ></iframe>
       </div>
     </div>
@@ -2058,8 +2062,8 @@
       <div class="film-header" id="film-header"></div>
       <div class="player-options">
         <button class="player-option-btn active" data-player="wavewatch">VM AUDIO</button>
-        <button class="player-option-btn" data-player="frembed">VF AUDIO</button>
-        <button class="player-option-btn" data-player="vidlink">VO AUDIO</button>
+        <!-- <button class="player-option-btn" data-player="frembed">VF AUDIO</button>
+        <button class="player-option-btn" data-player="vidlink">VO AUDIO</button> -->
         <button class="player-option-btn" data-player="wavewatchdl">DOWNLOAD</button>
       </div>
       <div class="episode-selector" id="episode-selector" style="display:none">
@@ -2068,32 +2072,18 @@
         <label for="episode-select">Épisode :</label>
         <select id="episode-select"></select>
       </div>
-      
-      <div class="player-container" style="position: relative;">
+      <div class="player-container">
         <iframe
           id="film-player"
-          frameborder="0"
-          allow="autoplay; fullscreen; encrypted-media"
-          style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1;"
-          src="https://embed.frembed.cc/xyz"
+          width="100%" 
+          height="500px" 
+          frameborder="0" 
+          allowfullscreen="yes" 
+          scrolling="no" 
+          style="overflow:hidden"
+          sandbox= "allow-scripts allow-same-origin"
         ></iframe>
-      
-        <!-- anti popup -->
-        <div id="click-shield"
-             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-                    background: transparent; z-index: 2; cursor: pointer;"
-             onclick="this.remove()">
-        </div>
-      </div>
-      
-      <script>
-        // Supprime la couche après 5s si personne ne clique
-        setTimeout(() => {
-          const shield = document.getElementById('click-shield');
-          if (shield) shield.remove();
-        }, 5000);
-      </script>
-      
+      </div>      
       <div id="comments-section" style="margin-top: 40px;">
         <h3 style="font-size: 1.3rem; margin-bottom: 10px;">Commentaires</h3>
       
@@ -2327,10 +2317,10 @@
   });
 
     const API_KEY = '7e14b834557481d48b67aebd4f0680b2';
-    const FREMBED_FILM = 'https://frembed.ink/api/film.php?id=';
-    const FREMBED_SERIE = 'https://frembed.ink/api/serie.php?id=';
-    const VIDLINK_FILM = 'https://vidlink.pro/movie/';
-    const VIDLINK_SERIE = 'https://vidlink.pro/tv/';
+    // const FREMBED_FILM = 'https://frembed.ink/api/film.php?id=';
+    // const FREMBED_SERIE = 'https://frembed.ink/api/serie.php?id=';
+    // const VIDLINK_FILM = 'https://vidlink.pro/movie/';
+    // const VIDLINK_SERIE = 'https://vidlink.pro/tv/';
     const WAVEWATCH_FILM = 'https://embed.wavewatch.xyz/embed/';
     const WAVEWATCH_SERIE = 'https://embed.wavewatch.xyz/embed/';
     const WAVEWATCH_DL = 'https://embed.wavewatch.xyz/download/'
@@ -2418,9 +2408,10 @@
             const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
             window.open(url, '_blank');
 
-          } else {
-            src = (currentPlayer === 'frembed' ? FREMBED_FILM : VIDLINK_FILM) + currentMedia.id;
-          }
+          } 
+          // else {
+          //   src = (currentPlayer === 'frembed' ? FREMBED_FILM : VIDLINK_FILM) + currentMedia.id;
+          // }
         } else {
           const s = document.getElementById('season-select').value;
           const e = document.getElementById('episode-select').value;
@@ -2432,11 +2423,12 @@
             const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
             window.open(url, '_blank');
 
-          } else {
-            src = currentPlayer === 'frembed'
-              ? `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`
-              : `${VIDLINK_SERIE}${currentMedia.id}/${s}/${e}`;
-          }
+          } 
+          // else {
+          //   src = currentPlayer === 'frembed'
+          //     ? `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`
+          //     : `${VIDLINK_SERIE}${currentMedia.id}/${s}/${e}`;
+          // }
         }
         player.src = src;
         player.setAttribute('allowfullscreen','');
