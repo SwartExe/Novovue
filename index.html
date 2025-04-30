@@ -497,7 +497,7 @@
 
     #vip-overlay {
       /* Fond noir semi-transparent */
-      background-color: rgba(0, 0, 0, 0.85);
+      background-color: rgba(0, 0, 0, 0.98);
       
       /* Animation de particules dorées */
       background-image: 
@@ -2045,9 +2045,13 @@
         <iframe
           id="tv-player"
           src=""
-          frameborder="0"
-          allow="autoplay; fullscreen; encrypted-media"
-          sandbox="allow-scripts allow-same-origin"
+          width="100%" 
+          height="500px" 
+          frameborder="0" 
+          allowfullscreen="yes" 
+          scrolling="no" 
+          style="overflow:hidden"
+          sandbox= "allow-scripts allow-same-origin"
         ></iframe>
       </div>
     </div>
@@ -2058,8 +2062,8 @@
       <div class="film-header" id="film-header"></div>
       <div class="player-options">
         <button class="player-option-btn active" data-player="wavewatch">VM AUDIO</button>
-        <button class="player-option-btn" data-player="frembed">VF AUDIO</button>
-        <button class="player-option-btn" data-player="vidlink">VO AUDIO</button>
+        <!-- <button class="player-option-btn" data-player="frembed">VF AUDIO</button>
+        <button class="player-option-btn" data-player="vidlink">VO AUDIO</button> -->
         <button class="player-option-btn" data-player="wavewatchdl">DOWNLOAD</button>
       </div>
       <div class="episode-selector" id="episode-selector" style="display:none">
@@ -2071,9 +2075,13 @@
       <div class="player-container">
         <iframe
           id="film-player"
-          frameborder="0"
-          allow="autoplay; fullscreen; encrypted-media"
-          sandbox="allow-scripts allow-same-origin"
+          width="100%" 
+          height="500px" 
+          frameborder="0" 
+          allowfullscreen="yes" 
+          scrolling="no" 
+          style="overflow:hidden"
+          sandbox= "allow-scripts allow-same-origin"
         ></iframe>
       </div>      
       <div id="comments-section" style="margin-top: 40px;">
@@ -2309,10 +2317,10 @@
   });
 
     const API_KEY = '7e14b834557481d48b67aebd4f0680b2';
-    const FREMBED_FILM = 'https://frembed.ink/api/film.php?id=';
-    const FREMBED_SERIE = 'https://frembed.ink/api/serie.php?id=';
-    const VIDLINK_FILM = 'https://vidlink.pro/movie/';
-    const VIDLINK_SERIE = 'https://vidlink.pro/tv/';
+    // const FREMBED_FILM = 'https://frembed.ink/api/film.php?id=';
+    // const FREMBED_SERIE = 'https://frembed.ink/api/serie.php?id=';
+    // const VIDLINK_FILM = 'https://vidlink.pro/movie/';
+    // const VIDLINK_SERIE = 'https://vidlink.pro/tv/';
     const WAVEWATCH_FILM = 'https://embed.wavewatch.xyz/embed/';
     const WAVEWATCH_SERIE = 'https://embed.wavewatch.xyz/embed/';
     const WAVEWATCH_DL = 'https://embed.wavewatch.xyz/download/'
@@ -2400,9 +2408,10 @@
             const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
             window.open(url, '_blank');
 
-          } else {
-            src = (currentPlayer === 'frembed' ? FREMBED_FILM : VIDLINK_FILM) + currentMedia.id;
-          }
+          } 
+          // else {
+          //   src = (currentPlayer === 'frembed' ? FREMBED_FILM : VIDLINK_FILM) + currentMedia.id;
+          // }
         } else {
           const s = document.getElementById('season-select').value;
           const e = document.getElementById('episode-select').value;
@@ -2414,11 +2423,12 @@
             const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
             window.open(url, '_blank');
 
-          } else {
-            src = currentPlayer === 'frembed'
-              ? `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`
-              : `${VIDLINK_SERIE}${currentMedia.id}/${s}/${e}`;
-          }
+          } 
+          // else {
+          //   src = currentPlayer === 'frembed'
+          //     ? `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`
+          //     : `${VIDLINK_SERIE}${currentMedia.id}/${s}/${e}`;
+          // }
         }
         player.src = src;
         player.setAttribute('allowfullscreen','');
@@ -2956,7 +2966,7 @@
         scrollToTopOfOverlay('search-overlay');
         document.body.classList.add('overlay-open');
         fetchAndDisplay(
-          `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=fr-FR&query=${encodeURIComponent(q)}&page=1`,
+          `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=fr-FR&query=${encodeURIComponent(q)}&sort_by=popularity.desc&page=1`,
           'search-results', null, true
         );
       });
