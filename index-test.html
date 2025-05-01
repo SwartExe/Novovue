@@ -2716,17 +2716,22 @@
       document.body.classList.add('overlay-open');
 
       const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
-      loadComments(currentMedia.imdb_id);
 
+      if (!isVIP(email)) {
+        showProtectedPlayer(currentMedia.imdb_id);
+      } else {
+        updatePlayer(); // ← réservé aux VIP
+      }
+
+      loadComments(currentMedia.imdb_id);
       if (isVIP(email)) {
         commentForm.style.display = "block";
         commentWarning.style.display = "none";
-        updatePlayer(); // les VIP ont le player direct
       } else {
         commentForm.style.display = "none";
         commentWarning.style.display = "block";
-        showProtectedPlayer(currentMedia.imdb_id); // pub, floutage etc.
       }
+
       updatePlayer();
     }
   
