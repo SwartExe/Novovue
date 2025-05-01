@@ -16,6 +16,8 @@
     gtag('config', 'G-6ZWC51QSQ7');
   </script>
 
+  <script type=module src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
+
   <style>
     :root {
       --primary-color: #ff2d55;
@@ -2714,23 +2716,17 @@
       document.body.classList.add('overlay-open');
 
       const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
-
-      if (!isVIP(email)) {
-        showProtectedPlayer(currentMedia.imdb_id);
-      } else {
-        updatePlayer(); // ← que pour les VIP
-      }
-
       loadComments(currentMedia.imdb_id);
 
       if (isVIP(email)) {
         commentForm.style.display = "block";
         commentWarning.style.display = "none";
+        updatePlayer(); // les VIP ont le player direct
       } else {
         commentForm.style.display = "none";
         commentWarning.style.display = "block";
+        showProtectedPlayer(currentMedia.imdb_id); // pub, floutage etc.
       }
-
       updatePlayer();
     }
   
