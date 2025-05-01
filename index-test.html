@@ -917,7 +917,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 5px 12px;
+      padding: 7px 12px;
       border-radius: 30px;
       font-weight: 600;
       font-size: 0.75rem;
@@ -2503,10 +2503,9 @@
 
 
     function showProtectedPlayer(id) {
-
       const email = localStorage.getItem("email");
-      if (isVIP(email)) return; // ne fait rien si VIP
-      
+      if (isVIP(email)) return; // Ne rien faire si VIP
+
       const overlay = document.getElementById('film-overlay');
       const container = overlay.querySelector('.player-container');
       const iframe = document.getElementById('film-player');
@@ -2721,10 +2720,12 @@
 
       const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
 
-      if (!isVIP(email)) {
-        showProtectedPlayer(currentMedia.imdb_id);
-      } else {
+      if (isVIP(email)) {
         updatePlayer(); // ← réservé aux VIP
+        const blocker = document.getElementById("click-blocker");
+        if (blocker) blocker.remove();
+      } else {
+        showProtectedPlayer(currentMedia.imdb_id);
       }
 
       loadComments(currentMedia.imdb_id);
@@ -2735,8 +2736,6 @@
         commentForm.style.display = "none";
         commentWarning.style.display = "block";
       }
-
-      updatePlayer();
     }
   
     async function loadEpisodes(id) {
