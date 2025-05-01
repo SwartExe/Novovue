@@ -2721,10 +2721,12 @@
       const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
 
       if (isVIP(email)) {
+        console.log('VIPPPPPPPPPP')
         updatePlayer(); // ← réservé aux VIP
         const blocker = document.getElementById("click-blocker");
         if (blocker) blocker.remove();
       } else {
+        console.log('Non VIP')
         showProtectedPlayer(currentMedia.imdb_id);
       }
 
