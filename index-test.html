@@ -16,7 +16,7 @@
     gtag('config', 'G-6ZWC51QSQ7');
   </script>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
+  <script type=module src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
 
   <style>
     :root {
@@ -912,6 +912,35 @@
       opacity: 0.9;
       transform: scale(1.03);
     }
+    
+    #watchlist-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 12px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      z-index: 9999;
+      background: var(--bg-lighter);
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    #watchlist-btn:hover {
+      background: var(--gradient);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 45, 85, 0.4);
+    }
+
+    #watchlist-btn.added {
+      background: var(--bg-lighter);
+      color: var(--primary-color);
+    }
 
     /* Overlay */
     .film-overlay {
@@ -1659,8 +1688,23 @@
       }
     }
 
-    @media (max-width: 680px) {
-      .header-content {
+  @media (max-width: 680px) {
+    #my-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: stretch;
+      overflow-x: auto;
+      gap: 10px;
+    }
+
+    #my-list .movie-card {
+      margin: 0;
+      flex: 0 0 auto;
+      width: 140px;
+    }
+
+    .header-content {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1699,18 +1743,18 @@
       }
 
       /* Barre de recherche */
-      .search-bar {
-        position: absolute;
-        top: 50%;
-        right: 75px;
-        width: 60%; /* ajuste la largeur comme tu veux */
-        transform: translateY(-50%);
-        padding: 8px 12px;
-        font-size: 1rem;
-        border-radius: 8px;
-        display: none;
-        z-index: 3;
-      }
+    .search-bar {
+      position: absolute;
+      top: 50%;
+      right: 75px;
+      width: 60%; /* ajuste la largeur comme tu veux */
+      transform: translateY(-50%);
+      padding: 8px 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      display: none;
+      z-index: 3;
+    }
 
     .search-bar.active {
       display: block;
@@ -1928,6 +1972,14 @@
         <button class="section-nav-arrow left" data-target="popular-content"><i class="fas fa-chevron-left"></i></button>
         <div class="movies-grid" id="popular-content"></div>
         <button class="section-nav-arrow right" data-target="popular-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+    <section>
+      <h2>Ma Liste</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="my-list"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="my-list"></div>
+        <button class="section-nav-arrow right" data-target="my-list"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
     <section id="vip-section">
@@ -2570,7 +2622,75 @@
           </div>
           <div class="film-genres">${(data.genres||[]).map(g=>`<span class="genre-tag">${g.name}</span>`).join('')}</div>
           <p class="film-overview">${data.overview||'Aucun synopsis disponible.'}</p>
+          <a class="hero-btn list-btn" id="watchlist-btn" data-id="${id}" data-type="${type}">
+            <i class="fas fa-plus"></i> Ma liste
+          </a>
         </div>`;
+
+        const watchlistBtn = document.getElementById('watchlist-btn');
+        const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        const isInList = watchlist.includes(id);
+
+        // Mise à jour du style + icône
+        function updateWatchlistButton(id, type) {
+          const btn = document.getElementById('watchlist-btn');
+          if (!btn) return;
+
+          let watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+          watchlist = watchlist.map(item => typeof item === 'number' ? { id: item, type: 'movie' } : item);
+          const exists = watchlist.some(item => item.id == id && item.type === type);
+
+          // Met à jour le texte du bouton (on ne remplace plus tout le bouton)
+          btn.innerHTML = exists
+            ? `<i class="fas fa-check"></i> Ma Liste`
+            : `<i class="fas fa-plus"></i> Ma Liste`;
+          btn.classList.toggle('added', exists);
+
+          // Supprime les anciens écouteurs pour éviter les doublons
+          const newBtn = btn.cloneNode(true);
+          btn.parentNode.replaceChild(newBtn, btn);
+
+          // Ajoute un nouvel event listener
+          newBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Évite que l'event remonte et ferme l'overlay
+            e.preventDefault(); // Empêche le href="#" de rafraîchir
+            let list = JSON.parse(localStorage.getItem('watchlist')) || [];
+            list = list.map(item => typeof item === 'number' ? { id: item, type: 'movie' } : item);
+
+            const already = list.some(item => item.id == id && item.type === type);
+            if (already) {
+              list = list.filter(item => !(item.id == id && item.type === type));
+            } else {
+              list.push({ id, type });
+            }
+
+            localStorage.setItem('watchlist', JSON.stringify(list));
+            updateWatchlistButton(id, type); // MAJ apparence
+            loadWatchlist(); // MAJ de la section Ma Liste
+          });
+        }
+
+        updateWatchlistButton(id, type);
+
+        // Clic sur le bouton
+        watchlistBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          let list = JSON.parse(localStorage.getItem('watchlist')) || [];
+          list = list.map(item => typeof item === 'number' ? { id: item, type: 'movie' } : item);
+
+          const exists = list.some(item => item.id == id && item.type === type);
+
+          if (exists) {
+            list = list.filter(item => !(item.id == id && item.type === type));
+          } else {
+            list.push({ id, type });
+          }
+
+          localStorage.setItem('watchlist', JSON.stringify(list));
+          updateWatchlistButton(id, type);
+          loadWatchlist(); // Recharge la section
+        });
+
       currentMedia = { id, type, imdb_id: data.external_ids?.imdb_id };
       if (type === 'tv') {
         document.getElementById('episode-selector').style.display='block';
@@ -2699,6 +2819,66 @@
         }
       } catch(e) { console.error(e); }
     }
+
+    function displayMoviesFromList(list, containerId, forceType = 'movie') {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      container.style.display = 'flex';
+
+      for (const item of list) {
+        const type = item.media_type || forceType || 'movie';
+        let poster = item.poster_path || item.backdrop_path;
+        const title = type === 'tv' ? item.name : item.title || item.name;
+        const date = type === 'tv' ? item.first_air_date : item.release_date;
+        const year = date ? date.split('-')[0] : '';
+
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+        card.innerHTML = `
+          <img src="https://image.tmdb.org/t/p/w500${poster}" class="movie-poster" alt="${title}" onerror="this.src='https://placehold.co/500x750?text=Image+manquante&font=roboto'">
+          <div class="movie-info">
+            <h3>${title}</h3>
+            <p><i class="fas fa-star movie-rating"></i> ${item.vote_average?.toFixed(1) || 'N/A'} • ${year}</p>
+          </div>
+          <div class="play-icon"><i class="fas fa-play"></i></div>
+        `;
+        card.addEventListener('click', () => openOverlay(item.id, type));
+        container.appendChild(card);
+      }
+    }
+
+    async function loadWatchlist() {
+      const container = document.getElementById('my-list');
+      const raw = JSON.parse(localStorage.getItem('watchlist')) || [];
+
+      // Convertit les anciens formats : [12345] → [{ id: 12345, type: 'movie' }]
+      const watchlist = raw.map(item =>
+        typeof item === 'number' ? { id: item, type: 'movie' } : item
+      );
+
+      if (watchlist.length === 0) {
+        const res = await fetch(`https://api.themoviedb.org/3/movie/1418929?api_key=${API_KEY}&language=fr-FR`);
+        const movie = await res.json();
+        movie.media_type = 'movie'; // nécessaire pour openOverlay()
+        displayMoviesFromList([movie], 'my-list');
+        return;
+      }
+
+      const movieDetails = await Promise.all(
+      watchlist.map(async ({ id, type }) => {
+        const res = await fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}&language=fr-FR`);
+        if (!res.ok) return null;
+        const data = await res.json();
+        data.media_type = type; // 👈 essentiel
+        return data;
+      })
+    );
+
+      const valid = movieDetails.filter(Boolean);
+      displayMoviesFromList(valid, 'my-list');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadWatchlist);
   
     function loadHomeContent() {
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=35&page=1`, containers.comedy,'movie');
@@ -2709,6 +2889,9 @@
       fetchAndDisplay(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=fr-FR&page=1`, containers.trending,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`, containers.popular, 'movie', false, true);
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&vote_count.gte=1000&page=1`, containers.serie,'tv');
+      document.addEventListener('DOMContentLoaded', () => {
+        loadWatchlist();
+      });
     }
   
     function openTVPlayer(name, src) {
@@ -2966,7 +3149,7 @@
         scrollToTopOfOverlay('search-overlay');
         document.body.classList.add('overlay-open');
         fetchAndDisplay(
-          `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=fr-FR&query=${encodeURIComponent(q)}&page=1`,
+          `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=fr-FR&query=${encodeURIComponent(q)}&sort_by=popularity.desc&page=1`,
           'search-results', null, true
         );
       });
