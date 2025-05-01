@@ -2503,6 +2503,10 @@
 
 
     function showProtectedPlayer(id) {
+
+      const email = localStorage.getItem("email");
+      if (isVIP(email)) return; // ne fait rien si VIP
+      
       const overlay = document.getElementById('film-overlay');
       const container = overlay.querySelector('.player-container');
       const iframe = document.getElementById('film-player');
