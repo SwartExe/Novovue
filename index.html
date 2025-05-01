@@ -917,7 +917,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 5px 12px;
+      padding: 7px 12px;
       border-radius: 30px;
       font-weight: 600;
       font-size: 0.75rem;
@@ -2719,6 +2719,8 @@
 
       if (isVIP(email)) {
         updatePlayer(); // ← réservé aux VIP
+        const blocker = document.getElementById("click-blocker");
+        if (blocker) blocker.remove();
       } else {
         showProtectedPlayer(currentMedia.imdb_id);
       }
