@@ -2718,7 +2718,7 @@
       scrollToTopOfOverlay('film-overlay');
       document.body.classList.add('overlay-open');
 
-      const email = user.email;
+      const email = firebase.auth().currentUser?.email;
       console.log(email)
 
       if (isVIP(email)) {
