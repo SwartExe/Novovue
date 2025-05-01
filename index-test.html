@@ -2715,12 +2715,15 @@
       scrollToTopOfOverlay('film-overlay');
       document.body.classList.add('overlay-open');
 
-      const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
+      const email = localStorage.getItem("email");
       if (!isVIP(email)) {
         showProtectedPlayer(currentMedia.imdb_id);
+      } else {
+        updatePlayer(); // ← que pour les VIP
       }
 
       loadComments(currentMedia.imdb_id);
+
       if (isVIP(email)) {
         commentForm.style.display = "block";
         commentWarning.style.display = "none";
@@ -2729,9 +2732,6 @@
         commentWarning.style.display = "block";
       }
 
-      updatePlayer();
-    }
-  
     async function loadEpisodes(id) {
       const season = document.getElementById('season-select').value;
       const res = await fetch(
