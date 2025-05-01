@@ -2715,7 +2715,9 @@
       scrollToTopOfOverlay('film-overlay');
       document.body.classList.add('overlay-open');
 
-      const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
+      const auth = getAuth(app);
+      const email = auth.currentUser?.email;
+      console.log(email)
 
       if (isVIP(email)) {
         updatePlayer(); // ← réservé aux VIP
