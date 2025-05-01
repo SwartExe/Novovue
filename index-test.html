@@ -2715,7 +2715,8 @@
       scrollToTopOfOverlay('film-overlay');
       document.body.classList.add('overlay-open');
 
-      const email = localStorage.getItem("email");
+      const email = localStorage.getItem("email"); // récupère l’email de l'utilisateur
+
       if (!isVIP(email)) {
         showProtectedPlayer(currentMedia.imdb_id);
       } else {
@@ -2732,6 +2733,9 @@
         commentWarning.style.display = "block";
       }
 
+      updatePlayer();
+    }
+  
     async function loadEpisodes(id) {
       const season = document.getElementById('season-select').value;
       const res = await fetch(
