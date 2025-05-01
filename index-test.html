@@ -2722,12 +2722,12 @@
 
       if (isVIP(email)) {
         console.log('VIPPPPPPPPPP')
-        console.log(isVIP(email))
+        console.log(isVIP('matissehpro@gmail.com'))
         updatePlayer(); // ← réservé aux VIP
         const blocker = document.getElementById("click-blocker");
         if (blocker) blocker.remove();
       } else {
-        console.log('Non VIP')
+        console.log(isVIP('matissehpro@gmail.com'))
         console.log(isVIP(email))
         showProtectedPlayer(currentMedia.imdb_id);
       }
