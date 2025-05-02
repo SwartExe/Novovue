@@ -2133,7 +2133,6 @@
           allowfullscreen="yes" 
           scrolling="no" 
           style="overflow:hidden"
-          sandbox= "allow-scripts allow-same-origin"
         ></iframe>
       </div>      
       <div id="comments-section" style="margin-top: 40px;">
@@ -2444,13 +2443,14 @@
       parent.appendChild(btn);
     }
   
-    function updatePlayer(){
+    function updatePlayer() {
       const player = document.getElementById('film-player');
-      player.src = '';
       player.removeAttribute('src');
+      player.src = ''; // Reset l'iframe
 
-      setTimeout(()=>{
+      setTimeout(() => {
         let src = '';
+
         if (currentMedia.type === 'movie') {
           if (currentPlayer === 'wavewatch') {
             src = `${WAVEWATCH_FILM}${currentMedia.id}`;
@@ -2458,45 +2458,73 @@
           } else if (currentPlayer === 'wavewatchdl') {
             const url = `${WAVEWATCH_DL}${currentMedia.id}`;
             window.open(url, '_blank');
+            return;
 
           } else if (currentPlayer === 'local') {
+            // Requête backend → récup lien sécurisé
             fetch(`${LOCAL_FILM}${currentMedia.id}`)
-            .then(res => res.json())
-            .then(data => {
-              if (data.link) {
-                document.getElementById('film-player').src = data.link;
-              } else {
-                console.warn("Aucun lien VF LOC trouvé pour ce film.");
-              }
-            })
-            .catch(err => console.error("Erreur API VF LOC :", err));
-          return;
+              .then(res => res.json())
+              .then(data => {
+                if (data.link) {
+                  // Créer un nouvel iframe propre
+                  const newIframe = document.createElement('iframe');
+                  newIframe.src = data.link;
+                  newIframe.id = 'film-player';
+                  newIframe.setAttribute('allowfullscreen', '');
+                  newIframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media');
+                  newIframe.style = "width:100%; height:500px; border:none;";
+                  newIframe.style.pointerEvents = 'auto';
 
-          } 
+                  // ⚠️ Ne pas mettre sandbox sur les lecteurs locaux (ex: uqload)
+                  // Mais tu peux le faire pour les autres si besoin
+
+                  const container = player.parentElement;
+                  container.replaceChild(newIframe, player);
+                } else {
+                  console.warn("Aucun lien VF LOC trouvé pour ce film.");
+                }
+              })
+              .catch(err => console.error("Erreur API VF LOC :", err));
+            return;
+          }
+
           else if (currentPlayer === 'frembed') {
             src = `${FREMBED_FILM}${currentMedia.id}`;
           }
 
         } else {
+          // Séries
           const s = document.getElementById('season-select').value;
           const e = document.getElementById('episode-select').value;
 
           if (currentPlayer === 'wavewatch') {
             src = `${WAVEWATCH_SERIE}${currentMedia.id}&sea=${s}&epi=${e}`;
-            
+
           } else if (currentPlayer === 'wavewatchdl') {
             const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
             window.open(url, '_blank');
+            return;
 
-          } 
-        else {
-          src = `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`;
+          } else {
+            src = `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`;
+          }
         }
+
+        // S’il ne s’agit PAS du lecteur local
+        if (currentPlayer !== 'local') {
+          player.src = src;
+          player.setAttribute('allowfullscreen', '');
+          player.setAttribute('allow', 'autoplay; fullscreen; encrypted-media');
+          player.style.pointerEvents = 'auto';
+
+          // Tu peux appliquer sandbox uniquement pour les sources non fiables
+          if (!src.includes('uqload')) {
+            player.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+          } else {
+            player.removeAttribute('sandbox');
+          }
         }
-        player.src = src;
-        player.setAttribute('allowfullscreen','');
-        player.setAttribute('allow','autoplay; fullscreen; encrypted-media');
-        player.style.pointerEvents = 'auto';
+
       }, 100);
     }
 
