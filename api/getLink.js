@@ -23,6 +23,10 @@ const data = [
     "tmdb_id": "207411-s1-e2",
     "uqload": "https://vidzy.org/embed-w2umvwb3ha13.html"
   },
+    {
+    "tmdb_id": "550",
+    "uqload": "https://supervideo.cc/e/8gtbo9tm5y8a"
+  }
 ]
 
 module.exports = (req, res) => {
