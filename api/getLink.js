@@ -1,4 +1,4 @@
-import data from './uqload_data.json';
+import data from './api/uqload_data.json';
 
 export default function handler(req, res) {
   const { id } = req.query;
