@@ -3,18 +3,31 @@ import path from 'path';
 
 export default function handler(req, res) {
   const { id } = req.query;
-  if (!id) return res.status(400).json({ error: 'ID manquant' });
+  if (!id) return res.status(400).json({ error: 'Missing id parameter' });
 
+  const filePath = path.join(process.cwd(), 'uqload_data.json');
+
+  let data;
   try {
-    const filePath = path.join(process.cwd(), 'api', 'uqload.json');
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
-    const data = JSON.parse(fileContent);
-
-    const result = data.find(item => String(item.tmdb_id) === String(id));
-    if (!result) return res.status(404).json({ error: 'Lien non trouvé' });
-
-    return res.status(200).json({ link: result.uqload });
-  } catch (e) {
-    return res.status(500).json({ error: 'Erreur serveur', details: e.message });
+    const rawData = fs.readFileSync(filePath, 'utf-8');
+    data = JSON.parse(rawData);
+  } catch (err) {
+    return res.status(500).json({ error: 'Erreur de lecture JSON' });
   }
+
+  // 🎯 Traitement pour série : id-ssaison-eepisode
+  if (/^\d+-s\d+-e\d+$/.test(id)) {
+    const match = data.find(entry => entry.tmdb_id === id);
+    if (match) return res.status(200).json({ link: match.uqload });
+    return res.status(404).json({ error: "Aucun lien série trouvé pour cet ID" });
+  }
+
+  // 🎯 Traitement pour film : juste un ID numérique
+  if (/^\d+$/.test(id)) {
+    const match = data.find(entry => entry.tmdb_id === id);
+    if (match) return res.status(200).json({ link: match.uqload });
+    return res.status(404).json({ error: "Aucun lien film trouvé pour cet ID" });
+  }
+
+  return res.status(400).json({ error: "Format d'ID invalide" });
 }
