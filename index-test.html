@@ -2494,8 +2494,7 @@
             return;
 
           } else if (currentPlayer === 'local') {
-            fetch(`${LOCAL_FILM}${currentMedia.id}-${s}-${e}`)
-              console.log(`${LOCAL_FILM}${currentMedia.id}-${s}-${e}`)
+            fetch(`${LOCAL_FILM}${currentMedia.id}-s${s}-e${e}`)
               .then(res => res.json())
               .then(data => {
                 if (data.link) {
