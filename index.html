@@ -2497,8 +2497,6 @@
               .then(res => res.json())
               .then(data => {
                 if (data.link) {
-                  player.setAttribute('allowfullscreen', '');
-                  player.setAttribute('allow', 'autoplay; fullscreen; encrypted-media');
                   player.src = data.link;
                 } else {
                   console.warn("Aucun lien VF LOC trouvé pour ce film.");
@@ -2515,14 +2513,7 @@
         // Cas général (non local)
         player.setAttribute('allowfullscreen', '');
         player.setAttribute('allow', 'autoplay; fullscreen; encrypted-media');
-
-        // ✅ Appliquer sandbox uniquement aux lecteurs classiques (pas uqload)
-        if (currentPlayer !== 'local') {
-          player.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-        } else {
-          player.removeAttribute('sandbox');
-        }
-
+        player.setAttribute('sandbox', 'allow-scripts allow-same-origin');
         player.src = src;
         player.style.pointerEvents = 'auto';
 
