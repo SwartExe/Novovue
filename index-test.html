@@ -2461,8 +2461,18 @@
             const url = `https://embed.wavewatch.xyz/download/${currentMedia.id}`;
             window.open(url, '_blank');
 
-          } else if (currentPlayer === 'local') {
-            src = fetch(`/api/FgetLink?id=${currentMedia.imdb_id}`);
+          } if (currentPlayer === 'local') {
+            fetch(`/api/FgetLink?id=${currentMedia.imdb_id}`)
+              .then(res => res.json())
+              .then(data => {
+                if (data.link) {
+                  document.getElementById('film-player').src = data.link;
+                } else {
+                  console.warn("Aucun lien trouvé dans l'API VF LOC");
+                }
+              })
+              .catch(err => console.error("Erreur API VF LOC :", err));
+            return;
 
           } else {
             src = (currentPlayer === 'frembed' ? FREMBED_FILM : VIDLINK_FILM) + currentMedia.id;
