@@ -2195,10 +2195,8 @@
         <a href="#">Un site pour les gouverner tous. Un site pour les trouver. Un site pour les amener tous et dans les ténèbres les lier.</a>
       </div>
       <div class="social-links">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.tiktok.com/@reelone.fr" target="_blank"><i class="fab fa-tiktok"></i></a>
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"><i class="fa-brands fa-youtube"></i></a>
       </div>
       <p>© 2025 Novovue. Tous droits réservés.</p>
     </div>
@@ -2477,6 +2475,9 @@
               })
               .catch(err => console.error("Erreur API VF LOC :", err));
             return;
+
+          } else if (currentMedia.id === '0') {
+            src = `https://www.youtube.com/watch?v=dQw4w9WgXcQ`;
 
           } else if (currentPlayer === 'frenchcloud') {
             src = `${FRENCHCLOUD}${currentMedia.imdb_id}`;
