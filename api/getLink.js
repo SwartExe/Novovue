@@ -1,32 +1,32 @@
 const data = [
   {
-    "tmdb_id": "207411-s1-e7",
-    "uqload": "https://vidzy.org/embed-ptyg85l3xjsc.html"
-  },
-  {
-    "tmdb_id": "207411-s1-e6",
-    "uqload": "https://vidzy.org/embed-d9ypm9mqmm0n.html"
-  },
-  {
-    "tmdb_id": "207411-s1-e5",
-    "uqload": "https://vidzy.org/embed-i0ptttzu89ce.html"
-  },
-  {
-    "tmdb_id": "207411-s1-e4",
-    "uqload": "https://vidzy.org/embed-lfun1awx0d5l.html"
+    "tmdb_id": "207411-s1-e2",
+    "uqload": "https://vidzy.org/embed-w2umvwb3ha13.html"
   },
   {
     "tmdb_id": "207411-s1-e3",
     "uqload": "https://vidzy.org/embed-eadj353d3s9j.html"
   },
   {
-    "tmdb_id": "207411-s1-e2",
-    "uqload": "https://vidzy.org/embed-w2umvwb3ha13.html"
+    "tmdb_id": "207411-s1-e4",
+    "uqload": "https://vidzy.org/embed-lfun1awx0d5l.html"
   },
-    {
-    "tmdb_id": "550",
+  {
+    "tmdb_id": "207411-s1-e5",
+    "uqload": "https://vidzy.org/embed-i0ptttzu89ce.html"
+  },
+  {
+    "tmdb_id": "207411-s1-e6",
+    "uqload": "https://vidzy.org/embed-d9ypm9mqmm0n.html"
+  },
+  {
+    "tmdb_id": "207411-s1-e7",
+    "uqload": "https://vidzy.org/embed-ptyg85l3xjsc.html"
+  },
+  {
+    "tmdb_id": "822119",
     "uqload": "https://supervideo.cc/e/8gtbo9tm5y8a"
-  }
+  },
 ]
 
 module.exports = (req, res) => {
