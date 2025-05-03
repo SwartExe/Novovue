@@ -27,10 +27,6 @@ const data = [
     "tmdb_id": "207411-s1-e8",
     "uqload": "https://jonathansociallike.com/e/5pgiuqnyjeiq"
   },
-  {
-    "tmdb_id": "822119",
-    "uqload": "https://supervideo.cc/e/8gtbo9tm5y8a"
-  },
 ]
 
 module.exports = (req, res) => {
