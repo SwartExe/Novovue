@@ -27,6 +27,10 @@ const data = [
     "tmdb_id": "822119",
     "uqload": "https://supervideo.cc/e/8gtbo9tm5y8a"
   },
+  {
+    "tmdb_id": "211672",
+    "uqload": "https://lecteurvideo.com/embed.php?id=70989"
+  },
 ]
 
 module.exports = (req, res) => {
