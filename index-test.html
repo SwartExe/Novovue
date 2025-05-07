@@ -1317,15 +1317,18 @@
       width: 100%;
 
       background-image: linear-gradient(to right, #ffb6f9, #b3ecff);
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    #comments-list > div {
-      margin-left: 15px; /* Décalage léger à droite */
-      padding-left: 12px;
-      border-left: 2px solid rgba(255,255,255,0.1);
+    #comments-list > div p {
+      margin-left: 20px;
+      color: #ddd;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
     #submit-comment {
