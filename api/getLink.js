@@ -1,31 +1,31 @@
 const data = [
   {
     "tmdb_id": "207411-s1-e2",
-    "uqload": "https://vidzy.org/embed-w2umvwb3ha13.html"
+    "lecteurvideo": "https://vidzy.org/embed-w2umvwb3ha13.html"
   },
   {
     "tmdb_id": "207411-s1-e3",
-    "uqload": "https://vidzy.org/embed-eadj353d3s9j.html"
+    "lecteurvideo": "https://vidzy.org/embed-eadj353d3s9j.html"
   },
   {
     "tmdb_id": "207411-s1-e4",
-    "uqload": "https://vidzy.org/embed-lfun1awx0d5l.html"
+    "lecteurvideo": "https://vidzy.org/embed-lfun1awx0d5l.html"
   },
   {
     "tmdb_id": "207411-s1-e5",
-    "uqload": "https://vidzy.org/embed-i0ptttzu89ce.html"
+    "lecteurvideo": "https://vidzy.org/embed-i0ptttzu89ce.html"
   },
   {
     "tmdb_id": "207411-s1-e6",
-    "uqload": "https://vidzy.org/embed-d9ypm9mqmm0n.html"
+    "lecteurvideo": "https://vidzy.org/embed-d9ypm9mqmm0n.html"
   },
   {
     "tmdb_id": "207411-s1-e7",
-    "uqload": "https://vidzy.org/embed-ptyg85l3xjsc.html"
+    "lecteurvideo": "https://vidzy.org/embed-ptyg85l3xjsc.html"
   },
     {
     "tmdb_id": "207411-s1-e8",
-    "uqload": "https://jonathansociallike.com/e/5pgiuqnyjeiq"
+    "lecteurvideo": "https://jonathansociallike.com/e/5pgiuqnyjeiq"
   },
   {
     "tmdb_id": "1144430",
@@ -11555,7 +11555,7 @@ module.exports = (req, res) => {
   const match = data.find(entry => entry.tmdb_id === id);
 
   if (match) {
-    return res.status(200).json({ link: match.uqload });
+    return res.status(200).json({ link: match.lecteurvideo });
   } else {
     return res.status(404).json({ error: "Lien non trouvé" });
   }
