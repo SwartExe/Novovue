@@ -1307,9 +1307,13 @@
     }
 
     #comment-input {
-      background-color: #1c1e2a; /* même fond que le sélecteur d’épisode */
-      color: #ffffff; /* texte blanc */
-      border: 1px solid #2f3344;
+      background-color: #1c1e2a;
+      color: #ffffff !important; /* Force le blanc */
+      -webkit-text-fill-color: #ffffff !important; /* Corrige les effets précédents de dégradé */
+      background-image: none !important;
+      background-clip: border-box !important;
+      -webkit-background-clip: border-box !important;
+
       border-radius: 10px;
       padding: 10px;
       font-size: 1rem;
