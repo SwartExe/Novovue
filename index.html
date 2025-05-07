@@ -1307,21 +1307,20 @@
     }
 
     #comment-input {
-      background-color: #2a2a2a;
-      color: transparent;
-      border: 1px solid #444;
+      background-color: #1c1e2a;
+      color: #ffffff !important; /* Force le blanc */
+      -webkit-text-fill-color: #ffffff !important; /* Corrige les effets précédents de dégradé */
+      background-image: none !important;
+      background-clip: border-box !important;
+      -webkit-background-clip: border-box !important;
+
+      border: 1px solid #1c1e2a;
       border-radius: 10px;
       padding: 10px;
       font-size: 1rem;
       resize: vertical;
       width: 100%;
-
-      background-image: linear-gradient(to right, #ffb6f9, #b3ecff);
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
     }
 
     #comments-list > div p {
@@ -2569,7 +2568,10 @@
 
     function isVIP(email) {
       const vipEmails = [
-        "matissehpro@gmail.com"
+        "matissehpro@gmail.com",
+        "chloe.stheme@gmail.com",
+        "lucie.racodon42@gmail.com",
+        "llysagirl@gmail.com"
       ];
       return vipEmails.includes(email)
       console.log(vipEmails.includes(email));
