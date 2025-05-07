@@ -1305,6 +1305,60 @@
       overflow: hidden;
       margin-top: 20px;
     }
+
+    #comments-list > div {
+      background: var(--bg-lighter);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    #comments-list > div::before {
+      content: "👤";
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      background: var(--gradient);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 1px 2px black;
+    }
+
+    #comments-list p {
+      margin: 0;
+      color: #ddd;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    #comment-input {
+      background: var(--bg-light);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.95rem;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    #submit-comment {
+      background: var(--gradient) !important;
+      border-radius: 30px !important;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+    }
+
+    #submit-comment:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255,45,85,0.4);
+    }
     
     .bottom-banner {
       position: fixed;
@@ -2115,8 +2169,8 @@
       <div class="player-options">
         <button class="player-option-btn active" data-player="wavewatch">Lecteur Multi</button>
         <button class="player-option-btn" data-player="frembed">Lecteur VF 1</button>
-        <!-- <button class="player-option-btn" data-player="local">Lecteur VF 2</button> -->
         <button class="player-option-btn" data-player="frenchcloud">Lecteur VF 2</button>
+        <button class="player-option-btn" data-player="local">Lecteur VF Bêta</button>
         <button class="player-option-btn" data-player="wavewatchdl">Télécharger</button>
       </div>
       <div class="episode-selector" id="episode-selector" style="display:none">
@@ -2195,10 +2249,8 @@
         <a href="#">Un site pour les gouverner tous. Un site pour les trouver. Un site pour les amener tous et dans les ténèbres les lier.</a>
       </div>
       <div class="social-links">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.tiktok.com/@reelone.fr" target="_blank"><i class="fab fa-tiktok"></i></a>
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"><i class="fa-brands fa-youtube"></i></a>
       </div>
       <p>© 2025 Novovue. Tous droits réservés.</p>
     </div>
@@ -2477,6 +2529,9 @@
               })
               .catch(err => console.error("Erreur API VF LOC :", err));
             return;
+
+          } else if (currentMedia.id === '0') {
+            src = `https://www.youtube.com/watch?v=dQw4w9WgXcQ`;
 
           } else if (currentPlayer === 'frenchcloud') {
             src = `${FRENCHCLOUD}${currentMedia.imdb_id}`;
