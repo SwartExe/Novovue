@@ -2152,7 +2152,6 @@
       <div class="player-options">
         <button class="player-option-btn active" data-player="wavewatch">Lecteur Multi</button>
         <button class="player-option-btn" data-player="frembed">Lecteur VF 1</button>
-        <button class="player-option-btn" data-player="frenchcloud">Lecteur VF 2</button>
         <button class="player-option-btn" data-player="local">Lecteur VF Bêta</button>
         <button class="player-option-btn" data-player="wavewatchdl">Télécharger</button>
       </div>
@@ -2408,7 +2407,6 @@
     const FREMBED_FILM = 'https://frembed.ink/api/film.php?id=';
     const FREMBED_SERIE = 'https://frembed.ink/api/serie.php?id=';
     const LOCAL_FILM = '/api/getLink?id=';
-    const FRENCHCLOUD = 'https://play.frenchcloud.cam/movie/';
     const WAVEWATCH_FILM = 'https://embed.wavewatch.xyz/embed/movie?tmdb=';
     const WAVEWATCH_SERIE = 'https://embed.wavewatch.xyz/embed/series?tmdb=';
     const WAVEWATCH_DL = 'https://embed.wavewatch.xyz/download/'
@@ -2515,9 +2513,6 @@
 
           } else if (currentMedia.id === '0') {
             src = `https://www.youtube.com/watch?v=dQw4w9WgXcQ`;
-
-          } else if (currentPlayer === 'frenchcloud') {
-            src = `${FRENCHCLOUD}${currentMedia.imdb_id}`;
           
           } else if (currentPlayer === 'frembed') {
             src = `${FREMBED_FILM}${currentMedia.id}`;
