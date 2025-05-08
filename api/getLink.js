@@ -12818,8 +12818,475 @@ const data = [
   {
     "tmdb_id": "7485",
     "lecteurvideo": "https://vidzy.org/embed-als3y7y9qaqf.html"
+  },
+  {
+    "tmdb_id": "11713",
+    "lecteurvideo": "https://vidzy.org/embed-l9wezim97phr.html"
+  },
+  {
+    "tmdb_id": "1361402",
+    "lecteurvideo": "https://vidzy.org/embed-af2j0sgpzzxl.html"
+  },
+  {
+    "tmdb_id": "97731",
+    "lecteurvideo": "https://vidzy.org/embed-7cp3ng2z71tq.html"
+  },
+  {
+    "tmdb_id": "437626",
+    "lecteurvideo": "https://vidzy.org/embed-4feq55a85qcr.html"
+  },
+  {
+    "tmdb_id": "1642",
+    "lecteurvideo": "https://vidzy.org/embed-7el9v0jt64hx.html"
+  },
+  {
+    "tmdb_id": "975043",
+    "lecteurvideo": "https://vidzy.org/embed-krucmslp3kf2.html"
+  },
+  {
+    "tmdb_id": "25462",
+    "lecteurvideo": "https://vidzy.org/embed-qzosyuehft8i.html"
+  },
+  {
+    "tmdb_id": "1056737",
+    "lecteurvideo": "https://vidzy.org/embed-k3kpl6aqmym5.html"
+  },
+  {
+    "tmdb_id": "638974",
+    "lecteurvideo": "https://vidzy.org/embed-u9f01pafj7gr.html"
+  },
+  {
+    "tmdb_id": "42949",
+    "lecteurvideo": "https://vidzy.org/embed-bz41b8qozw2s.html"
+  },
+  {
+    "tmdb_id": "1317357",
+    "lecteurvideo": "https://vidzy.org/embed-v5c0w3vtmvhh.html"
+  },
+  {
+    "tmdb_id": "1607",
+    "lecteurvideo": "https://vidzy.org/embed-xz7hada8wb6u.html"
+  },
+  {
+    "tmdb_id": "837841",
+    "lecteurvideo": "https://vidzy.org/embed-pxqjnbvsazhh.html"
+  },
+  {
+    "tmdb_id": "663712",
+    "lecteurvideo": "https://vidzy.org/embed-7axw2l5pja2t.html"
+  },
+  {
+    "tmdb_id": "82654",
+    "lecteurvideo": "https://vidzy.org/embed-cr2x9i3062zm.html"
+  },
+  {
+    "tmdb_id": "50620",
+    "lecteurvideo": "https://vidzy.org/embed-t3az4gm3b5cb.html"
+  },
+  {
+    "tmdb_id": "2034",
+    "lecteurvideo": "https://vidzy.org/embed-ms9u8s2xf961.html"
+  },
+  {
+    "tmdb_id": "366104",
+    "lecteurvideo": "https://vidzy.org/embed-0u6xdxbu1r6d.html"
+  },
+  {
+    "tmdb_id": "583116",
+    "lecteurvideo": "https://vidzy.org/embed-ihnh4iubyxab.html"
+  },
+  {
+    "tmdb_id": "13448",
+    "lecteurvideo": "https://vidzy.org/embed-6nmhrmws123t.html"
+  },
+  {
+    "tmdb_id": "271404",
+    "lecteurvideo": "https://vidzy.org/embed-6rvgneo6xjul.html"
+  },
+  {
+    "tmdb_id": "16617",
+    "lecteurvideo": "https://vidzy.org/embed-u3fvvncov55n.html"
+  },
+  {
+    "tmdb_id": "1014209",
+    "lecteurvideo": "https://vidzy.org/embed-570stbe33roe.html"
+  },
+  {
+    "tmdb_id": "21259",
+    "lecteurvideo": "https://vidzy.org/embed-z41tiavhakq2.html"
+  },
+  {
+    "tmdb_id": "1190012",
+    "lecteurvideo": "https://vidzy.org/embed-wx1kwlrrd1a2.html"
+  },
+  {
+    "tmdb_id": "989224",
+    "lecteurvideo": "https://vidzy.org/embed-j64eaq3zhdc7.html"
+  },
+  {
+    "tmdb_id": "31789",
+    "lecteurvideo": "https://vidzy.org/embed-qrerlda40ulj.html"
+  },
+  {
+    "tmdb_id": "1118853",
+    "lecteurvideo": "https://vidzy.org/embed-z5kkxnk7by4a.html"
+  },
+  {
+    "tmdb_id": "934506",
+    "lecteurvideo": "https://vidzy.org/embed-gvzbustst55f.html"
+  },
+  {
+    "tmdb_id": "9427",
+    "lecteurvideo": "https://vidzy.org/embed-xusl7jjh9gsl.html"
+  },
+  {
+    "tmdb_id": "11543",
+    "lecteurvideo": "https://vidzy.org/embed-bmib2j9qplg4.html"
+  },
+  {
+    "tmdb_id": "12145",
+    "lecteurvideo": "https://vidzy.org/embed-qq7x9e4r57bx.html"
+  },
+  {
+    "tmdb_id": "286565",
+    "lecteurvideo": "https://vidzy.org/embed-4ltkazw5jadj.html"
+  },
+  {
+    "tmdb_id": "906455",
+    "lecteurvideo": "https://vidzy.org/embed-1dwesro544y4.html"
+  },
+  {
+    "tmdb_id": "249070",
+    "lecteurvideo": "https://vidzy.org/embed-ojw4jnnd1cd7.html"
+  },
+  {
+    "tmdb_id": "216015",
+    "lecteurvideo": "https://vidzy.org/embed-8kdx9nehpo9w.html"
+  },
+  {
+    "tmdb_id": "616704",
+    "lecteurvideo": "https://vidzy.org/embed-fikn8cazjnws.html"
+  },
+  {
+    "tmdb_id": "228968",
+    "lecteurvideo": "https://vidzy.org/embed-gm1bzgobpghi.html"
+  },
+  {
+    "tmdb_id": "304357",
+    "lecteurvideo": "https://vidzy.org/embed-5my7wtxtlill.html"
+  },
+  {
+    "tmdb_id": "8848",
+    "lecteurvideo": "https://vidzy.org/embed-k8j5wgin219d.html"
+  },
+  {
+    "tmdb_id": "19913",
+    "lecteurvideo": "https://vidzy.org/embed-8lxu90l13cbd.html"
+  },
+  {
+    "tmdb_id": "591273",
+    "lecteurvideo": "https://vidzy.org/embed-rlimb91zjz4i.html"
+  },
+  {
+    "tmdb_id": "776797",
+    "lecteurvideo": "https://vidzy.org/embed-l0uvb7iqrinu.html"
+  },
+  {
+    "tmdb_id": "80280",
+    "lecteurvideo": "https://vidzy.org/embed-2i6lipsa03pf.html"
+  },
+  {
+    "tmdb_id": "42941",
+    "lecteurvideo": "https://vidzy.org/embed-dsfc4di9fqbx.html"
+  },
+  {
+    "tmdb_id": "795853",
+    "lecteurvideo": "https://vidzy.org/embed-7q2xnh0zyqkn.html"
+  },
+  {
+    "tmdb_id": "18443",
+    "lecteurvideo": "https://vidzy.org/embed-h8hc5hnsc99k.html"
+  },
+  {
+    "tmdb_id": "242095",
+    "lecteurvideo": "https://vidzy.org/embed-w36fvf790zt7.html"
+  },
+  {
+    "tmdb_id": "273477",
+    "lecteurvideo": "https://vidzy.org/embed-7x5r572tburu.html"
+  },
+  {
+    "tmdb_id": "1179420",
+    "lecteurvideo": "https://vidzy.org/embed-41zmjhtkfbes.html"
+  },
+  {
+    "tmdb_id": "299582",
+    "lecteurvideo": "https://vidzy.org/embed-z5s9k7v780ru.html"
+  },
+  {
+    "tmdb_id": "1000862",
+    "lecteurvideo": "https://vidzy.org/embed-2x1m3i1vj6rd.html"
+  },
+  {
+    "tmdb_id": "1163186",
+    "lecteurvideo": "https://vidzy.org/embed-ofehzwm3pbkk.html"
+  },
+  {
+    "tmdb_id": "271715",
+    "lecteurvideo": "https://vidzy.org/embed-7r3ktk6g3d2t.html"
+  },
+  {
+    "tmdb_id": "363716",
+    "lecteurvideo": "https://vidzy.org/embed-lw95p990ssom.html"
+  },
+  {
+    "tmdb_id": "1172522",
+    "lecteurvideo": "https://vidzy.org/embed-vf29q84g6922.html"
+  },
+  {
+    "tmdb_id": "530047",
+    "lecteurvideo": "https://vidzy.org/embed-o438wpq7cd0v.html"
+  },
+  {
+    "tmdb_id": "1123493",
+    "lecteurvideo": "https://vidzy.org/embed-0xhme27j6yec.html"
+  },
+  {
+    "tmdb_id": "925124",
+    "lecteurvideo": "https://vidzy.org/embed-7wxj7zyk17db.html"
+  },
+  {
+    "tmdb_id": "267746",
+    "lecteurvideo": "https://vidzy.org/embed-xyaht3rfk83k.html"
+  },
+  {
+    "tmdb_id": "1083412",
+    "lecteurvideo": "https://vidzy.org/embed-suf6atx0d3v7.html"
+  },
+  {
+    "tmdb_id": "850165",
+    "lecteurvideo": "https://vidzy.org/embed-chkzefdojabd.html"
+  },
+  {
+    "tmdb_id": "238215",
+    "lecteurvideo": "https://vidzy.org/embed-aox04tklweiw.html"
+  },
+  {
+    "tmdb_id": "10949",
+    "lecteurvideo": "https://vidzy.org/embed-fpi6w2hboqne.html"
+  },
+  {
+    "tmdb_id": "149509",
+    "lecteurvideo": "https://vidzy.org/embed-hqzqwm686y41.html"
+  },
+  {
+    "tmdb_id": "102382",
+    "lecteurvideo": "https://vidzy.org/embed-l1b9u749fmto.html"
+  },
+  {
+    "tmdb_id": "57158",
+    "lecteurvideo": "https://vidzy.org/embed-fbkyjgo3dw3z.html"
+  },
+  {
+    "tmdb_id": "200211",
+    "lecteurvideo": "https://vidzy.org/embed-uupbazn2ypdj.html"
+  },
+  {
+    "tmdb_id": "181533",
+    "lecteurvideo": "https://vidzy.org/embed-vo15wib0ctr8.html"
+  },
+  {
+    "tmdb_id": "68737",
+    "lecteurvideo": "https://vidzy.org/embed-wmq7r81h5klw.html"
+  },
+  {
+    "tmdb_id": "122917",
+    "lecteurvideo": "https://vidzy.org/embed-zywshf09olgd.html"
+  },
+  {
+    "tmdb_id": "72190",
+    "lecteurvideo": "https://vidzy.org/embed-0cd8ic9uyavf.html"
+  },
+  {
+    "tmdb_id": "76170",
+    "lecteurvideo": "https://vidzy.org/embed-qixyjd9u5not.html"
+  },
+  {
+    "tmdb_id": "76338",
+    "lecteurvideo": "https://vidzy.org/embed-4n1ws18wrjwr.html"
+  },
+  {
+    "tmdb_id": "13811",
+    "lecteurvideo": "https://vidzy.org/embed-17k3l0aqvv75.html"
+  },
+  {
+    "tmdb_id": "22538",
+    "lecteurvideo": "https://vidzy.org/embed-paoqgffvdvvk.html"
+  },
+  {
+    "tmdb_id": "18239",
+    "lecteurvideo": "https://vidzy.org/embed-gv0djzjopihc.html"
+  },
+  {
+    "tmdb_id": "410199",
+    "lecteurvideo": "https://vidzy.org/embed-p08yoxsyspxz.html"
+  },
+  {
+    "tmdb_id": "428322",
+    "lecteurvideo": "https://vidzy.org/embed-m9wq6xw4daj4.html"
+  },
+  {
+    "tmdb_id": "45612",
+    "lecteurvideo": "https://vidzy.org/embed-65nu3baz7aug.html"
+  },
+  {
+    "tmdb_id": "1771",
+    "lecteurvideo": "https://vidzy.org/embed-9mhv9u1qewkr.html"
+  },
+  {
+    "tmdb_id": "49530",
+    "lecteurvideo": "https://vidzy.org/embed-a8dkv70grpef.html"
+  },
+  {
+    "tmdb_id": "39254",
+    "lecteurvideo": "https://vidzy.org/embed-2i5r7s20kbt8.html"
+  },
+  {
+    "tmdb_id": "1353641",
+    "lecteurvideo": "https://vidzy.org/embed-kkdpn5lwhyoh.html"
+  },
+  {
+    "tmdb_id": "294254",
+    "lecteurvideo": "https://vidzy.org/embed-4hrl65fu2uo4.html"
+  },
+  {
+    "tmdb_id": "61791",
+    "lecteurvideo": "https://vidzy.org/embed-yxac1th85vnr.html"
+  },
+  {
+    "tmdb_id": "1002645",
+    "lecteurvideo": "https://vidzy.org/embed-ocq2ftsnix2e.html"
+  },
+  {
+    "tmdb_id": "158852",
+    "lecteurvideo": "https://vidzy.org/embed-ytumcnx5ke1q.html"
+  },
+  {
+    "tmdb_id": "102899",
+    "lecteurvideo": "https://vidzy.org/embed-6yl344nzlpmx.html"
+  },
+  {
+    "tmdb_id": "99861",
+    "lecteurvideo": "https://vidzy.org/embed-h6sijxkzuk2f.html"
+  },
+  {
+    "tmdb_id": "87101",
+    "lecteurvideo": "https://vidzy.org/embed-0xt65etk51z6.html"
+  },
+  {
+    "tmdb_id": "264660",
+    "lecteurvideo": "https://vidzy.org/embed-gtp4ro4dkass.html"
+  },
+  {
+    "tmdb_id": "428495",
+    "lecteurvideo": "https://vidzy.org/embed-8slrr1xo3j3t.html"
+  },
+  {
+    "tmdb_id": "446021",
+    "lecteurvideo": "https://vidzy.org/embed-b04wcy1u39qw.html"
+  },
+  {
+    "tmdb_id": "479226",
+    "lecteurvideo": "https://vidzy.org/embed-tb1c3re62441.html"
+  },
+  {
+    "tmdb_id": "429200",
+    "lecteurvideo": "https://vidzy.org/embed-3wg0taoh9rqg.html"
+  },
+  {
+    "tmdb_id": "9072",
+    "lecteurvideo": "https://vidzy.org/embed-gz22tm9sp7dm.html"
+  },
+  {
+    "tmdb_id": "347375",
+    "lecteurvideo": "https://vidzy.org/embed-jk1qob89n5b0.html"
+  },
+  {
+    "tmdb_id": "9676",
+    "lecteurvideo": "https://vidzy.org/embed-uunyepibrr36.html"
+  },
+  {
+    "tmdb_id": "13653",
+    "lecteurvideo": "https://vidzy.org/embed-8sj0wcw62fjc.html"
+  },
+  {
+    "tmdb_id": "7295",
+    "lecteurvideo": "https://vidzy.org/embed-pr4pvrts5qz9.html"
+  },
+  {
+    "tmdb_id": "500553",
+    "lecteurvideo": "https://vidzy.org/embed-j16raygwwaqx.html"
+  },
+  {
+    "tmdb_id": "388",
+    "lecteurvideo": "https://vidzy.org/embed-zqej3cg16pdn.html"
+  },
+  {
+    "tmdb_id": "9615",
+    "lecteurvideo": "https://vidzy.org/embed-jfz4mi8t6r67.html"
+  },
+  {
+    "tmdb_id": "339692",
+    "lecteurvideo": "https://vidzy.org/embed-i3si4bu0qkee.html"
+  },
+  {
+    "tmdb_id": "851303",
+    "lecteurvideo": "https://vidzy.org/embed-w2tbivopguw0.html"
+  },
+  {
+    "tmdb_id": "693327",
+    "lecteurvideo": "https://vidzy.org/embed-hpslm364o0g5.html"
+  },
+  {
+    "tmdb_id": "774343",
+    "lecteurvideo": "https://vidzy.org/embed-kja06luc7lrk.html"
+  },
+  {
+    "tmdb_id": "746131",
+    "lecteurvideo": "https://vidzy.org/embed-32dr92qqyq1b.html"
+  },
+  {
+    "tmdb_id": "32338",
+    "lecteurvideo": "https://vidzy.org/embed-wnp4flt5bvmj.html"
+  },
+  {
+    "tmdb_id": "945729",
+    "lecteurvideo": "https://vidzy.org/embed-1sytoptewkbf.html"
+  },
+  {
+    "tmdb_id": "9759",
+    "lecteurvideo": "https://vidzy.org/embed-bisq9osiqi60.html"
+  },
+  {
+    "tmdb_id": "343795",
+    "lecteurvideo": "https://vidzy.org/embed-i549j4e9fmi5.html"
+  },
+  {
+    "tmdb_id": "312221",
+    "lecteurvideo": "https://vidzy.org/embed-652gf5albbub.html"
+  },
+  {
+    "tmdb_id": "274167",
+    "lecteurvideo": "https://vidzy.org/embed-xd8iyzupvhot.html"
+  },
+  {
+    "tmdb_id": "1089",
+    "lecteurvideo": "https://vidzy.org/embed-5tzhy4ohb5kx.html"
+  },
+  {
+    "tmdb_id": "1196134",
+    "lecteurvideo": "https://vidzy.org/embed-ips5pfjn08hu.html"
   }
-
 ]
 
 module.exports = (req, res) => {
