@@ -2221,18 +2221,19 @@
   </div>  
 
   <div class="bottom-banner">
-    🔔 Votre configuration DNS bloque certains lecteurs. Utilisez ce <a href="https://one.one.one.one/" target="_blank">navigateur</a> pour profter pleinement de notre site.
+    🔔 Novovue ne fait que référencer des sources publiques. La disponibilité des films ou séries affichés peut varier et n’est pas garantie.
   </div>  
 
   <footer>
     <div class="container">
       <div class="footer-logo">Novovue</div>
       <div class="footer-links">
-        <a href="#">Un site pour les gouverner tous. Un site pour les trouver. Un site pour les amener tous et dans les ténèbres les lier.</a>
+        <p>⚠️ Novovue ne stocke aucun contenu. Nous référencions des sources externes dont la légalité relève de l’utilisateur selon la loi de son pays.</p>
       </div>
       <div class="social-links">
         <a href="https://www.tiktok.com/@reelone.fr" target="_blank"><i class="fab fa-tiktok"></i></a>
         <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+        <a href="mailto:team@novovue.fr"><i class="fa-solid fa-envelope"></i></a>
       </div>
       <p>© 2025 Novovue. Tous droits réservés.</p>
     </div>
@@ -2510,9 +2511,6 @@
               })
               .catch(err => console.error("Erreur API VF LOC :", err));
             return;
-
-          } else if (currentMedia.id === '0') {
-            src = `https://www.youtube.com/watch?v=dQw4w9WgXcQ`;
           
           } else if (currentPlayer === 'frembed') {
             src = `${FREMBED_FILM}${currentMedia.id}`;
@@ -2543,7 +2541,7 @@
               .catch(err => console.error("Erreur API VF LOC :", err));
             return;
 
-          } else {
+          } else if (currentPlayer === 'frembed') {
             src = `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`;
           }
         }
@@ -2934,7 +2932,7 @@
       );
 
       if (watchlist.length === 0) {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/1418929?api_key=${API_KEY}&language=fr-FR`);
+        const res = await fetch(`https://api.themoviedb.org/3/movie/0?api_key=${API_KEY}&language=fr-FR`);
         const movie = await res.json();
         movie.media_type = 'movie'; // nécessaire pour openOverlay()
         displayMoviesFromList([movie], 'my-list');
