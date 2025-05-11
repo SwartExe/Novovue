@@ -1396,7 +1396,7 @@
 
     .account-wrapper {
       position: absolute;
-      right: 30px; /* À droite de la loupe */
+      right: 31px; /* À droite de la loupe */
       top: 48%;
       transform: translateY(-50%);
       display: flex;
@@ -2780,7 +2780,7 @@
           card.addEventListener('click', () => openOverlay(item.id, type));
           container.appendChild(card);
         }
-        if (isGrid && list.length>0 && ['films-content','series-content','platform-results'].includes(containerId)) {
+        if (isGrid && list.length>0 && ['films-content','series-content','platform-results','categories-content'].includes(containerId)) {
           const baseUrl = url.split('&page=')[0];
           addSeeMoreButton(containerId, baseUrl, forceType, isGrid);
         }
@@ -2993,11 +2993,9 @@
         await loadEpisodes(currentMedia.id);
         updatePlayer();
       });
-
       document.getElementById('episode-select').addEventListener('change', () => {
         updatePlayer();
       });
-
       window.addEventListener('scroll', () => {
         document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50);
       });
@@ -3026,7 +3024,6 @@
         document.body.classList.add('overlay-open');
         loadTVChannels();
       });
-
       document.getElementById('films-link').addEventListener('click', e => {
         e.preventDefault();
         document.getElementById('home-page').style.display = 'none';
@@ -3079,7 +3076,6 @@
           }
         });
       });
-
       document.querySelectorAll('.stream-btn').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.preventDefault(); // 🔥 Bloque le clic du lien
