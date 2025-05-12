@@ -2130,7 +2130,7 @@
   </div>
 
   <div class="bottom-banner">
-    🔔 Novovue ne fait que référencer des sources publiques. La disponibilité des films ou séries affichés peut varier et n’est pas garantie.
+    🔔 Novovue ne fait que référencer des sources publiques. La disponibilité des médias affichés peut varier et n’est pas garantie.
   </div>  
 
   <footer>
@@ -2279,6 +2279,11 @@
 
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
+  });
+
+  document.querySelector(".logo").addEventListener("click", (e) => {
+    e.preventDefault(); // ← ça bloque le "saut" provoqué par #
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   document.addEventListener('DOMContentLoaded', loadHeroSlides);
