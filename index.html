@@ -527,11 +527,6 @@
       opacity: 0;
     }
 
-    .pricing-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    }
-
     .card-header {
       background: linear-gradient(270deg, #ff2d55, #00c8ff, #ff2d55);
       background-size: 400% 400%;
@@ -1885,15 +1880,6 @@
       </div>
     </section>
 
-    <section id="featured">
-      <h2>À l'affiche</h2>
-      <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="trending-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="trending-content"></div>
-        <button class="section-nav-arrow right" data-target="trending-content"><i class="fas fa-chevron-right"></i></button>
-      </div>
-    </section>
-
     <section>
       <h2>Films populaires</h2>
       <div class="movies-grid-container">
@@ -1903,9 +1889,33 @@
       </div>
     </section>
 
+    <section>
+      <h2>Tendances actuelles</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="spopular-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="spopular-content"></div>
+        <button class="section-nav-arrow right" data-target="spopular-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Ma Liste</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="my-list"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="my-list">
+          <div id="empty-watchlist-message" style="display: none; width: 100%; text-align: center; padding: 40px 20px; color: #ccc; font-size: 1rem;">
+            <p style="font-size: 1.4rem; font-weight: bold;">Votre liste est vide</p>
+            <p>Cliquez sur un film, puis sur <strong>+Ma liste</strong> pour l’ajouter à votre liste</p>
+          </div>
+        </div>
+        <button class="section-nav-arrow right" data-target="my-list"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
     <section id="vip-section" style="background: var(--secondary-color);">
       <h2 style="font-size: 2rem; text-align: center; margin-bottom: 40px;">Nos offres premiums</h2>
       <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="pricing-container"><i class="fas fa-chevron-left"></i></button>
         <div class="pricing-container">
           <div class="pricing-card" onclick="window.open('https://t.me/+beoY2ZlrsJk4NjZh','_blank')">
             <div class="card-header">Sans abonnement</div>
@@ -1936,6 +1946,7 @@
             </div>
           </div>
         </div>
+        <button class="section-nav-arrow right" data-target="pricing-container"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>    
 
@@ -1949,11 +1960,29 @@
     </section>
 
     <section>
-      <h2>Ma Liste</h2>
+      <h2>A voir en famille</h2>
       <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="my-list"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="my-list"></div>
-        <button class="section-nav-arrow right" data-target="my-list"><i class="fas fa-chevron-right"></i></button>
+        <button class="section-nav-arrow left" data-target="family"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="family"></div>
+        <button class="section-nav-arrow right" data-target="family"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Soirée horreur</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="horror-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="horror-content"></div>
+        <button class="section-nav-arrow right" data-target="horror-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Super-heros</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="super-heros"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="super-heros"></div>
+        <button class="section-nav-arrow right" data-target="super-heros"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
 
@@ -1965,42 +1994,34 @@
         <button class="section-nav-arrow right" data-target="comedy-content"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
-    <section>
 
-      <h2>Horreur</h2>
+    <section>
+      <h2>Science fiction</h2>
       <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="horror-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="horror-content"></div>
-        <button class="section-nav-arrow right" data-target="horror-content"><i class="fas fa-chevron-right"></i></button>
+        <button class="section-nav-arrow left" data-target="sf"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="sf"></div>
+        <button class="section-nav-arrow right" data-target="sf"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
 
     <section>
-      <h2>Action</h2>
+      <h2>Films d'animations</h2>
       <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="action-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="action-content"></div>
-        <button class="section-nav-arrow right" data-target="action-content"><i class="fas fa-chevron-right"></i></button>
+        <button class="section-nav-arrow left" data-target="animation"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="animation"></div>
+        <button class="section-nav-arrow right" data-target="animation"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
-    <section>
 
-      <h2>Drame</h2>
-      <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="drama-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="drama-content"></div>
-        <button class="section-nav-arrow right" data-target="drama-content"><i class="fas fa-chevron-right"></i></button>
-      </div>
-    </section>
     <section>
-
-      <h2>Romance</h2>
+      <h2>Comédie musicales</h2>
       <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="romance-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="romance-content"></div>
-        <button class="section-nav-arrow right" data-target="romance-content"><i class="fas fa-chevron-right"></i></button>
+        <button class="section-nav-arrow left" data-target="comedy-musical"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="comedy-musical"></div>
+        <button class="section-nav-arrow right" data-target="comedy-musical"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
+
   </div>
 
   <!-- Overlays -->
@@ -2320,12 +2341,14 @@
     const containers = {
       comedy: 'comedy-content',
       horror: 'horror-content',
-      action: 'action-content',
-      drama: 'drama-content',
-      romance: 'romance-content',
       serie: 'serie-popular',
       popular: 'popular-content',
-      trending: 'trending-content'
+      spopular: 'spopular-content',
+      sf: 'sf',
+      family: 'family',
+      comedym: 'comedy-musical',
+      superheros: 'super-heros',
+      animation: 'animation',
     };
   
     const playerOptions = document.querySelectorAll('.player-option-btn');
@@ -2816,33 +2839,47 @@
 
     async function loadWatchlist() {
       const container = document.getElementById('my-list');
+      const emptyMessage = document.getElementById('empty-watchlist-message');
+
       const raw = JSON.parse(localStorage.getItem('watchlist')) || [];
 
-      // Convertit les anciens formats : [12345] → [{ id: 12345, type: 'movie' }]
       const watchlist = raw.map(item =>
         typeof item === 'number' ? { id: item, type: 'movie' } : item
       );
 
+      // Supprimer les anciens films
+      container.innerHTML = ''; // vide totalement
       if (watchlist.length === 0) {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/0?api_key=${API_KEY}&language=fr-FR`);
-        const movie = await res.json();
-        movie.media_type = 'movie'; // nécessaire pour openOverlay()
-        displayMoviesFromList([movie], 'my-list');
+        container.innerHTML = `
+          <div id="empty-watchlist-message" style="width: 100%; text-align: center; padding: 140px 20px; color: #ccc; font-size: 1rem;">
+            <p style="font-size: 1.4rem; font-weight: bold;">Votre liste est vide</p>
+            <p>Cliquez sur un film, puis sur <strong>+Ma Liste</strong> pour l’ajouter à votre liste</p>
+          </div>`;
         return;
       }
 
-      const movieDetails = await Promise.all(
-      watchlist.map(async ({ id, type }) => {
-        const res = await fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}&language=fr-FR`);
-        if (!res.ok) return null;
-        const data = await res.json();
-        data.media_type = type; // 👈 essentiel
-        return data;
-      })
-    );
 
-      const valid = movieDetails.filter(Boolean);
-      displayMoviesFromList(valid, 'my-list');
+      // Gérer la liste vide
+      if (watchlist.length === 0) {
+        if (emptyMessage) emptyMessage.style.display = 'block';
+        return;
+      }
+
+      if (emptyMessage) emptyMessage.style.display = 'none';
+
+      // Charger les films
+      const movieDetails = await Promise.all(
+        watchlist.map(async ({ id, type }) => {
+          const res = await fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}&language=fr-FR`);
+          if (!res.ok) return null;
+          const data = await res.json();
+          data.media_type = type;
+          return data;
+        })
+      );
+
+      const validMovies = movieDetails.filter(m => m !== null);
+      displayMoviesFromList(validMovies, 'my-list');
     }
 
     document.addEventListener('DOMContentLoaded', loadWatchlist);
@@ -2850,12 +2887,14 @@
     function loadHomeContent() {
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=35&page=1`, containers.comedy,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=27&page=1`, containers.horror,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=28&page=1`, containers.action,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=18&page=1`, containers.drama,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=10749&page=1`, containers.romance,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=fr-FR&page=1`, containers.trending,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`, containers.popular, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=10`, containers.spopular, 'movie', false, true);      
+      fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`, containers.popular, 'movie', false, true);      
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&vote_count.gte=1000&page=1`, containers.serie,'tv');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=10402&sort_by=popularity.desc&page=1`, containers.comedym, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_keywords=9715&sort_by=popularity.desc&page=1`, containers.superheros, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=878&sort_by=popularity.desc&page=1`, containers.sf, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=10751&sort_by=popularity.desc&page=1`, containers.family, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=16&sort_by=popularity.desc&page=1`, containers.animation, 'movie', false, true);
       document.addEventListener('DOMContentLoaded', () => {
         loadWatchlist();
       });
@@ -3032,6 +3071,7 @@
         const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&with_origin_country=US&page=1`;
         fetchAndDisplay(url, 'films-content','movie',true);
         addSeeMoreButton('films-content', url, 'movie', true);
+        scrollToTopOfOverlay('films-overlay');
       });
       document.getElementById('series-link').addEventListener('click', e => {
         e.preventDefault();
@@ -3042,6 +3082,7 @@
         const url = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&with_origin_country=US&with_type=2&page=1`;
         fetchAndDisplay(url, 'series-content','tv',true);
         addSeeMoreButton('series-content', url, 'tv', true);
+        scrollToTopOfOverlay('series-overlay');
       });
       document.getElementById('categories-link').addEventListener('click', e => {
         e.preventDefault();
