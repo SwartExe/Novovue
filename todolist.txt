@@ -1,0 +1,5 @@
+1. Setup mode de payement abonnement
+2. Réparer case abonnement (largeur bug)
+3. Mettre les chaines tv en VIP
+4. CLean interface mobile film
+5. Limite de film pour les non abonnés?
