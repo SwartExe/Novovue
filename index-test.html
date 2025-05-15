@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Novovue - Streaming Premium</title>
+  <title>Novovue - Films & Séries en Streaming</title>
+  <meta name="description" content="Novovue – La plateforme ultime pour voir vos films et séries préférés en streaming gratuit, VF/VOSTFR et HD !">
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZWC51QSQ7"></script>
@@ -174,7 +175,7 @@
 
     .search-toggle {
       position: absolute;
-      right: 35px;
+      right: 60px;
       background: none;
       border: none;
       color: var(--text-color);
@@ -190,14 +191,15 @@
     }
     
     .search-toggle:hover { 
-      background: rgba(255,255,255,0.1); 
-      color: var(--primary-color); 
+      color: var(--primary-color);
+      transform: scale(1.1);
+      transition: color 0.3s ease, transform 0.3s ease;
     }
 
     .search-bar {
       position: absolute; 
       top: 50%; 
-      right: 80px; 
+      right: 120px; 
       transform: translateY(-50%);
       width: 200px; 
       display: none; 
@@ -495,230 +497,74 @@
       display: none; 
     }
 
-    #vip-overlay {
-      /* Fond noir semi-transparent */
-      background-color: rgba(0, 0, 0, 0.98);
-      
-      /* Animation de particules dorées */
-      background-image: 
-        radial-gradient(circle, rgba(255,215,0,0.8) 1px, transparent 1px),
-        radial-gradient(circle, rgba(255,215,0,0.5) 1px, transparent 1px),
-        radial-gradient(circle, rgba(255,215,0,0.3) 1px, transparent 1px);
-
-      background-attachment: fixed;
-      background-size: contain;
-      background-position: center;
+    .pricing-container {
+      margin-left: 12px;
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      gap: 15px;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* Option : Ajoutez ceci si vous voulez des particules interactives */
-    #vip-overlay::before {
-      content: "";
-      position: fixed; /* ➔ FIXÉ à l'écran */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      
-      background: url('https://assets.codepen.io/13471/sparkles.gif') repeat;
-      background-size: contain;
-      
-      mix-blend-mode: screen;
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 0;
+    .pricing-container::-webkit-scrollbar {
+      display: none;
     }
 
-    .vip-glow {
-      color: #ffd700;
-      text-shadow:
-        0 0 3px #ffd700,
-        0 0 6px #ffd700aa,
-        0 0 12px #ffea00aa;
-      transition: text-shadow 0.3s ease, color 0.3s ease;
-    }
-
-    #vip-section {
-      margin: 60px 0;
-      position: relative;
-      text-align: left;
-    }
-
-    .vip-banner {
-      background: linear-gradient(145deg, #FFD700, #FFC300, #FFB000);
-      color: #0f0f13;
-      border-radius: 20px;
-      padding: 40px 20px;
-      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3), 
-                  0 0 50px rgba(255, 215, 0, 0.15) inset;
-      position: relative;
+    .pricing-card {
+      flex: 0 0 auto; /* ← largeur fixe, pas d’étirement */
+      width: 23.7%;
+      scroll-snap-align: start;
+      min-height: 160px;
+      background: var(--bg-lighter);
+      border-radius: 16px;
       overflow: hidden;
-      z-index: 0;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
     }
 
-    /* Effet de lumière principale */
-    .vip-banner::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: 
-        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25) 0%, transparent 25%),
-        radial-gradient(circle at 70% 70%, rgba(255, 255, 210, 0.3) 0%, transparent 30%),
-        radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
-      animation: 
-        sparkle 8s ease-in-out infinite alternate,
-        moveBackground 25s linear infinite;
-      pointer-events: none;
-      z-index: 1;
-      mix-blend-mode: overlay;
+    .card-header {
+      background: linear-gradient(270deg, #ff2d55, #00c8ff, #ff2d55);
+      background-size: 400% 400%;
+      animation: gradientLoop 8s ease-in-out infinite;
+      padding: 20px;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      text-align: center;
     }
 
-    /* Effet de brillance traversante */
-    .vip-banner::after {
-      content: '';
-      position: absolute;
-      top: 0; 
-      left: 0;
-      width: 150%; 
-      height: 150%;
-      background: linear-gradient(
-        120deg, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.1) 20%,
-        rgba(255, 255, 255, 0.3) 40%,
-        rgba(255, 215, 0, 0.2) 50%,
-        rgba(255, 255, 255, 0.3) 60%,
-        rgba(255, 255, 255, 0.1) 80%,
-        transparent 100%
-      );
-      transform: translateX(-100%) rotate(15deg);
-      animation: shine 4s ease-in-out infinite;
-      z-index: 2;
+    @keyframes gradientLoop {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    /* Effet de particules avec box-shadow */
-    .vip-banner .particle-effect {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: 0;
+    .card-body {
+      padding: 20px;
+      text-align: center;
+      color: var(--text-secondary);
     }
 
-    .vip-banner .particle-effect::before {
-      content: '';
-      position: absolute;
-      width: 300%;
-      height: 300%;
-      top: -100%;
-      left: -100%;
-      background: transparent;
-      box-shadow: 
-        /* Particules dorées */
-        15% 10% 0 1px rgba(255, 215, 0, 0.4),
-        25% 65% 0 2px rgba(255, 215, 0, 0.3),
-        45% 30% 0 1px rgba(255, 255, 255, 0.5),
-        60% 80% 0 1px rgba(255, 215, 0, 0.4),
-        75% 25% 0 2px rgba(255, 255, 255, 0.4),
-        85% 60% 0 1px rgba(255, 215, 0, 0.3),
-        10% 45% 0 1px rgba(255, 255, 255, 0.5),
-        35% 75% 0 1px rgba(255, 215, 0, 0.4),
-        50% 15% 0 2px rgba(255, 255, 255, 0.3),
-        70% 50% 0 1px rgba(255, 215, 0, 0.5);
-      animation: floatParticles 20s linear infinite;
+    .card-body .price {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: white;
     }
 
-    /* Animations */
+    .card-body .desc {
+      font-size: 0.9rem;
+    }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
       to {
         opacity: 1;
         transform: translateY(0);
       }
-    }
-
-    @keyframes sparkle {
-      0%, 100% { opacity: 0.6; transform: scale(0.95); }
-      50% { opacity: 0.9; transform: scale(1.05); }
-    }
-
-    @keyframes shine {
-      0% { transform: translateX(-100%) rotate(15deg); }
-      100% { transform: translateX(100%) rotate(15deg); }
-    }
-
-    @keyframes moveBackground {
-      0% { transform: translate(0, 0); }
-      25% { transform: translate(-3%, -2%); }
-      50% { transform: translate(-5%, 0); }
-      75% { transform: translate(-3%, 2%); }
-      100% { transform: translate(0, 0); }
-    }
-
-    @keyframes floatParticles {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(5%, 5%); }
-    }
-
-    .vip-content {
-      position: relative;
-      z-index: 3;
-    }
-
-    .vip-content h3 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .vip-content p {
-      font-size: 1rem;
-      margin-bottom: 20px;
-      color: #222;
-      text-align: center;
-    }
-
-    .vip-content {
-      position: relative;
-      z-index: 3;
-      text-align: left;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .vip-btn {
-      background: #0f0f13;
-      color: gold;
-      padding: 12px 30px;
-      border-radius: 30px;
-      font-weight: bold;
-      font-size: 1rem;
-      transition: transform 0.3s ease, background 0.3s ease;
-      text-shadow: 0 1px 2px black;
-      margin-top: 20px;
-
-      display: inline-block;       /* bouton garde sa taille */
-      text-align: center;          /* texte centré dans le bouton */
-    }
-
-    .vip-content .vip-btn-wrapper {
-      text-align: center;          /* on centre le bouton dans ce bloc */
-      margin-top: 20px;
-    }
-
-
-    .vip-btn:hover {
-      transform: scale(1.05);
-      background: #1e1e28;
     }
 
     /* Fixed navigation arrows */
@@ -1504,6 +1350,34 @@
       pointer-events: auto;
     }
 
+    .wl-wrapper {
+      position: absolute;
+      right: 0px; /* À droite de la loupe */
+      top: 48%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 40px; /* même taille que la loupe */
+    }
+
+    #watchlist-icon {
+      font-size: 1.1rem; /* ou 24px, 28px… */
+    }
+
+    .wl-btn {
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+    
+    .wl-btn:hover { 
+      color: var(--primary-color);
+      transform: scale(1.1);
+      transition: color 0.3s ease, transform 0.3s ease; 
+    }
+
     .account-container {
       position: absolute;
       right: 50px;
@@ -1516,7 +1390,7 @@
 
     .account-wrapper {
       position: absolute;
-      right: 0; /* À droite de la loupe */
+      right: 31px; /* À droite de la loupe */
       top: 48%;
       transform: translateY(-50%);
       display: flex;
@@ -1541,6 +1415,12 @@
       font-size: 1.2rem;
       color: white;
       transition: color 0.3s ease;
+    }
+
+    #user-icon:hover {
+      color: var(--primary-color);
+      transform: scale(1.1);
+      transition: color 0.3s ease, transform 0.3s ease;
     }
 
     .account-name {
@@ -1725,6 +1605,19 @@
     }
 
   @media (max-width: 680px) {
+      .pricing-card {
+        flex: 0 0 auto; /* ← largeur fixe, pas d’étirement */
+        width: 330px;
+        scroll-snap-align: start;
+        min-height: 160px;
+        background: var(--bg-lighter);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeInUp 0.6s ease forwards;
+        opacity: 0;
+      }
     #my-list {
       display: flex;
       flex-direction: row;
@@ -1782,8 +1675,8 @@
     .search-bar {
       position: absolute;
       top: 50%;
-      right: 75px;
-      width: 60%; /* ajuste la largeur comme tu veux */
+      right: 90px;
+      width: 55%; /* ajuste la largeur comme tu veux */
       transform: translateY(-50%);
       padding: 8px 12px;
       font-size: 1rem;
@@ -1902,7 +1795,7 @@
   }
 
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <header id="main-header">
@@ -1934,7 +1827,12 @@
             <i id="user-icon" class="fas fa-user-circle"></i>
           </button>
           <span id="user-display" class="account-name">Non connecté</span>
-        </div>                
+        </div>  
+        <div class="wl-wrapper">
+          <button id="wl-scroll-btn" class="wl-btn" title="Voir ma watchlist">
+            <i class="fa-solid fa-history" id='watchlist-icon'></i>
+          </button>
+        </div>                 
       </div>
     </div>
   </header>
@@ -1994,14 +1892,6 @@
       </div>
     </section>
 
-    <section id="featured">
-      <h2>À l'affiche</h2>
-      <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="trending-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="trending-content"></div>
-        <button class="section-nav-arrow right" data-target="trending-content"><i class="fas fa-chevron-right"></i></button>
-      </div>
-    </section>
     <section>
       <h2>Films populaires</h2>
       <div class="movies-grid-container">
@@ -2010,33 +1900,107 @@
         <button class="section-nav-arrow right" data-target="popular-content"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
+
+    <section>
+      <h2>Tendances actuelles</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="spopular-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="spopular-content"></div>
+        <button class="section-nav-arrow right" data-target="spopular-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
     <section>
       <h2>Ma Liste</h2>
       <div class="movies-grid-container">
         <button class="section-nav-arrow left" data-target="my-list"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="my-list"></div>
+        <div class="movies-grid" id="my-list">
+          <div id="empty-watchlist-message" style="display: none; width: 100%; text-align: center; padding: 40px 20px; color: #ccc; font-size: 1rem;">
+            <p style="font-size: 1.4rem; font-weight: bold;">Votre liste est vide</p>
+            <p>Cliquez sur un film, puis sur <strong>+Ma liste</strong> pour l’ajouter à votre liste</p>
+          </div>
+        </div>
         <button class="section-nav-arrow right" data-target="my-list"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
-    <section id="vip-section">
-      <h2>Exclusivité VIP</h2>
-      <div class="vip-banner">
-        <div class="particle-effect"></div>
-          <div class="vip-content">
-            <h3>Rejoins le club VIP</h3>
-            <p>Accès sans pub, fonctionnlités communautaires, et chaînes privées en illimité. A partir de 1,99€ seulement.</p>
-            <div class="vip-btn-wrapper">
-              <a href=# target="_blank" class="vip-btn">Devenir VIP</a>
-            </div>  
-          </div>        
+
+    <section id="vip-section" style="background: var(--secondary-color);">
+      <h2 style="font-size: 2rem; text-align: center; margin-bottom: 40px;">Nos offres premiums</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="pricing-container"><i class="fas fa-chevron-left"></i></button>
+        <div class="pricing-container">
+          <div class="pricing-card">
+            <div class="card-header">Sans abonnement</div>
+            <div class="card-body">
+              <p class="price">0€</p>
+              <p class="desc">Avec pubs<br>Sans compte requis<br>✖ Accès <b>Live TV</b><br>✖ Accès <b>Commentaires</b></p>
+            </div>
+          </div>
+          <div class="pricing-card">
+            <div class="card-header">Standard – 1 Mois</div>
+            <div class="card-body">
+              <p class="price">4,99€</p>
+              <p class="desc">Sans pubs<br>Accès complet<br>1 mois</p>
+              <div id="paypal-button-container-P-15H523885A811470FNASGADA" style="margin-top: 15px;"></div>
+            </div>
+          </div>
+          <div class="pricing-card">
+            <div class="card-header">Base – 3 Mois</div>
+            <div class="card-body">
+              <p class="price">12,99€</p>
+              <p class="desc">Sans pubs<br>Accès complet<br>3 mois</p>
+              <div id="paypal-button-container-P-4F183303645774125NAS23JI" style="margin-top: 15px;"></div>
+            </div>
+          </div>
+          <div class="pricing-card">
+            <div class="card-header">Pro – 6 Mois</div>
+            <div class="card-body">
+              <p class="price">24,99€</p>
+              <p class="desc">Sans pubs<br>Accès complet<br>6 mois</p>
+              <div id="paypal-button-container-P-3K78307277741043HNAS24IA" style="margin-top: 15px;"></div>
+            </div>
+          </div>
         </div>
-    </section>      
+        <button class="section-nav-arrow right" data-target="pricing-container"><i class="fas fa-chevron-right"></i></button>
+      </div>
+        <div id="empty-watchlist-message" style="width: 100%; text-align: center; padding: 10px 20px; color: #ccc; font-size: 0.5rem;">
+            <p style="font-size: 1rem; font-weight: bold;">Après le réglement, veuillez vous connecter avec l’adresse PayPal utilisée lors du paiement ; l’activation peut prendre quelques heures.</p>
+          </div>
+    </section>    
+
     <section>
       <h2>Séries emblématiques</h2>
       <div class="movies-grid-container">
         <button class="section-nav-arrow left" data-target="serie-popular"><i class="fas fa-chevron-left"></i></button>
         <div class="movies-grid" id="serie-popular"></div>
         <button class="section-nav-arrow right" data-target="serie-popular"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <section>
+      <h2>A voir en famille</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="family"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="family"></div>
+        <button class="section-nav-arrow right" data-target="family"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Soirée horreur</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="horror-content"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="horror-content"></div>
+        <button class="section-nav-arrow right" data-target="horror-content"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Super-heros</h2>
+      <div class="movies-grid-container">
+        <button class="section-nav-arrow left" data-target="super-heros"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="super-heros"></div>
+        <button class="section-nav-arrow right" data-target="super-heros"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
 
@@ -2048,38 +2012,34 @@
         <button class="section-nav-arrow right" data-target="comedy-content"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
+
     <section>
-      <h2>Horreur</h2>
+      <h2>Science fiction</h2>
       <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="horror-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="horror-content"></div>
-        <button class="section-nav-arrow right" data-target="horror-content"><i class="fas fa-chevron-right"></i></button>
+        <button class="section-nav-arrow left" data-target="sf"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="sf"></div>
+        <button class="section-nav-arrow right" data-target="sf"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
+
     <section>
-      <h2>Action</h2>
+      <h2>Films d'animations</h2>
       <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="action-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="action-content"></div>
-        <button class="section-nav-arrow right" data-target="action-content"><i class="fas fa-chevron-right"></i></button>
+        <button class="section-nav-arrow left" data-target="animation"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="animation"></div>
+        <button class="section-nav-arrow right" data-target="animation"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
+
     <section>
-      <h2>Drame</h2>
+      <h2>Comédie musicales</h2>
       <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="drama-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="drama-content"></div>
-        <button class="section-nav-arrow right" data-target="drama-content"><i class="fas fa-chevron-right"></i></button>
+        <button class="section-nav-arrow left" data-target="comedy-musical"><i class="fas fa-chevron-left"></i></button>
+        <div class="movies-grid" id="comedy-musical"></div>
+        <button class="section-nav-arrow right" data-target="comedy-musical"><i class="fas fa-chevron-right"></i></button>
       </div>
     </section>
-    <section>
-      <h2>Romance</h2>
-      <div class="movies-grid-container">
-        <button class="section-nav-arrow left" data-target="romance-content"><i class="fas fa-chevron-left"></i></button>
-        <div class="movies-grid" id="romance-content"></div>
-        <button class="section-nav-arrow right" data-target="romance-content"><i class="fas fa-chevron-right"></i></button>
-      </div>
-    </section>
+
   </div>
 
   <!-- Overlays -->
@@ -2151,7 +2111,6 @@
       <div class="player-options">
         <button class="player-option-btn active" data-player="wavewatch">Lecteur Multi</button>
         <button class="player-option-btn" data-player="frembed">Lecteur VF 1</button>
-        <button class="player-option-btn" data-player="frenchcloud">Lecteur VF 2</button>
         <button class="player-option-btn" data-player="local">Lecteur VF Bêta</button>
         <button class="player-option-btn" data-player="wavewatchdl">Télécharger</button>
       </div>
@@ -2188,51 +2147,20 @@
     </div>
   </div>
 
-  <div id="vip-overlay" class="film-overlay">
-    <div class="film-container" style="max-width: 600px;">
-      <button class="close-btn" onclick="closeOverlay('vip-overlay')"><i class="fas fa-times"></i></button>
-      <h2 style="text-align: center; margin-bottom: 30px; font-size: 2rem;">⭐ Deviens VIP ⭐</h2>
-  
-      <div style="display: flex; flex-direction: column; gap: 25px;">
-  
-        <!-- PASS 24H -->
-        <div style= "background: linear-gradient(145deg, #fff4b8, #ffd700); box-shadow: 0 0 12px #ffd70099; border-radius: 16px; padding: 24px; animation: fadeInUp 0.4s;">
-          <h3 style="color: #8a6d00; font-size: 1.4rem;">💫 Pass 24h – 1,99€</h3>
-          <p style="margin: 10px 0;">Lecture sans pub, accès aux commentaires, tout débloqué pendant 24h.</p>
-          <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #8a6d00;">Choisir</a>
-        </div>
-  
-        <!-- MENSUEL -->
-        <div style="background: linear-gradient(145deg, #c9f4ff, #00c8ff); box-shadow: 0 0 12px #00c8ff99; border-radius: 16px; padding: 24px; animation: fadeInUp 0.6s;">
-          <h3 style="color: #006e99; font-size: 1.4rem;">📅 Abonnement mensuel – 4,99€</h3>
-          <p style="margin: 10px 0;">Streaming illimité sans pub, favoris, TV premium, interface dorée, nouveautés en avance.</p>
-          <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #006e99;">Choisir</a>
-        </div>
-  
-        <!-- À VIE -->
-        <div style="background: linear-gradient(145deg, #ffd5dd, #ff2d55); box-shadow: 0 0 12px #ff2d55aa; border-radius: 16px; padding: 24px; animation: fadeInUp 0.8s;">
-          <h3 style="color: #730022; font-size: 1.4rem;">👑 VIP à vie – 14,99€</h3>
-          <p style="margin: 10px 0;">Un seul paiement pour débloquer tous les avantages à vie. Zéro pub. Zéro limite. Badge doré éternel.</p>
-          <a href="https://t.me/+beoY2ZlrsJk4NjZh" target="_blank" class="vip-btn" style="background: #730022;">Choisir</a>
-        </div>
-  
-      </div>
-    </div>
-  </div>  
-
   <div class="bottom-banner">
-    🔔 Votre configuration DNS bloque certains lecteurs. Utilisez ce <a href="https://one.one.one.one/" target="_blank">navigateur</a> pour profter pleinement de notre site.
+    🔔 Novovue ne fait que référencer des sources publiques. La disponibilité des médias affichés peut varier et n’est pas garantie.
   </div>  
 
   <footer>
     <div class="container">
       <div class="footer-logo">Novovue</div>
       <div class="footer-links">
-        <a href="#">Un site pour les gouverner tous. Un site pour les trouver. Un site pour les amener tous et dans les ténèbres les lier.</a>
+        <p>⚠️ Novovue ne stocke aucun contenu. Nous référençons des sources externes dont la légalité relève de l’utilisateur selon la loi de son pays.</p>
       </div>
       <div class="social-links">
-        <a href="https://www.tiktok.com/@reelone.fr" target="_blank"><i class="fab fa-tiktok"></i></a>
+        <a href="https://www.tiktok.com/@novovue.fr" target="_blank"><i class="fab fa-tiktok"></i></a>
         <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+        <a href="mailto:team@novovue.fr"><i class="fa-solid fa-envelope"></i></a>
       </div>
       <p>© 2025 Novovue. Tous droits réservés.</p>
     </div>
@@ -2341,7 +2269,6 @@
   startHeroSlider();
 }
 
-
   function startHeroSlider() {
     const slides = document.querySelectorAll('.hero-slide');
     let current = 0;
@@ -2360,6 +2287,21 @@
       }
     });
   }
+
+  document.getElementById("wl-scroll-btn").addEventListener("click", () => {
+    const section = document.getElementById("my-list");
+    if (section) {
+      const offset = -250; // distance en pixels à garder au-dessus de la section
+      const y = section.getBoundingClientRect().top + window.pageYOffset + offset;
+
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  });
+
+  document.querySelector(".logo").addEventListener("click", (e) => {
+    e.preventDefault(); // ← ça bloque le "saut" provoqué par #
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 
   document.addEventListener('DOMContentLoaded', loadHeroSlides);
 
@@ -2407,7 +2349,6 @@
     const FREMBED_FILM = 'https://frembed.ink/api/film.php?id=';
     const FREMBED_SERIE = 'https://frembed.ink/api/serie.php?id=';
     const LOCAL_FILM = '/api/getLink?id=';
-    const FRENCHCLOUD = 'https://play.frenchcloud.cam/movie/';
     const WAVEWATCH_FILM = 'https://embed.wavewatch.xyz/embed/movie?tmdb=';
     const WAVEWATCH_SERIE = 'https://embed.wavewatch.xyz/embed/series?tmdb=';
     const WAVEWATCH_DL = 'https://embed.wavewatch.xyz/download/'
@@ -2422,12 +2363,14 @@
     const containers = {
       comedy: 'comedy-content',
       horror: 'horror-content',
-      action: 'action-content',
-      drama: 'drama-content',
-      romance: 'romance-content',
       serie: 'serie-popular',
       popular: 'popular-content',
-      trending: 'trending-content'
+      spopular: 'spopular-content',
+      sf: 'sf',
+      family: 'family',
+      comedym: 'comedy-musical',
+      superheros: 'super-heros',
+      animation: 'animation',
     };
   
     const playerOptions = document.querySelectorAll('.player-option-btn');
@@ -2436,12 +2379,6 @@
       const overlay = document.getElementById(overlayId);
       if (overlay) overlay.scrollTo({ top: 0, behavior: 'auto' });
     }
-
-    document.querySelector('.vip-btn').addEventListener('click', (e) => {
-      e.preventDefault();
-      document.getElementById('vip-overlay').classList.add('active');
-      document.body.classList.add('overlay-open');
-    });
   
     function closeOverlay(overlayId) {
       const overlay = document.getElementById(overlayId);
@@ -2511,12 +2448,6 @@
               })
               .catch(err => console.error("Erreur API VF LOC :", err));
             return;
-
-          } else if (currentMedia.id === '0') {
-            src = `https://www.youtube.com/watch?v=dQw4w9WgXcQ`;
-
-          } else if (currentPlayer === 'frenchcloud') {
-            src = `${FRENCHCLOUD}${currentMedia.imdb_id}`;
           
           } else if (currentPlayer === 'frembed') {
             src = `${FREMBED_FILM}${currentMedia.id}`;
@@ -2547,7 +2478,7 @@
               .catch(err => console.error("Erreur API VF LOC :", err));
             return;
 
-          } else {
+          } else if (currentPlayer === 'frembed') {
             src = `${FREMBED_SERIE}${currentMedia.id}&sa=${s}&epi=${e}`;
           }
         }
@@ -2894,7 +2825,7 @@
           card.addEventListener('click', () => openOverlay(item.id, type));
           container.appendChild(card);
         }
-        if (isGrid && list.length>0 && ['films-content','series-content','platform-results'].includes(containerId)) {
+        if (isGrid && list.length>0 && ['films-content','series-content','platform-results','categories-content'].includes(containerId)) {
           const baseUrl = url.split('&page=')[0];
           addSeeMoreButton(containerId, baseUrl, forceType, isGrid);
         }
@@ -2930,33 +2861,47 @@
 
     async function loadWatchlist() {
       const container = document.getElementById('my-list');
+      const emptyMessage = document.getElementById('empty-watchlist-message');
+
       const raw = JSON.parse(localStorage.getItem('watchlist')) || [];
 
-      // Convertit les anciens formats : [12345] → [{ id: 12345, type: 'movie' }]
       const watchlist = raw.map(item =>
         typeof item === 'number' ? { id: item, type: 'movie' } : item
       );
 
+      // Supprimer les anciens films
+      container.innerHTML = ''; // vide totalement
       if (watchlist.length === 0) {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/1418929?api_key=${API_KEY}&language=fr-FR`);
-        const movie = await res.json();
-        movie.media_type = 'movie'; // nécessaire pour openOverlay()
-        displayMoviesFromList([movie], 'my-list');
+        container.innerHTML = `
+          <div id="empty-watchlist-message" style="width: 100%; text-align: center; padding: 140px 20px; color: #ccc; font-size: 1rem;">
+            <p style="font-size: 1.4rem; font-weight: bold;">Votre liste est vide</p>
+            <p>Cliquez sur un film, puis sur <strong>+Ma Liste</strong> pour l’ajouter à votre liste</p>
+          </div>`;
         return;
       }
 
-      const movieDetails = await Promise.all(
-      watchlist.map(async ({ id, type }) => {
-        const res = await fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}&language=fr-FR`);
-        if (!res.ok) return null;
-        const data = await res.json();
-        data.media_type = type; // 👈 essentiel
-        return data;
-      })
-    );
 
-      const valid = movieDetails.filter(Boolean);
-      displayMoviesFromList(valid, 'my-list');
+      // Gérer la liste vide
+      if (watchlist.length === 0) {
+        if (emptyMessage) emptyMessage.style.display = 'block';
+        return;
+      }
+
+      if (emptyMessage) emptyMessage.style.display = 'none';
+
+      // Charger les films
+      const movieDetails = await Promise.all(
+        watchlist.map(async ({ id, type }) => {
+          const res = await fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}&language=fr-FR`);
+          if (!res.ok) return null;
+          const data = await res.json();
+          data.media_type = type;
+          return data;
+        })
+      );
+
+      const validMovies = movieDetails.filter(m => m !== null);
+      displayMoviesFromList(validMovies, 'my-list');
     }
 
     document.addEventListener('DOMContentLoaded', loadWatchlist);
@@ -2964,12 +2909,14 @@
     function loadHomeContent() {
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=35&page=1`, containers.comedy,'movie');
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=27&page=1`, containers.horror,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=28&page=1`, containers.action,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=18&page=1`, containers.drama,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_origin_country=US&with_genres=10749&page=1`, containers.romance,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=fr-FR&page=1`, containers.trending,'movie');
-      fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`, containers.popular, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=10`, containers.spopular, 'movie', false, true);      
+      fetchAndDisplay(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`, containers.popular, 'movie', false, true);      
       fetchAndDisplay(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&vote_count.gte=1000&page=1`, containers.serie,'tv');
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=10402&sort_by=popularity.desc&page=1`, containers.comedym, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_keywords=9715&sort_by=popularity.desc&page=1`, containers.superheros, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=878&sort_by=popularity.desc&page=1`, containers.sf, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=10751&sort_by=popularity.desc&page=1`, containers.family, 'movie', false, true);
+      fetchAndDisplay(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&with_genres=16&sort_by=popularity.desc&page=1`, containers.animation, 'movie', false, true);
       document.addEventListener('DOMContentLoaded', () => {
         loadWatchlist();
       });
@@ -3107,11 +3054,9 @@
         await loadEpisodes(currentMedia.id);
         updatePlayer();
       });
-
       document.getElementById('episode-select').addEventListener('change', () => {
         updatePlayer();
       });
-
       window.addEventListener('scroll', () => {
         document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50);
       });
@@ -3123,7 +3068,7 @@
       document.querySelectorAll('.section-nav-arrow').forEach(btn => {
         btn.addEventListener('click', () => {
           const grid = document.getElementById(btn.dataset.target);
-          grid.scrollBy({ left: btn.classList.contains('left') ? -300 : 300, behavior: 'smooth' });
+          grid.scrollBy({ left: btn.classList.contains('left') ? -600 : 600, behavior: 'smooth' });
         });
       });
       document.getElementById('home-link').addEventListener('click', e => {
@@ -3140,7 +3085,6 @@
         document.body.classList.add('overlay-open');
         loadTVChannels();
       });
-
       document.getElementById('films-link').addEventListener('click', e => {
         e.preventDefault();
         document.getElementById('home-page').style.display = 'none';
@@ -3149,6 +3093,7 @@
         const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&with_origin_country=US&page=1`;
         fetchAndDisplay(url, 'films-content','movie',true);
         addSeeMoreButton('films-content', url, 'movie', true);
+        scrollToTopOfOverlay('films-overlay');
       });
       document.getElementById('series-link').addEventListener('click', e => {
         e.preventDefault();
@@ -3159,6 +3104,7 @@
         const url = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc&with_origin_country=US&with_type=2&page=1`;
         fetchAndDisplay(url, 'series-content','tv',true);
         addSeeMoreButton('series-content', url, 'tv', true);
+        scrollToTopOfOverlay('series-overlay');
       });
       document.getElementById('categories-link').addEventListener('click', e => {
         e.preventDefault();
@@ -3193,7 +3139,6 @@
           }
         });
       });
-
       document.querySelectorAll('.stream-btn').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.preventDefault(); // 🔥 Bloque le clic du lien
@@ -3262,6 +3207,38 @@
         });
       });
     });
+  </script>
+  <script src="https://www.paypal.com/sdk/js?client-id=AZLXlrGrVImRZMtClIj8vFSQRpAXK76cWWJyl8ShN-2cu47J0Oz-D7maa_bh1Q7xogXvP2si0PcdisLp&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+  <script>
+    paypal.Buttons({
+      style: { shape: 'pill', color: 'blue', layout: 'vertical', label: 'subscribe', height: 35 },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({ plan_id: 'P-15H523885A811470FNASGADA' });
+      },
+      onApprove: function(data, actions) {
+        alert("1 mois OK");
+      }
+    }).render('#paypal-button-container-P-15H523885A811470FNASGADA');
+
+    paypal.Buttons({
+      style: { shape: 'pill', color: 'blue', layout: 'vertical', label: 'subscribe', height: 35 },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({ plan_id: 'P-4F183303645774125NAS23JI' });
+      },
+      onApprove: function(data, actions) {
+        alert("3 mois OK");
+      }
+    }).render('#paypal-button-container-P-4F183303645774125NAS23JI');
+
+    paypal.Buttons({
+      style: { shape: 'pill', color: 'blue', layout: 'vertical', label: 'subscribe', height: 35 },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({ plan_id: 'P-3K78307277741043HNAS24IA' });
+      },
+      onApprove: function(data, actions) {
+        alert("6 mois OK");
+      }
+    }).render('#paypal-button-container-P-3K78307277741043HNAS24IA');
   </script>
 </body>
 </html>
