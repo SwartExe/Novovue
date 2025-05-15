@@ -2511,7 +2511,6 @@
       console.log(vipEmails.includes(email));
     }
 
-
     function showProtectedPlayer(id) {
       const overlay = document.getElementById('film-overlay');
       const container = overlay.querySelector('.player-container');
@@ -2520,14 +2519,9 @@
       unlockClicks = 0;
       unlockLocked = false;
 
-      // Appliquer le flou
       iframe.style.filter = 'blur(8px)';
       iframe.style.pointerEvents = 'none';
-
-      // Supprimer tout blocage précédent
       document.getElementById('click-blocker')?.remove();
-
-      // Empêcher les fermetures accidentelles
       overlay.setAttribute('data-protected', 'true');
 
       const blocker = document.createElement('div');
@@ -2542,48 +2536,55 @@
       blocker.style.alignItems = 'center';
       blocker.style.justifyContent = 'center';
       blocker.style.zIndex = '9999';
-      blocker.style.backdropFilter = 'blur(8px)';
-      blocker.style.background = 'rgba(0,0,0,0.6)';
+      blocker.style.backdropFilter = 'blur(10px)';
+      blocker.style.background = 'rgba(15,15,19,0.85)';
+      blocker.style.borderRadius = '12px';
+      blocker.style.padding = '20px';
 
       const label = document.createElement('p');
-      label.textContent = 'VOUS ÊTES SUR UNE ZONE PUBLICITAIRE !';
-      label.style.fontWeight = 'bold';
-      label.style.color = 'var(--primary-color)';
-      label.style.fontSize = '1.2rem';
+      label.textContent = '🔒 Zone protégée';
+      label.style.fontWeight = '600';
+      label.style.fontSize = '1.3rem';
+      label.style.background = 'linear-gradient(135deg, #ff2d55, #00c8ff)';
+      label.style.webkitBackgroundClip = 'text';
+      label.style.color = 'transparent';
       label.style.marginBottom = '10px';
 
       const desc = document.createElement('p');
-      desc.textContent = 'Regardez les publicités nécessaires afin de visionner votre film ou épisode.';
+      desc.textContent = 'Regardez quelques pubs pour débloquer la lecture.';
       desc.style.color = 'var(--text-secondary)';
-      desc.style.fontSize = '0.9rem';
+      desc.style.fontSize = '0.95rem';
       desc.style.marginBottom = '20px';
       desc.style.textAlign = 'center';
+      desc.style.maxWidth = '350px';
 
       const progress = document.createElement('div');
       progress.id = 'progress-text';
       progress.textContent = '0% complet';
-      progress.style.fontSize = '1.5rem';
+      progress.style.fontSize = '1.1rem';
       progress.style.color = 'white';
-      progress.style.marginBottom = '10px';
+      progress.style.marginBottom = '12px';
 
       const button = document.createElement('button');
       button.textContent = 'Continuer';
-      button.style.padding = '12px 30px';
-      button.style.background = 'var(--primary-color)';
+      button.style.padding = '10px 25px';
+      button.style.background = 'linear-gradient(135deg, #ff2d55, #00c8ff)';
       button.style.color = '#fff';
       button.style.fontSize = '1rem';
       button.style.border = 'none';
       button.style.borderRadius = '30px';
       button.style.cursor = 'pointer';
-      button.style.marginTop = '15px';
+      button.style.boxShadow = '0 4px 12px rgba(0,0,0,0.4)';
+      button.style.transition = 'all 0.3s ease';
 
       const hint = document.createElement('p');
-      hint.textContent = 'Votre compteur reste bloqué ? Rafraîchissez la page.';
+      hint.textContent = 'Si rien ne se passe, essayez de rafraîchir la page.';
       hint.style.color = 'orange';
-      hint.style.fontSize = '0.8rem';
-      hint.style.marginTop = '15px';
+      hint.style.fontSize = '0.75rem';
+      hint.style.marginTop = '18px';
 
       blocker.addEventListener('click', e => e.stopPropagation());
+
       button.addEventListener('click', (e) => {
         e.stopPropagation();
         if (unlockLocked) return;
