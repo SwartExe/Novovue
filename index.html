@@ -514,13 +514,12 @@
 
     .pricing-card {
       flex: 0 0 auto; /* ← largeur fixe, pas d’étirement */
-      width: 330px;
+      width: 23.7%;
       scroll-snap-align: start;
       min-height: 160px;
       background: var(--bg-lighter);
       border-radius: 16px;
       overflow: hidden;
-      cursor: pointer;
       box-shadow: 0 6px 18px rgba(0,0,0,0.3);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       animation: fadeInUp 0.6s ease forwards;
@@ -1605,6 +1604,22 @@
       }
     }
 
+  @media (max-width: 900px) {
+    .pricing-card {
+      flex: 0 0 auto; /* ← largeur fixe, pas d’étirement */
+      width: 330px;
+      scroll-snap-align: start;
+      min-height: 160px;
+      background: var(--bg-lighter);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+    }
+  }
+
   @media (max-width: 680px) {
     #my-list {
       display: flex;
@@ -1917,37 +1932,43 @@
       <div class="movies-grid-container">
         <button class="section-nav-arrow left" data-target="pricing-container"><i class="fas fa-chevron-left"></i></button>
         <div class="pricing-container">
-          <div class="pricing-card" onclick="window.open('https://t.me/+beoY2ZlrsJk4NjZh','_blank')">
+          <div class="pricing-card">
             <div class="card-header">Sans abonnement</div>
             <div class="card-body">
               <p class="price">0€</p>
-              <p class="desc">Avec pubs<br>Sans compte requis</p>
+              <p class="desc">Avec pubs<br>Sans compte requis<br>Accès <b>Limité</b></p>
             </div>
           </div>
-          <div class="pricing-card" onclick="window.open('https://t.me/+beoY2ZlrsJk4NjZh','_blank')">
+          <div class="pricing-card">
             <div class="card-header">Standard – 1 Mois</div>
             <div class="card-body">
               <p class="price">4,99€</p>
-              <p class="desc">Sans pubs<br>1 mois</p>
+              <p class="desc">Sans pubs<br>Accès <b>Complet</b><br>1 mois</p>
+              <div id="paypal-button-container-P-15H523885A811470FNASGADA" style="margin-top: 15px;"></div>
             </div>
           </div>
-          <div class="pricing-card" onclick="window.open('https://t.me/+beoY2ZlrsJk4NjZh','_blank')">
+          <div class="pricing-card">
             <div class="card-header">Base – 3 Mois</div>
             <div class="card-body">
               <p class="price">12,99€</p>
-              <p class="desc">Sans pubs<br>3 mois</p>
+              <p class="desc">Sans pubs<br>Accès <b>Complet</b><br>3 mois</p>
+              <div id="paypal-button-container-P-4F183303645774125NAS23JI" style="margin-top: 15px;"></div>
             </div>
           </div>
-          <div class="pricing-card" onclick="window.open('https://t.me/+beoY2ZlrsJk4NjZh','_blank')">
+          <div class="pricing-card">
             <div class="card-header">Pro – 6 Mois</div>
             <div class="card-body">
               <p class="price">24,99€</p>
-              <p class="desc">Sans pubs<br>6 mois</p>
+              <p class="desc">Sans pubs<br>Accès <b>Complet</b><br>6 mois</p>
+              <div id="paypal-button-container-P-3K78307277741043HNAS24IA" style="margin-top: 15px;"></div>
             </div>
           </div>
         </div>
         <button class="section-nav-arrow right" data-target="pricing-container"><i class="fas fa-chevron-right"></i></button>
       </div>
+        <div id="empty-watchlist-message" style="width: 100%; text-align: center; padding: 10px 20px; color: #ccc; font-size: 0.5rem;">
+            <p style="font-size: 1rem; font-weight: bold;">Après le réglement, veuillez vous connecter avec l’adresse PayPal utilisée lors du paiement ; l’activation peut prendre quelques heures.</p>
+          </div>
     </section>    
 
     <section>
@@ -2250,7 +2271,6 @@
   // Et on démarre le défilement automatique
   startHeroSlider();
 }
-
 
   function startHeroSlider() {
     const slides = document.querySelectorAll('.hero-slide');
@@ -3190,6 +3210,38 @@
         });
       });
     });
+  </script>
+  <script src="https://www.paypal.com/sdk/js?client-id=AZLXlrGrVImRZMtClIj8vFSQRpAXK76cWWJyl8ShN-2cu47J0Oz-D7maa_bh1Q7xogXvP2si0PcdisLp&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+  <script>
+    paypal.Buttons({
+      style: { shape: 'pill', color: 'blue', layout: 'vertical', label: 'subscribe', height: 35 },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({ plan_id: 'P-15H523885A811470FNASGADA' });
+      },
+      onApprove: function(data, actions) {
+        alert("1 mois OK");
+      }
+    }).render('#paypal-button-container-P-15H523885A811470FNASGADA');
+
+    paypal.Buttons({
+      style: { shape: 'pill', color: 'blue', layout: 'vertical', label: 'subscribe', height: 35 },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({ plan_id: 'P-4F183303645774125NAS23JI' });
+      },
+      onApprove: function(data, actions) {
+        alert("3 mois OK");
+      }
+    }).render('#paypal-button-container-P-4F183303645774125NAS23JI');
+
+    paypal.Buttons({
+      style: { shape: 'pill', color: 'blue', layout: 'vertical', label: 'subscribe', height: 35 },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({ plan_id: 'P-3K78307277741043HNAS24IA' });
+      },
+      onApprove: function(data, actions) {
+        alert("6 mois OK");
+      }
+    }).render('#paypal-button-container-P-3K78307277741043HNAS24IA');
   </script>
 </body>
 </html>
